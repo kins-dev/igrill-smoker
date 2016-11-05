@@ -64,10 +64,9 @@ class IGrillHandler(object):
                 continue
 
             #persist data
-            try: 
-                fields = {"temperature": temp}
-                persistence.save("sensordata", fields, settings)
-                persistence.save_battery_level(battery, **settings)
+            try:
+                fields = {"temperature": temp, "battery": battery}
+                print fields
             except Exception as ex:
                 print "Error persisting stats,", ex, ", retrying next time"
 
