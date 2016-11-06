@@ -150,7 +150,10 @@ class IGrillMiniPeripheral(IDevicePeripheral):
         self.temp_char = self.characteristic(UUIDS.PROBE1_TEMPERATURE)
 
     def read_temperature(self):
-        return float(ord(self.temp_char.read()[0]))
+        temp = ord(self.temp_char.read()[1]) * 256
+        temp += ord(self.temp_char.read()[0])
+
+        return float(temp)
 
     def read_battery(self):
         return float(ord(self.battery_char.read()[0]))
