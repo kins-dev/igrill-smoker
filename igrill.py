@@ -23,54 +23,6 @@ class UUIDS:
     PROBE4_THRESHOLD   = btle.UUID("06ef0009-2e06-4b79-9e33-fce2c42805ec")
 
 
-class IGrillHandler(object):
-    def __init__(self, device_settings):
-        self.device_settings = device_settings
-        self.devices = []
-
-
-    def handleDiscovery(self, scanEntry, isNewDev, isNewData):
-        name = scanEntry.getValueText(8)
-        if name != "iGrill_mini" or not isNewDev:
-            return
-
-        #see if we have this device already
-        for d in self.devices:
-            if d.addr == scanEntry.addr:
-                return
-
-        #add dev
-        dev = IGrillMiniPeripheral(scanEntry.addr)
-        self.devices.append(dev)
-
-    def persist_stats(self, persistence):
-        for dev in list(self.devices):
-            settings = self.device_settings.get(dev.deviceAddr)
-            print "dev: ", dev, ", settings: ", settings
-            if settings == None:
-                settings = {
-                    "device": "iGrill " + dev.deviceAddr,
-                    "type": "kitchen",
-                    "addr": dev.addr,
-                }
-
-            #read data from device
-            try:
-                temp = dev.read_temperature()
-                battery = dev.read_battery()
-            except Exception as ex:
-                print "Error reading from ", dev.deviceAddr, ": ", ex, "removing device"
-                self.devices.remove(dev)
-                continue
-
-            #persist data
-            try:
-                fields = {"temperature": temp, "battery": battery}
-                print fields
-            except Exception as ex:
-                print "Error persisting stats,", ex, ", retrying next time"
-
-
 class IDevicePeripheral(btle.Peripheral):
     encryption_key = None
 
