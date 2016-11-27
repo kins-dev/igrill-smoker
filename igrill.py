@@ -6,11 +6,11 @@ from crypto import encrypt, decrypt
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
 
-    BATTERY_LEVEL      = btle.UUID(0x2a19)
+    BATTERY_LEVEL      = btle.UUID("00002A19-0000-1000-8000-00805F9B34FB")
 
-    APP_CHALLENGE      = btle.UUID("64ac0002-4a4b-4b58-9f37-94d3c52ffdf7")
-    DEVICE_CHALLENGE   = btle.UUID("64ac0003-4a4b-4b58-9f37-94d3c52ffdf7")
-    DEVICE_RESPONSE    = btle.UUID("64ac0004-4a4b-4b58-9f37-94d3c52ffdf7")
+    APP_CHALLENGE      = btle.UUID("64AC0002-4A4B-4B58-9F37-94D3C52FFDF7")
+    DEVICE_CHALLENGE   = btle.UUID("64AC0003-4A4B-4B58-9F37-94D3C52FFDF7")
+    DEVICE_RESPONSE    = btle.UUID("64AC0004-4A4B-4B58-9F37-94D3C52FFDF7")
 
     CONFIG             = btle.UUID("06ef0002-2e06-4b79-9e33-fce2c42805ec")
     PROBE1_TEMPERATURE = btle.UUID("06ef0002-2e06-4b79-9e33-fce2c42805ec")
@@ -106,6 +106,39 @@ class IGrillMiniPeripheral(IDevicePeripheral):
         temp += ord(self.temp_char.read()[0])
 
         return float(temp)
+
+    def read_battery(self):
+        return float(ord(self.battery_char.read()[0]))
+
+
+class IGrillV2Peripheral(IDevicePeripheral):
+    """
+    Specialization of iDevice peripheral for the iGrill v2
+    """
+
+    # encryption key for the iGrill v2
+    encryption_key = [-33, 51, -32, -119, -12, 72, 78, 115, -110, -44, -49, -71, 70, -25, -123, -74]
+
+    def __init__(self, address):
+        IDevicePeripheral.__init__(self, address)
+
+        # find characteristics for battery and temperature
+        self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
+        self.temp_chars = {}
+
+        for probe_num in range(1,5):
+            temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
+            temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
+            self.temp_chars[probe_num] = temp_char
+
+    def read_temperature(self):
+        temps = {}
+        for probe_num, temp_char in self.temp_chars.items():
+            temp = ord(temp_char.read()[1]) * 256
+            temp += ord(temp_char.read()[0])
+            temps[probe_num] = float(temp)
+
+        return temps
 
     def read_battery(self):
         return float(ord(self.battery_char.read()[0]))
