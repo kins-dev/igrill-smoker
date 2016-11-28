@@ -15,7 +15,11 @@ class IGrillCheck(AgentCheck):
 
     def check(self, instance):
         data = self.read_sensor_data()
-        self.gauge('igrill.sensor.temperature', data['temperature'], tags=['igrill'])
+        for probe_num in range(1, 5):
+            self.gauge(
+                'igrill.sensor.temperature',
+                data['temperature'][str(probe_num)],
+                tags=['igrill', 'probe:{}'.format(probe_num)])
         self.gauge('igrill.battery', data['battery'], tags=['igrill'])
 
 

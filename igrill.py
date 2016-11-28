@@ -105,7 +105,7 @@ class IGrillMiniPeripheral(IDevicePeripheral):
         temp = ord(self.temp_char.read()[1]) * 256
         temp += ord(self.temp_char.read()[0])
 
-        return float(temp)
+        return { 1: float(temp), 2: 0.0, 3: 0.0, 4: 0.0 }
 
     def read_battery(self):
         return float(ord(self.battery_char.read()[0]))
