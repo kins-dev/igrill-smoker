@@ -3,7 +3,10 @@ import json
 import time
 
 from igrill import IGrillV2Peripheral
-# TODO: change this to grab from lshci lescan
+# TODO: 
+#   change this to grab from lshci lescan
+#   Cleanup the sleep to be a more regular
+#   Read data from config file or enviroment vars
 ADDRESS = '11:22:33:44:55:66'
 DATA_FILE = '/tmp/igrill.json'
 INTERVAL = 20
