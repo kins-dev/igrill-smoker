@@ -19,7 +19,7 @@ sudo pip install -r requirements.txt
 You may need to rebuild the executables for bluepy
 
 ```bash
-cd /usr/local/lib/python/.../bluepy
+cd /usr/local/lib/python2.7/dist-packages/bluepy
 sudo make
 ```
 
@@ -35,7 +35,15 @@ Edit monitor_igrill.py or monitor_igrill2.py with your mac address
 
 Install npm
 
+```bash
+sudo apt-get install npm
+```
+
 Install kasa cli
+
+```bash
+sudo npm install -g tplink-smarthome-api
+```
 
 Find your Kasa IP address
 
@@ -43,7 +51,9 @@ Update data.sh with that IP address
 
 Exit the desktop (run at the command line)
 
-Install lighttp
+Install lighttpd
+
+Secure lighttpd
 
 Link the data.csv to the correct directory
 
