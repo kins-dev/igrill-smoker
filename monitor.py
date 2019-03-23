@@ -1,15 +1,16 @@
+import os
 import json
 import time
+import mac_config
 
-from igrill import IGrillMiniPeripheral
+from igrill import IGrillV2Peripheral
 
-ADDRESS = 'D4:81:CA:05:53:5E'
 DATA_FILE = '/tmp/igrill.json'
-INTERVAL = 15
+INTERVAL = 20
 
 if __name__ == '__main__':
 
-    periph = IGrillMiniPeripheral(ADDRESS)
+    periph = IGrillV2Peripheral(mac_config.ADDRESS)
 
     while True:
 
@@ -17,6 +18,7 @@ if __name__ == '__main__':
             'temperature': periph.read_temperature(),
             'battery': periph.read_battery(),
         }
+        os.system("data.sh " + str(int(sensor_data['battery'])) + ' ' + str(int(sensor_data['temperature'][1])) + ' ' + str(int(sensor_data['temperature'][4])))
 
         print 'Writing sensor data: {}'.format(sensor_data)
         with open(DATA_FILE, 'w') as f:
