@@ -1,6 +1,6 @@
 # Starting with Raspberry Pi Stretch
 
-*These instructions are not complete yet*
+## These instructions are not complete yet
 
 This assumes you've installed the stretch desktop image on your raspberry pi.
 

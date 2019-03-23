@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# TODO:
-# 	Add stages
-# 	Reorder data
-# 	Deal with missing values
-#	Set -ue
-# 	Alter polling time
-#	Save plug state in data
-# 	Block multilpe instances running at the same time
-
 function SetLEDState () {
 	if [ $# -ne 2 ]; then
 		 echo "Wrong number of arguements to SetLEDState"
