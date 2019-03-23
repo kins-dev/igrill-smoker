@@ -11,16 +11,16 @@ cat hci-data | \
 while read CMD; do
 	# when we find the iGrill_V2 setup that information
         if [[ $CMD = *"iGrill_V2"* ]]; then
-                echo $CMD
                 MAC=${CMD:0:17}
                 echo $MAC
 		echo -n "ADDRESS='" > mac_config.py
 		echo -n $MAC >> mac_config.py
 		echo "'" >> mac_config.py
-		kill -s int $!
-		sudo hciconfig hci0 down
-		rm -f hci-data
-		sudo hciconfig hci0 up
-		exit 0
+		break
         fi
 done
+sudo kill -s int $!
+sudo hciconfig hci0 down
+rm -f hci-data
+sudo hciconfig hci0 up
+
