@@ -7,3 +7,4 @@ sudo pip install -r requirements.txt
 pushd /usr/local/lib/python2.7/dist-packages/bluepy
 sudo make
 popd
+bash get_mac.sh

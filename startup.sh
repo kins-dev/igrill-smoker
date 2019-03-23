@@ -5,5 +5,5 @@ if ! [ -f /tmp/data.csv ] ; then
     gpio write 15 1
     gpio mode 4 out
     gpio write 4 0
-    sudo python monitor.py
+    python monitor.py
 fi
