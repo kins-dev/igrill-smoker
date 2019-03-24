@@ -16,6 +16,8 @@ cd igrill-smoker
 bash run-install.sh
 ```
 
+Secure your instance using the instructions at <https://github.com/galeone/letsencrypt-lighttpd/blob/master/renew.sh>
+
 After starting the run-install.sh script, you should turn on your iGrill v2.  Installation shouldn't take long and the device is needed for setup.
 
 Find your Kasa IP address
