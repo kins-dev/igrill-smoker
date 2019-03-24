@@ -82,6 +82,8 @@ function SetKasaState()
 }
 
 # FIXME: Read from config file
+CSV_FILE=/tmp/data.csv
+BAD_DATA=65536
 SMOKE_MID=225
 SMOKE_TEMP_HIGH=`expr $SMOKE_MID + 3`
 SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
@@ -94,7 +96,21 @@ MT_TEMP=$2
 SM_TEMP=$3
 
 # Data for Highcharts
-echo "`date -Iseconds`,$BATTERY,$MT_TEMP,$SM_TEMP" >> /tmp/data.csv
+# order must mach startup.sh
+echo -n "`date -Iseconds`," >> $CSV_FILE
+if [ $BATTERY -le 100 ]; then
+	echo -n $BATTERY >> $CSV_FILE
+fi
+echo -n "," >> $CSV_FILE
+if [ $SM_TEMP -ne $BAD_DATA ]; then
+	echo -n $SM_TEMP
+fi
+echo -n "," >> $CSV_FILE
+if [ $MT_TEMP -ne $BAD_DATA ]; then
+	echo -n $MT_TEMP
+fi
+echo "" >> $CSV_FILE
+
 
 if [ $BATTERY -le $MIN_BATTERY ] ; then
 	#low battery
@@ -113,7 +129,7 @@ if [ $MT_TEMP -ge $INTERNAL_TEMP ]; then
 	SetKasaState "off" "internal temp meets or exceeds threshold ($MT_TEMP >= $INTERNAL_TEMP)"
 	
 	# Play a sound
-	#omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
+	omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
 else
 	SetLEDState "green" "off"
 	# only enable hotplate if the internal temp is below expected
