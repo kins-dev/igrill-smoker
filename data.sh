@@ -82,7 +82,7 @@ function SetKasaState()
 }
 
 # FIXME: Read from config file
-CSV_FILE=/tmp/data.csv
+CSV_FILE=/var/www/html/current.csv
 BAD_DATA=65536
 SMOKE_MID=225
 SMOKE_TEMP_HIGH=`expr $SMOKE_MID + 3`
@@ -103,11 +103,11 @@ if [ $BATTERY -le 100 ]; then
 fi
 echo -n "," >> $CSV_FILE
 if [ $SM_TEMP -ne $BAD_DATA ]; then
-	echo -n $SM_TEMP
+	echo -n $SM_TEMP >> $CSV_FILE
 fi
 echo -n "," >> $CSV_FILE
 if [ $MT_TEMP -ne $BAD_DATA ]; then
-	echo -n $MT_TEMP
+	echo -n $MT_TEMP >> $CSV_FILE
 fi
 echo "" >> $CSV_FILE
 
