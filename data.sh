@@ -1,4 +1,21 @@
 #!/bin/bash
+# FIXME: Read from config file
+CSV_FILE=/var/www/html/current.csv
+BAD_DATA=65536
+SMOKE_MID=225
+INTERNAL_TEMP=190
+MIN_BATTERY=15
+MAX_TEMP_CHANGE=2
+
+BATTERY=$1
+MT_TEMP=$2
+SM_TEMP=$3
+
+if [ $MT_TEMP -gt 180 ]; then
+	SMOKE_MID=165
+fi
+SMOKE_TEMP_HIGH=`expr $SMOKE_MID + 3`
+SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
 
 function SetLEDState () {
 	if [ $# -ne 2 ]; then
@@ -81,19 +98,6 @@ function SetKasaState()
 	echo "$MSG"
 }
 
-# FIXME: Read from config file
-CSV_FILE=/var/www/html/current.csv
-BAD_DATA=65536
-SMOKE_MID=225
-SMOKE_TEMP_HIGH=`expr $SMOKE_MID + 3`
-SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
-INTERNAL_TEMP=185
-MIN_BATTERY=15
-MAX_TEMP_CHANGE=2
-
-BATTERY=$1
-MT_TEMP=$2
-SM_TEMP=$3
 
 # Data for Highcharts
 # order must mach startup.sh
@@ -110,7 +114,10 @@ if [ $MT_TEMP -ne $BAD_DATA ]; then
 	echo -n $MT_TEMP >> $CSV_FILE
 fi
 echo "" >> $CSV_FILE
-
+LAST_TEMP=0
+if [ -f "last_temp.sh" ]; then
+	source last_temp.sh
+fi
 
 if [ $BATTERY -le $MIN_BATTERY ] ; then
 	#low battery
@@ -132,21 +139,46 @@ if [ $MT_TEMP -ge $INTERNAL_TEMP ]; then
 	omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
 else
 	SetLEDState "green" "off"
+
 	# only enable hotplate if the internal temp is below expected
-	if [ $SM_TEMP -ge $SMOKE_TEMP_HIGH ]; then
+	if [ "$SM_TEMP" -le "$SMOKE_TEMP_HIGH" ]; then
+		# if the temp is dropping and we're less than or equal to the high value, start the hotplate
+		if [ "$LAST_TEMP" -gt "$SMOKE_TEMP_HIGH" ]; then
+			SetKasaState "on" "smoke temp meets or is below threshold ($SM_TEMP <= $SMOKE_TEMP_HIGH)"
+		elif [ "$LAST_TEMP" -lt "$SM_TEMP" ]; then
+			if [ $SM_TEMP -gt $SMOKE_TEMP_LOW ]; then
+				SetKasaState "off" "smoke temp rising in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH)"
+			fi
+		elif [ "$LAST_TEMP" -eq "$SM_TEMP" ]; then
+			if [ "$SM_TEMP" -gt "$SMOKE_MID" ]; then
+				SetKasaState "off" "smoke temp stable but above midpoint in band ($SMOKE_MID < $SM_TEMP <= $SMOKE_TEMP_HIGH)"
+			elif [ "$SM_TEMP" -lt "$SMOKE_MID" ]; then
+				SetKasaState "on" "smoke temp stable but below midpoint in band ($SMOKE_TEMP_LOW <= $SM_TEMP < $SMOKE_MID)"
+			fi
+		fi
+	else
 		#disable hotplate
 		SetKasaState "off" "smoke temp meets or exceeds threshold ($SM_TEMP >= $SMOKE_TEMP_HIGH)"
 	fi
-	if [ $3 -le $SMOKE_TEMP_LOW ]; then
+	if [ $SM_TEMP -ge $SMOKE_TEMP_LOW ]; then
+		# if the temp is rising and we're greater than or equal to the low value, stop the hotplate
+		if [ $LAST_TEMP -lt $SMOKE_TEMP_LOW ] ; then
+			SetKasaState "off" "smoke temp meets or exceeds threshold ($SM_TEMP >= $SMOKE_TEMP_LOW)"
+		elif [ "$LAST_TEMP" -gt "$SM_TEMP" ]; then
+			if [ $SM_TEMP -le $SMOKE_TEMP_HIGH ]; then
+				SetKasaState "on" "smoke temp falling in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH)"
+			fi
+		fi
+	else
 		#enable hotplate
 		SetKasaState "on" "smoke temp meets or is below threshold ($SM_TEMP <= $SMOKE_TEMP_LOW)"
 	fi
 
 fi
-if [ -f "$last_temp.sh" ]; then
+if [ -f "last_temp.sh" ]; then
 	source last_temp.sh
 	DIFF=`expr $SM_TEMP - $LAST_TEMP`
-	if [ $DIFF -ge $MAX_TEMP_CHANGE ] ; then
+	if [ $DIFF -gt $MAX_TEMP_CHANGE ] ; then
 		# temp moving up too fast, disable the hotplate (trying to prevemt fires)
 		SetKasaState "off" "smoke temp change meets or exceeds threshold ($DIFF >= $MAX_TEMP_CHANGE)"
 	fi
