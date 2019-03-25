@@ -1,7 +1,9 @@
 #!/bin/bash
 if ! [ -f /tmp/igrill.json ] ; then
-    FILE="`date -Iseconds`.csv"
-    sudo echo "Time,Battery,Smoke Temp,Meat Temp" > /var/www/html/$FILE
+    FILE="$(date +"%Y_%m_%d_%I_%M_%p").csv"
+    sudo touch /var/www/html/$FILE
+    sudo chmod a+rw /var/www/html/$FILE
+    echo "Time,Battery,Smoke Temp,Meat Temp" > /var/www/html/$FILE
     sudo rm -f /var/www/html/current.csv
     sudo ln -s /var/www/html/$FILE /var/www/html/current.csv
     gpio mode 15 out
