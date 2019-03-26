@@ -10,8 +10,18 @@ MAX_TEMP_CHANGE=2
 BATTERY=$1
 MT_TEMP=$2
 SM_TEMP=$3
-
-if [ $MT_TEMP -gt 180 ]; then
+MT_TEMP_MAX=0
+if [ -f "max_meat_temp.sh" ]; then
+	source max_meat_temp.sh
+fi
+if [ $MT_TEMP -lt 65536 ]; then
+	if [ $MT_TEMP_MAX -lt $MT_TEMP ]; then
+		MT_TEMP_MAX=$MT_TEMP
+		echo "#!/bin/bash" > max_meat_temp.sh
+		echo "MT_TEMP_MAX=$MT_TEMP_MAX" >> max_meat_temp.sh
+	fi
+fi
+if [ $MT_TEMP_MAX -ge 190 ]; then
 	SMOKE_MID=165
 fi
 SMOKE_TEMP_HIGH=`expr $SMOKE_MID + 3`
@@ -78,7 +88,7 @@ function SetKasaState()
 	
 	# Is it possible to set this automatically?
 	# FIXME: read from config file
-	local TP_LINK_IP="192.168.0.1"
+	local TP_LINK_IP="192.168.0.23"
 
 	# NOTE: api commands must be blocking as they take a second or two
 	# and another state update may come in
