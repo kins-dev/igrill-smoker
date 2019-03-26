@@ -85,10 +85,10 @@ function SetKasaState()
 		 exit 1
 	fi
 	STATE=$1
-	
+
 	# Is it possible to set this automatically?
 	# FIXME: read from config file
-	local TP_LINK_IP="192.168.0.23"
+	local TP_LINK_IP="192.168.0.1"
 
 	# NOTE: api commands must be blocking as they take a second or two
 	# and another state update may come in
