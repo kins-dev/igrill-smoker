@@ -1,13 +1,13 @@
 #!/bin/bash
 set -ue
 LAST_BATTERY=0
-LAST_MT_TEMP=0
+LAST_FD_TEMP=0
 LAST_SM_TEMP=0
 
 source config.sh
 
 BATTERY=$1
-MT_TEMP=$2
+FD_TEMP=$2
 SM_TEMP=$3
 
 function SetLEDState () {
@@ -94,14 +94,14 @@ fi
 if [ $SM_TEMP -eq $BAD_DATA ]; then
 	SM_TEMP=$LAST_SM_TEMP
 fi
-if [ $MT_TEMP -eq $BAD_DATA ]; then
-	MT_TEMP=$LAST_MT_TEMP
+if [ $FD_TEMP -eq $BAD_DATA ]; then
+	FD_TEMP=$LAST_FD_TEMP
 fi
 
 cat > last_temp.sh <<<EOL
 #!/bin/bash
 set -ue
-LAST_MT_TEMP=$MT_TEMP
+LAST_FD_TEMP=$FD_TEMP
 LAST_SM_TEMP=$SM_TEMP
 LAST_BATTERY=$BATTERY
 EOL
@@ -119,7 +119,7 @@ fi
 
 # Only if we're using stages
 if [ $STAGE -gt 0 ]; then
-	if [ $MT_TEMP -ge $INTERNAL_TEMP ]; then
+	if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
 		STAGE=`expr $STAGE + 1`
 		cat > stage.sh <<<EOL
 #!/bin/bash
@@ -131,7 +131,14 @@ EOL
 	fi
 fi
 
-if [ $MT_TEMP -ge $INTERNAL_TEMP ]; then
+if [ $FD_DONE -eq 1 ]; then
+	#done
+	SetLEDState "green" "on"
+
+	# Play a sound
+	omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
+
+elif [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
 	#done
 	SetLEDState "green" "on"
 
@@ -150,14 +157,14 @@ SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
 
 # Data for Highcharts
 # order must mach startup.sh
-echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$MT_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH" >> $CSV_FILE
+echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH" >> $CSV_FILE
 
 cat > $STATE_FILE <<<EOL
 [
 {"State":"$STATE_NAME",
 "Battery":"$BATTERY",
-"Meat Temp":"$MT_TEMP",
-"Target Meat Temp":"$INTERNAL_TEMP",
+"Food Temp":"$FD_TEMP",
+"Target Food Temp":"$INTERNAL_TEMP",
 "Smoke Temp":"$SM_TEMP",
 "Smoke Target Temp":"$SMOKE_MID",
 "Smoke Target Low":"$SMOKE_TEMP_LOW",

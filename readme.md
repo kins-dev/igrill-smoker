@@ -33,3 +33,9 @@ ln -s /tmp/data.csv /var/www/html/.
 ```
 
 Edit the chart.html file to suit your needs and copy it to your /var/www/html directory
+
+Start a smoking session by running
+
+```bash
+bash startup.sh
+```
