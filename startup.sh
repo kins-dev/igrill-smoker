@@ -8,7 +8,7 @@ if ! [ -f /tmp/igrill.json ] ; then
     sudo touch $STATE_FILE
     sudo chmod a+rw $STATE_FILE
     sudo chmod a+rw $FILE
-    echo "Time,Battery,Smoke Temp,Food Temp,Internal Target,Smoke Target Low,Smoke Target,Smoke Target High" > $FILE
+    echo "Time,Battery,Smoke Temp,Food Temp,Internal Target,Smoke Target Low,Smoke Target,Smoke Target High,Plug State" > $FILE
     sudo rm -f $CSV_FILE
     sudo ln -s $FILE $CSV_FILE
     sudo bash gen_json.sh

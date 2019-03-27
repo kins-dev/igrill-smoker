@@ -74,9 +74,11 @@ function SetKasaState()
 	case "$STATE" in
 		"on")
 			tplink-smarthome-api setPowerState $TP_LINK_IP true
+			echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,1" >> $CSV_FILE
 		;;
 		"off")
 			tplink-smarthome-api setPowerState $TP_LINK_IP false
+			echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,0" >> $CSV_FILE
 		;;
 		*)
 			echo "bad value for hotplate state sent to SetKasaState"
@@ -157,18 +159,20 @@ SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
 
 # Data for Highcharts
 # order must mach startup.sh
-echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH" >> $CSV_FILE
+echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH," >> $CSV_FILE
 
 cat > $STATE_FILE <<<EOL
 [
-{"State":"$STATE_NAME",
-"Battery":"$BATTERY",
-"Food Temp":"$FD_TEMP",
-"Target Food Temp":"$INTERNAL_TEMP",
-"Smoke Temp":"$SM_TEMP",
-"Smoke Target Temp":"$SMOKE_MID",
-"Smoke Target Low":"$SMOKE_TEMP_LOW",
-"Smoke Target High":"$SMOKE_TEMP_HIGH"}
+  {
+    "State":"$STATE_NAME",
+    "Battery":"$BATTERY",
+    "Food Temp":"$FD_TEMP",
+    "Target Food Temp":"$INTERNAL_TEMP",
+    "Smoke Temp":"$SM_TEMP",
+    "Smoke Target Temp":"$SMOKE_MID",
+    "Smoke Target Low":"$SMOKE_TEMP_LOW",
+    "Smoke Target High":"$SMOKE_TEMP_HIGH"
+  }
 ]
 EOL
 
