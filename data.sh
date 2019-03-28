@@ -3,7 +3,7 @@ set -ue
 LAST_BATTERY=0
 LAST_FD_TEMP=0
 LAST_SM_TEMP=0
-
+DATE=`date -Iseconds`
 source config.sh
 
 BATTERY=$1
@@ -73,12 +73,12 @@ function SetKasaState()
 	# and another state update may come in
 	case "$STATE" in
 		"on")
+			KASA_STATE=1
 			tplink-smarthome-api setPowerState $TP_LINK_IP true
-			echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,1" >> $CSV_FILE
 		;;
 		"off")
+			KASA_STATE=0
 			tplink-smarthome-api setPowerState $TP_LINK_IP false
-			echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,0" >> $CSV_FILE
 		;;
 		*)
 			echo "bad value for hotplate state sent to SetKasaState"
@@ -159,7 +159,6 @@ SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
 
 # Data for Highcharts
 # order must mach startup.sh
-echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH," >> $CSV_FILE
 
 cat > $STATE_FILE <<EOL
 [
@@ -194,37 +193,35 @@ if [ $SM_TEMP -ge $SMOKE_TEMP_LOW ]; then
 		IN_BAND=1
 	fi
 fi
-
+KASA_STATE=""
 if [ $DIFF -gt $MAX_TEMP_CHANGE ] ; then
 	# temp moving up too fast, disable the hotplate (trying to prevemt fires)
 	SetKasaState "off" "smoke temp change meets or exceeds threshold ($DIFF >= $MAX_TEMP_CHANGE)"
-	# no more processing needed
-	exit 0
-fi
-
-if [ $IN_BAND -eq 0 ]; then
-	if [ $DIRECTION -lt 0 ]; then
-		#enable hotplate
-		SetKasaState "on" "smoke temp is below threshold ($SM_TEMP < $SMOKE_TEMP_LOW)"
-	elif [ $DIRECTION -gt 0 ]; then
-		SetKasaState "off" "smoke temp is exceeds threshold ($SM_TEMP > $SMOKE_TEMP_HIGH)"
-	else
-		echo "Error, direction not set but out of band"
-		exit 1
-	fi
 else
-	if [ $DIFF -eq 0 ]; then
+	if [ $IN_BAND -eq 0 ]; then
 		if [ $DIRECTION -lt 0 ]; then
-			SetKasaState "on" "smoke temp stable but below midpoint in band ($SMOKE_TEMP_LOW <= $SM_TEMP < $SMOKE_MID)"
-		elif [ $DIRECTION -gt 0]; then
-			SetKasaState "off" "smoke temp stable but above midpoint in band ($SMOKE_MID < $SM_TEMP <= $SMOKE_TEMP_HIGH)"
+			#enable hotplate
+			SetKasaState "on" "smoke temp is below threshold ($SM_TEMP < $SMOKE_TEMP_LOW)"
+		elif [ $DIRECTION -gt 0 ]; then
+			SetKasaState "off" "smoke temp is exceeds threshold ($SM_TEMP > $SMOKE_TEMP_HIGH)"
 		else
-			echo "smoke temp stable and $SM_TEMP == $SMOKE_MID, doing nothing"
+			echo "Error, direction not set but out of band"
+			exit 1
 		fi
-	elif [ $DIFF -gt 0 ]; then
-		SetKasaState "off" "smoke temp rising in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH) && ($LAST_SM_TEMP < $SM_TEMP)"
 	else
-		SetKasaState "on" "smoke temp falling in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH) && ($LAST_SM_TEMP > $SM_TEMP)"
+		if [ $DIFF -eq 0 ]; then
+			if [ $DIRECTION -lt 0 ]; then
+				SetKasaState "on" "smoke temp stable but below midpoint in band ($SMOKE_TEMP_LOW <= $SM_TEMP < $SMOKE_MID)"
+			elif [ $DIRECTION -gt 0]; then
+				SetKasaState "off" "smoke temp stable but above midpoint in band ($SMOKE_MID < $SM_TEMP <= $SMOKE_TEMP_HIGH)"
+			else
+				echo "smoke temp stable and $SM_TEMP == $SMOKE_MID, doing nothing"
+			fi
+		elif [ $DIFF -gt 0 ]; then
+			SetKasaState "off" "smoke temp rising in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH) && ($LAST_SM_TEMP < $SM_TEMP)"
+		else
+			SetKasaState "on" "smoke temp falling in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH) && ($LAST_SM_TEMP > $SM_TEMP)"
+		fi
 	fi
 fi
-
+echo "$DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> $CSV_FILE
