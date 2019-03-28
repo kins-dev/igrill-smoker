@@ -164,7 +164,7 @@ echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW
 cat > $STATE_FILE <<EOL
 [
   {
-    "State":"$STATE_NAME",
+    "Stage":"$STAGE_NAME",
     "Battery":"$BATTERY",
     "Food Temp":"$FD_TEMP",
     "Target Food Temp":"$INTERNAL_TEMP",
