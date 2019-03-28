@@ -22,8 +22,8 @@ fi
 
 LAST_SM_TEMP=0
 LAST_FD_TEMP=0
-if [ -f "last_temps.sh" ]; then
-	source last_temps.sh
+if [ -f "last_temp.sh" ]; then
+	source last_temp.sh
 fi
 
 # allow user overrides
