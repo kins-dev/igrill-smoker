@@ -123,7 +123,7 @@ fi
 if [ $STAGE -gt 0 ]; then
 	if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
 		STAGE=`expr $STAGE + 1`
-		cat > stage.sh <<<EOL
+		cat > stage.sh <<EOL
 #!/bin/bash
 set -ue
 STAGE=$STAGE
