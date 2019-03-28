@@ -100,7 +100,7 @@ if [ $FD_TEMP -eq $BAD_DATA ]; then
 	FD_TEMP=$LAST_FD_TEMP
 fi
 
-cat > last_temp.sh <<<EOL
+cat > last_temp.sh <<EOL
 #!/bin/bash
 set -ue
 LAST_FD_TEMP=$FD_TEMP
@@ -161,7 +161,7 @@ SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
 # order must mach startup.sh
 echo "`date -Iseconds`,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH," >> $CSV_FILE
 
-cat > $STATE_FILE <<<EOL
+cat > $STATE_FILE <<EOL
 [
   {
     "State":"$STATE_NAME",
