@@ -1,5 +1,11 @@
 #!/bin/bash
 set -ue
+function finish  () {
+    rm -f /tmp/igrill.json
+    rm -f last_temp.sh
+    rm -f stage.sh
+}
+
 source config.sh
 WEBDIR="/var/www/html"
 if ! [ -f /tmp/igrill.json ] ; then
@@ -18,5 +24,7 @@ if ! [ -f /tmp/igrill.json ] ; then
     gpio write 15 1
     gpio mode 4 out
     gpio write 4 0
+    trap finish INT
+    trap finish EXIT
     python monitor.py
 fi
