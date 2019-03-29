@@ -9,6 +9,11 @@ source config.sh
 BATTERY=$1
 FD_TEMP=$2
 SM_TEMP=$3
+function finish () {
+	echo "done"
+	echo "$DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> $CSV_FILE
+}
+trap finish EXIT
 
 function SetLEDState () {
 	if [ $# -ne 2 ]; then
@@ -198,7 +203,9 @@ if [ $DIFF -gt $MAX_TEMP_CHANGE ] ; then
 	# temp moving up too fast, disable the hotplate (trying to prevemt fires)
 	SetKasaState "off" "smoke temp change meets or exceeds threshold ($DIFF >= $MAX_TEMP_CHANGE)"
 else
+	echo "Temp change was $DIFF"
 	if [ $IN_BAND -eq 0 ]; then
+		echo "Out of band"
 		if [ $DIRECTION -lt 0 ]; then
 			#enable hotplate
 			SetKasaState "on" "smoke temp is below threshold ($SM_TEMP < $SMOKE_TEMP_LOW)"
@@ -209,6 +216,7 @@ else
 			exit 1
 		fi
 	else
+		echo "in band"
 		if [ $DIFF -eq 0 ]; then
 			if [ $DIRECTION -lt 0 ]; then
 				SetKasaState "on" "smoke temp stable but below midpoint in band ($SMOKE_TEMP_LOW <= $SM_TEMP < $SMOKE_MID)"
@@ -224,4 +232,3 @@ else
 		fi
 	fi
 fi
-echo "$DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> $CSV_FILE
