@@ -44,10 +44,10 @@ function SetLEDState () {
 	esac
 	case "$VALUE" in
 		"on")
-			gpio write $GPIO $ON_VAL &
+			gpio write $GPIO $ON_VAL 
 		;;
 		"off")
-			gpio write $GPIO $OFF_VAL &
+			gpio write $GPIO $OFF_VAL 
 		;;
 		*)
 			echo "bad value for LED state sent to SetLEDState"
