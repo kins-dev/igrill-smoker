@@ -183,10 +183,10 @@ cat > $STATE_FILE <<EOL
   }
 ]
 EOL
-
+echo "Calculating diff"
 # Diff is used for rising/falling and to make sure it doesn't rise too fast
 DIFF=`expr $SM_TEMP - $LAST_SM_TEMP`
-
+echo "finding direction"
 # Direction is used to see if the smoke is above or below the target temp
 DIRECTION=0
 if [ $SM_TEMP -gt $SMOKE_MID ]; then
