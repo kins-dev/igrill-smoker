@@ -168,6 +168,7 @@ SMOKE_TEMP_LOW=`expr $SMOKE_MID - 3`
 # Data for Highcharts
 # order must mach startup.sh
 
+echo "writting state"
 cat > $STATE_FILE <<EOL
 [
   {
