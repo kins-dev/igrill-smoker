@@ -73,11 +73,11 @@ function SetKasaState()
 	# and another state update may come in
 	case "$STATE" in
 		"on")
-			KASA_STATE=1
+			KASA_STATE="green"
 			tplink-smarthome-api setPowerState $TP_LINK_IP true
 		;;
 		"off")
-			KASA_STATE=0
+			KASA_STATE="red"
 			tplink-smarthome-api setPowerState $TP_LINK_IP false
 		;;
 		*)
