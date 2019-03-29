@@ -186,8 +186,10 @@ DIFF=`expr $SM_TEMP - $LAST_SM_TEMP`
 # Direction is used to see if the smoke is above or below the target temp
 DIRECTION=0
 if [ $SM_TEMP -gt $SMOKE_MID ]; then
+	echo "temp high"
 	DIRECTION=1
 elif [ $SM_TEMP -lt $SMOKE_MID ]; then
+	echo "temp low"
 	DIRECTION=-1
 fi
 
@@ -195,6 +197,7 @@ fi
 IN_BAND=0
 if [ $SM_TEMP -ge $SMOKE_TEMP_LOW ]; then
 	if [ $SM_TEMP -le $SMOKE_TEMP_HIGH ] ;then
+		echo "temp in band"
 		IN_BAND=1
 	fi
 fi
