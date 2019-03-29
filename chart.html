@@ -80,6 +80,15 @@ function createChart() {
         title: {
             text: 'Live Data'
         },
+        plotOptions: {
+            series: {
+                marker: {
+                    //fillColor: '#FFFFFF',
+                    lineWidth: 1,
+                    lineColor: null // inherit from series
+                }
+            }
+        },
         data: {
             csvURL: urlInput.value,
             enablePolling: pollingCheckbox.checked === true,
