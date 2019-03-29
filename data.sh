@@ -127,14 +127,17 @@ fi
 # Only if we're using stages
 if [ $STAGE -gt 0 ]; then
 	if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
+		echo "updating stages"
 		STAGE=`expr $STAGE + 1`
 		cat > stage.sh <<EOL
 #!/bin/bash
 set -ue
 STAGE=$STAGE
 EOL
+		echo "reloading config"
 		# Reload the config file with the new stage.
 		source config.sh
+		echo "update complete"
 	fi
 fi
 
