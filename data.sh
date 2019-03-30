@@ -95,6 +95,20 @@ function SetKasaState()
 	echo "$MSG"
 }
 
+function WriteStages()
+{
+#	echo "updating stages"
+	cat > stage.sh <<EOL
+#!/bin/bash
+set -ue
+STAGE=$STAGE
+TIMESTAMP=`date +'%s'`
+EOL
+#	echo "reloading config"
+	# Reload the config file with the new stage.
+	source config.sh
+#	echo "update complete"
+}
 
 if [ $BATTERY -eq $BAD_DATA ]; then
 	BATTERY=$LAST_BATTERY
@@ -118,20 +132,26 @@ else
 	SetLEDState "red" "off"
 fi
 
+
 # Only if we're using stages
 if [ $STAGE -gt 0 ]; then
-	if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
-#		echo "updating stages"
-		STAGE=`expr $STAGE + 1`
-		cat > stage.sh <<EOL
-#!/bin/bash
-set -ue
-STAGE=$STAGE
-EOL
-#		echo "reloading config"
-		# Reload the config file with the new stage.
-		source config.sh
-#		echo "update complete"
+	# if TIME is less than 0, then we're using temperature
+	if [ $TIME -lt 0 ]; then
+		if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
+			STAGE=`expr $STAGE + 1`
+			WriteStages
+		fi
+	else
+		# Get the timestamp
+		CURRENT_TIME=`date +'%s'`
+		if [ $TIMESTAMP -eq 0 ]; then
+			WriteStages
+		else
+			if [ $(( ($CURRENT_TIME - $TIMESTAMP)/60 )) -ge $TIME ]; then
+				STAGE=`expr $STAGE + 1`
+				WriteStages
+			fi
+		fi
 	fi
 fi
 
@@ -192,6 +212,9 @@ EOL
 # if val is 0, expr returns non-zero exit code
 set +e
 DIFF=`expr $SM_TEMP - $LAST_SM_TEMP`
+if [ $LAST_SM_TEMP -eq 0 ]; then
+	DIFF=0
+fi
 #echo "$?"
 set -e
 #echo "finding direction"
@@ -208,7 +231,7 @@ fi
 # IN_BAND is used to see if the smoke is near the target temp, meaning finer grain controls to prevent ringing
 IN_BAND=0
 if [ $SM_TEMP -ge $SMOKE_TEMP_LOW ]; then
-	if [ $SM_TEMP -le $SMOKE_TEMP_HIGH ] ;then
+	if [ $SM_TEMP -le $SMOKE_TEMP_HIGH ]; then
 #		echo "temp in band"
 		IN_BAND=1
 	fi

@@ -105,10 +105,10 @@ class IGrillMiniPeripheral(IDevicePeripheral):
         temp = ord(self.temp_char.read()[1]) * 256
         temp += ord(self.temp_char.read()[0])
 
-        return { 1: float(temp), 2: 0.0, 3: 0.0, 4: 0.0 }
+        return { 1: int(temp), 2: 0.0, 3: 0.0, 4: 0.0 }
 
     def read_battery(self):
-        return float(ord(self.battery_char.read()[0]))
+        return int(ord(self.battery_char.read()[0]))
 
 
 class IGrillV2Peripheral(IDevicePeripheral):
@@ -136,9 +136,9 @@ class IGrillV2Peripheral(IDevicePeripheral):
         for probe_num, temp_char in self.temp_chars.items():
             temp = ord(temp_char.read()[1]) * 256
             temp += ord(temp_char.read()[0])
-            temps[probe_num] = float(temp)
+            temps[probe_num] = int(temp)
 
         return temps
 
     def read_battery(self):
-        return float(ord(self.battery_char.read()[0]))
+        return int(ord(self.battery_char.read()[0]))
