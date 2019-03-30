@@ -3,6 +3,8 @@ set -ue
 CSV_FILE=/var/www/html/current.csv
 STATE_FILE=/var/www/html/state.json
 BAD_DATA=65536
+TIME=-1
+TIMESTAMP=0
 FOOD=brisket
 # Used to warn on low battery
 MIN_BATTERY=15
@@ -22,6 +24,7 @@ fi
 
 LAST_SM_TEMP=0
 LAST_FD_TEMP=0
+
 if [ -f "last_temp.sh" ]; then
 	source last_temp.sh
 fi
