@@ -2,7 +2,7 @@
 set -ue
 CSV_FILE=/var/www/html/current.csv
 STATE_FILE=/var/www/html/state.json
-BAD_DATA=65536
+BAD_DATA=63536
 TIME=-1
 TIMESTAMP=0
 FOOD=brisket
