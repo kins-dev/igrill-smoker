@@ -139,17 +139,17 @@ if [ $STAGE -gt 0 ]; then
 	if [ $TIME -lt 0]; then
 		if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
 			STAGE=`expr $STAGE + 1`
-			WriteStages()
+			WriteStages
 		fi
 	else
 		# Get the timestamp
 		CURRENT_TIME=`date +'%s'`
 		if [ $TIMESTAMP -eq 0]; then
-			WriteStages();
+			WriteStages
 		else
 			if [ $( ($CURRENT_TIME - $TIMESTAMP)/60 ) -ge $TIME ]; then
 				STAGE=`expr $STAGE + 1`
-				WriteStages()
+				WriteStages
 			fi
 		fi
 	fi
