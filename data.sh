@@ -136,7 +136,7 @@ fi
 # Only if we're using stages
 if [ $STAGE -gt 0 ]; then
 	# if TIME is less than 0, then we're using temperature
-	if [ $TIME -lt 0]; then
+	if [ $TIME -lt 0 ]; then
 		if [ $FD_TEMP -ge $INTERNAL_TEMP ]; then
 			STAGE=`expr $STAGE + 1`
 			WriteStages
@@ -144,7 +144,7 @@ if [ $STAGE -gt 0 ]; then
 	else
 		# Get the timestamp
 		CURRENT_TIME=`date +'%s'`
-		if [ $TIMESTAMP -eq 0]; then
+		if [ $TIMESTAMP -eq 0 ]; then
 			WriteStages
 		else
 			if [ $(( ($CURRENT_TIME - $TIMESTAMP)/60 )) -ge $TIME ]; then
@@ -212,7 +212,7 @@ EOL
 # if val is 0, expr returns non-zero exit code
 set +e
 DIFF=`expr $SM_TEMP - $LAST_SM_TEMP`
-if [ $LAST_SM_TEMP -eq 0]; then
+if [ $LAST_SM_TEMP -eq 0 ]; then
 	DIFF=0
 fi
 #echo "$?"
