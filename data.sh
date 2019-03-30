@@ -147,7 +147,7 @@ if [ $STAGE -gt 0 ]; then
 		if [ $TIMESTAMP -eq 0]; then
 			WriteStages
 		else
-			if [ $( ($CURRENT_TIME - $TIMESTAMP)/60 ) -ge $TIME ]; then
+			if [ $(( ($CURRENT_TIME - $TIMESTAMP)/60 )) -ge $TIME ]; then
 				STAGE=`expr $STAGE + 1`
 				WriteStages
 			fi
