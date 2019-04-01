@@ -39,3 +39,13 @@ Start a smoking session by running
 ```bash
 bash startup.sh
 ```
+
+It may be a good idea to setup lighttpd such that *.csv is not cached
+
+```conf
+$HTTP["url"] =~ "/.*\.(json|csv)$" {
+    expire.url = (
+        "" => "access 0 seconds",
+    )
+}
+```
