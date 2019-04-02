@@ -258,7 +258,7 @@ else
 		if [ $DIFF -eq 0 ]; then
 			if [ $DIRECTION -lt 0 ]; then
 				SetKasaState "on" "smoke temp stable but below midpoint in band ($SMOKE_TEMP_LOW <= $SM_TEMP < $SMOKE_MID)"
-			elif [ $DIRECTION -gt 0]; then
+			elif [ $DIRECTION -gt 0 ]; then
 				SetKasaState "off" "smoke temp stable but above midpoint in band ($SMOKE_MID < $SM_TEMP <= $SMOKE_TEMP_HIGH)"
 			else
 				echo "smoke temp stable and $SM_TEMP == $SMOKE_MID, doing nothing"
