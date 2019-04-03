@@ -74,7 +74,7 @@ function SetKasaState()
 		 exit 1
 	fi
 	STATE=$1
-	tplink-smarthome-api send $IP '{"count_down":{"delete_all_rules":{}}}}'
+	tplink-smarthome-api send $TP_LINK_IP '{"count_down":{"delete_all_rules":{}}}}'
 	# NOTE: api commands must be blocking as they take a second or two
 	# and another state update may come in
 	case "$STATE" in
@@ -82,7 +82,7 @@ function SetKasaState()
 			KASA_STATE="lightgreen"
 			tplink-smarthome-api setPowerState $TP_LINK_IP true
 			# Force off after 5 minutes if there's no commands
-			tplink-smarthome-api send $IP '{"count_down":{"add_rule":{"enable":1,"delay":300,"act":0,"name":"turn off"}}}'
+			tplink-smarthome-api send $TP_LINK_IP '{"count_down":{"add_rule":{"enable":1,"delay":300,"act":0,"name":"turn off"}}}'
 		;;
 		"off")
 			KASA_STATE="red"
