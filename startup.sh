@@ -26,5 +26,19 @@ if ! [ -f /tmp/igrill.json ] ; then
     gpio write 4 0
     trap finish INT
     trap finish EXIT
-    python monitor.py
+    if [ ! -f "mac_config.py" ]; then
+        bash get_mac.sh
+    fi
+    
+    # deal with unexpected wireless issues
+    while [ true ]; do
+        sudo hciconfig hci0 down
+        rm -f hci-data
+        sudo hciconfig hci0 up
+        # python may fail if disconnected
+        set +e
+        python monitor.py
+        set -e
+    done
+    
 fi
