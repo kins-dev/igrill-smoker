@@ -53,7 +53,7 @@ Secure your instance of lighttpd using the instructions at <https://github.com/g
 
 Also, it may be a good idea to setup lighttpd such that ```*.csv```/```*.json``` is not cached.  Here's an example lighttpd config file:
 
-```shell
+```bash
 server.modules = (
         "mod_expire",
         "mod_access",
