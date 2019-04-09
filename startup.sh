@@ -20,10 +20,13 @@ if ! [ -f /tmp/igrill.json ] ; then
     sudo bash gen_json.sh
     rm -f last_temp.sh
     rm -f stage.sh
+    
+    # Turm off LEDs
     gpio mode 15 out
     gpio write 15 1
     gpio mode 4 out
     gpio write 4 0
+
     trap finish INT
     trap finish EXIT
     if [ ! -f "mac_config.py" ]; then
@@ -32,6 +35,7 @@ if ! [ -f /tmp/igrill.json ] ; then
     
     # deal with unexpected wireless issues
     while [ true ]; do
+        # reset the bluetooth connection
         sudo hciconfig hci0 down
         rm -f hci-data
         sudo hciconfig hci0 up
