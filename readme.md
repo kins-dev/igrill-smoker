@@ -1,10 +1,21 @@
 # Starting with Raspberry Pi Stretch
 
-You must have a Raspberry Pi 3 (only tested on B)
+You must have:
 
-This assumes you've done the basic setup of network and updated the system.  Rember, you probably want to enable ssh access.
+* Raspberry Pi 3
+* TP-Link Kasa
+* iGrill v2
 
-Also you must have your iGrill V2 ready to complete the installation and setup.
+Optional items:
+
+* LEDs with current limiting resistors
+* Speaker with 3.5 mm stereo jack input
+
+*Note: This has been tested using a Raspberry Pi B 3 with Raspian Strecth.  Your milage may vary.*
+
+This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Rember, you probably want to enable ssh access.  You must have your iGrill V2 ready to complete the installation and setup.
+
+## Installation
 
 Either download and run ```go.sh``` or run the following commands:
 
@@ -16,7 +27,7 @@ bash run-install.sh
 
 After starting the ```run-install.sh``` script, you should turn on your iGrill v2.  Installation shouldn't take long and the device is needed for setup.
 
-Secure your instance of lighttpd using the instructions at <https://github.com/galeone/letsencrypt-lighttpd/blob/master/renew.sh>.
+## Setup
 
 Find your Kasa IP address:
 
@@ -28,15 +39,21 @@ Copy ```user-config.example.sh``` to ```user-config.sh```.  Update ```user-confi
 
 Edit the chart.html file to suit your needs and copy it to your ```/var/www/html``` directory.
 
+## Running
+
 Start a smoking session by running:
 
 ```bash
 ./startup.sh
 ```
 
-It may be a good idea to setup lighttpd such that *.csv is not cached.  Here's an example lighttpd config file:
+## Lighttpd Setup
 
-```conf
+Secure your instance of lighttpd using the instructions at <https://github.com/galeone/letsencrypt-lighttpd/blob/master/renew.sh>.  You may want a wildcard certificate and you can find instructions here <https://asknetsec.com/generate-lets-encrypt-free-wildcard-certificate-using-certbot-ubuntu-16-04/>.
+
+Also, it may be a good idea to setup lighttpd such that ```*.csv```/```*.json``` is not cached.  Here's an example lighttpd config file:
+
+```shell
 server.modules = (
         "mod_expire",
         "mod_access",
