@@ -1,7 +1,7 @@
 import bluepy.btle as btle
 import random
 
-from crypto import encrypt, decrypt
+from Crypto.Cipher import AES
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -55,19 +55,24 @@ class IDevicePeripheral(btle.Peripheral):
         """
         Performs iDevices challenge/response handshake. Returns if handshake succeeded
 
+        Works by taking the challenge replacing the last 8 bytes with 3 random bytes plus 5 empty bytes
+        Then encypts that based on the key.
+        
         """
         print "Authenticating..."
-        # encryption key used by igrill mini
+        
         key = "".join([chr((256 + x) % 256) for x in self.encryption_key])
 
-        # send app challenge
-        challenge = str(bytearray([(random.randint(0, 255)) for i in range(8)] + [0] * 8))
+        aes = AES.new(key)
+
+        # send app challenge (16 bytes)
+        challenge = str([0] * 16))
         self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
 
         # read device challenge
         encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
         print "encrypted device challenge:", str(encrypted_device_challenge).encode("hex")
-        device_challenge = decrypt(key, encrypted_device_challenge)
+        device_challenge = aes.decrypt(encrypted_device_challenge)
         print "decrypted device challenge:", str(device_challenge).encode("hex")
 
         # verify device challenge
@@ -76,9 +81,10 @@ class IDevicePeripheral(btle.Peripheral):
             return False
 
         # send device response
+        # set the first 8 chars to '\0'
         device_response = chr(0) * 8 + device_challenge[8:]
         print "device response: ", str(device_response).encode("hex")
-        encrypted_device_response = encrypt(key, device_response)
+        encrypted_device_response = aes.encrypt(device_response)
         self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_response, True)
 
         print("Authenticated")
