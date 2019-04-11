@@ -134,7 +134,11 @@ else
 	SetLEDState "red" "off"
 fi
 
-
+CURRENT_TIME=`date +'%s'`
+STAGE_TIME=0
+if [ $TIMESTAMP -gt 0 ]; then
+	STAGE_TIME=$(( ($CURRENT_TIME - $TIMESTAMP)/60 ))
+fi
 # Only if we're using stages
 if [ $STAGE -gt 0 ]; then
 	# if TIME is less than 0, then we're using temperature
@@ -145,11 +149,10 @@ if [ $STAGE -gt 0 ]; then
 		fi
 	else
 		# Get the timestamp
-		CURRENT_TIME=`date +'%s'`
 		if [ $TIMESTAMP -eq 0 ]; then
 			WriteStages
 		else
-			if [ $(( ($CURRENT_TIME - $TIMESTAMP)/60 )) -ge $TIME ]; then
+			if [ $STAGE_TIME -ge $TIME ]; then
 				STAGE=`expr $STAGE + 1`
 				WriteStages
 			fi
@@ -195,7 +198,8 @@ cat > $STATE_FILE <<EOL
     "Smoke Temp":"$SM_TEMP",
     "Smoke Target Temp":"$SMOKE_MID",
     "Smoke Target Low":"$SMOKE_TEMP_LOW",
-    "Smoke Target High":"$SMOKE_TEMP_HIGH"
+    "Smoke Target High":"$SMOKE_TEMP_HIGH",
+	"Stage Time":"$STAGE_TIME"
   }
 ]
 EOL
