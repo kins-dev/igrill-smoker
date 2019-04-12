@@ -19,24 +19,24 @@ MAX_TEMP_CHANGE=2
 FD_DONE=0
 
 if [ -f "stage.sh" ]; then
-	source stage.sh
+    source stage.sh
 fi
 
 LAST_SM_TEMP=0
 LAST_FD_TEMP=0
 
 if [ -f "last_temp.sh" ]; then
-	source last_temp.sh
+    source last_temp.sh
 fi
 
 # allow user overrides
 if [ -f "user-config.sh" ]; then
-	source "user-config.sh"
+    source "user-config.sh"
 fi
 
 if [ -f "stages/${FOOD}.sh" ]; then
-	if [ $STAGE -eq 0 ]; then
-		STAGE=1
-	fi
-	source "stages/${FOOD}.sh"
+    if [ $STAGE -eq 0 ]; then
+        STAGE=1
+    fi
+    source "stages/${FOOD}.sh"
 fi

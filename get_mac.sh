@@ -8,16 +8,16 @@ sudo hciconfig hci0 up
 mkfifo hci-data
 sudo stdbuf -oL hcitool lescan > hci-data &
 cat hci-data | \
-while read CMD; do
-	# when we find the iGrill_V2 setup that information
-        if [[ $CMD = *"iGrill_V2"* ]]; then
-                MAC=${CMD:0:17}
-                echo $MAC
-		echo -n "ADDRESS='" > mac_config.py
-		echo -n $MAC >> mac_config.py
-		echo "'" >> mac_config.py
-		break
-        fi
+while read -r CMD; do
+    # when we find the iGrill_V2 setup that information
+    if [[ $CMD = *"iGrill_V2"* ]]; then
+        MAC=${CMD:0:17}
+        echo "$MAC"
+        echo -n "ADDRESS='" > mac_config.py
+        echo -n "$MAC" >> mac_config.py
+        echo "'" >> mac_config.py
+        break
+    fi
 done
 sudo kill -s int $!
 sudo hciconfig hci0 down
