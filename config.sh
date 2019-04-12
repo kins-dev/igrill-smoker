@@ -17,9 +17,10 @@ SMOKE_MID=225
 INTERNAL_TEMP=190
 MAX_TEMP_CHANGE=2
 FD_DONE=0
+STAGE_FILE="stage.sh"
 
-if [ -f "stage.sh" ]; then
-    source stage.sh
+if [ -f "$STAGE_FILE" ]; then
+    source "$STAGE_FILE"
 fi
 
 LAST_SM_TEMP=0
