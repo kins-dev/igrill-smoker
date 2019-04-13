@@ -7,11 +7,12 @@ echo "Turn on your iGrill2 or iGrill3 now"
 sudo hciconfig hci0 down
 sudo hciconfig hci0 up
 
-# use a FIFO to process each line
-mkfifo hci-data
-sudo stdbuf -oL hcitool lescan >&220 &
+coproc RunScan (
+        sudo stdbuf -oL hcitool lescan
+)
 
-while read -u 220 -r CMD; do
+while read -r CMD; do
+
     # when we find the iGrill_V2 setup that information
     if [[ $CMD = *"iGrill_"* ]]; then
         MAC=${CMD:0:17}
@@ -21,9 +22,8 @@ while read -u 220 -r CMD; do
         echo "'" >> mac_config.py
         break
     fi
-done
-#sudo kill -s int $!
-sudo hciconfig hci0 down
-rm -f hci-data
-sudo hciconfig hci0 up
+done <&"${RunScan[0]}"
 
+# Reset BT again
+sudo hciconfig hci0 down
+sudo hciconfig hci0 up
