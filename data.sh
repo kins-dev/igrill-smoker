@@ -228,7 +228,7 @@ cat > "$STATE_FILE" <<EOL
 EOL
 
 # must write after config is reloaded
-cat > "last_temp.sh" <<EOL
+cat > "$LAST_TEMP_FILE" <<EOL
 #!/bin/bash
 set -ue
 LAST_FD_TEMP=$FD_TEMP
