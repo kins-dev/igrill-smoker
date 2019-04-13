@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ue
+set -$-ue${DEBUG+xv}
 
 # Functions
 function Finish () {
@@ -10,6 +10,7 @@ function Finish () {
 function LoadConfig () {
     local CONFIG_FILE="config.sh"
     if [ -f "$CONFIG_FILE" ]; then
+        # shellcheck source=config.sh
         source "$CONFIG_FILE"
     else
         echo "Missing $CONFIG_FILE, exiting!"

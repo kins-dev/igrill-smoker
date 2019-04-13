@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ue
+set -$-ue${DEBUG+xv}
 CSV_FILE=/var/www/html/current.csv
 STATE_FILE=/var/www/html/state.json
 BAD_DATA=63536

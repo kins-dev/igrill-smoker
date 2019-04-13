@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ue
+set -$-ue${DEBUG+xv}
 WEBDIR="/var/www/html"
 OUTFILE="$WEBDIR/items.json"
 echo "[" > $OUTFILE

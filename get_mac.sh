@@ -1,4 +1,5 @@
 #!/bin/bash
+set -$-ue${DEBUG+xv}
 echo "Turn on your iGrill V2 now"
 # Reset BT adapter
 sudo hciconfig hci0 down
