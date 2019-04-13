@@ -2,7 +2,7 @@
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
-echo "Turn on your iGrill V2 now"
+echo "Turn on your iGrill2 or iGrill3 now"
 # Reset BT adapter
 sudo hciconfig hci0 down
 sudo hciconfig hci0 up
@@ -13,7 +13,7 @@ sudo stdbuf -oL hcitool lescan >&220 &
 
 while read -u 220 -r CMD; do
     # when we find the iGrill_V2 setup that information
-    if [[ $CMD = *"iGrill_V2"* ]]; then
+    if [[ $CMD = *"iGrill_"* ]]; then
         MAC=${CMD:0:17}
         echo "$MAC"
         echo -n "ADDRESS='" > mac_config.py
