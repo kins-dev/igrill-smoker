@@ -9,9 +9,9 @@ sudo hciconfig hci0 up
 
 # use a FIFO to process each line
 mkfifo hci-data
-sudo stdbuf -oL hcitool lescan > hci-data &
-cat hci-data | \
-while read -r CMD; do
+sudo stdbuf -oL hcitool lescan >&220 &
+
+while read -u 220 -r CMD; do
     # when we find the iGrill_V2 setup that information
     if [[ $CMD = *"iGrill_V2"* ]]; then
         MAC=${CMD:0:17}
@@ -22,7 +22,7 @@ while read -r CMD; do
         break
     fi
 done
-sudo kill -s int $!
+#sudo kill -s int $!
 sudo hciconfig hci0 down
 rm -f hci-data
 sudo hciconfig hci0 up

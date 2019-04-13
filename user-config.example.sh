@@ -1,4 +1,6 @@
 #!/bin/bash
+# Defining variables for other scripts
+# shellcheck disable=2034
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
