@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ue
+set -$-ue${DEBUG+xv}
 
 function finish  () {
     # Cleanup on exit
