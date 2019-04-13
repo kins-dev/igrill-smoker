@@ -1,4 +1,6 @@
 #!/bin/bash
+true
+# shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 sudo apt-get update
 sudo apt-get install -y libglib2.0-dev npm lighttpd certbot screen

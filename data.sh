@@ -1,4 +1,6 @@
 #!/bin/bash
+true
+# shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
 # Functions
@@ -141,7 +143,7 @@ if [ "$FD_TEMP" -eq "$BAD_DATA" ]; then
 fi
 
 if [ "$TIMESTAMP" -gt "0" ]; then
-    TIME_IN_S=$((DATE_TS - TINESTAMP))
+    TIME_IN_S=$((DATE_TS - TIMESTAMP))
     STAGE_TIME=$((TIME_IN_S / 60))
 fi
 

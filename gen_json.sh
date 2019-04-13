@@ -1,4 +1,6 @@
 #!/bin/bash
+true
+# shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 WEBDIR="/var/www/html"
 OUTFILE="$WEBDIR/items.json"
