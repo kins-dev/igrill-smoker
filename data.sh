@@ -20,48 +20,7 @@ function LoadConfig () {
     fi
 }
 
-function SetLEDState () {
-    if [ "$#" -ne "2" ]; then
-        echo "Wrong number of arguements to SetLEDState"
-        echo "Expected 2, got $#"
-        exit 1
-    fi
-    local COLOR="$1"
-    local VALUE="$2"
-    local ON_VAL="1"
-    local OFF_VAL="0"
-    local GPIO
-    # TODO: Document pin hookups
-    case "$COLOR" in
-        "red")
-            GPIO="4"
-        ;;
-        "green")
-            GPIO="15"
-            OFF_VAL="1"
-            ON_VAL="0"
-        ;;
-        *)
-            echo "bad value for led sent to SetLEDState"
-            echo "expected \"red\" or \"green\", got \"$COLOR\""
-            exit 1
-        ;;
-    esac
-    case "$VALUE" in
-        "on")
-            gpio write "$GPIO" "$ON_VAL" &
-        ;;
-        "off")
-            gpio write "$GPIO" "$OFF_VAL" &
-        ;;
-        *)
-            echo "bad value for LED state sent to SetLEDState"
-            echo "expected \"on\" or \"off\", got \"$VALUE\""
-            exit 1
-        ;;
-    esac
-    echo "Turning LED $COLOR $VALUE"
-}
+
 
 function SetKasaState() {
     local STATE
@@ -173,14 +132,14 @@ fi
 
 if [ "$FD_DONE" -eq "1" ]; then
     #done
-    SetLEDState "green" "on"
+    LEDsSetState "green" "on"
     
     # Play a sound
     omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
     
 elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
     #done
-    SetLEDState "green" "on"
+    LEDsSetState "green" "on"
     
     # Play a sound
     omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
@@ -190,7 +149,7 @@ elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
         SMOKE_MID="$INTERNAL_TEMP"
     fi
 else
-    SetLEDState "green" "off"
+    LEDsSetState "green" "off"
 fi
 
 SMOKE_TEMP_HIGH=$((SMOKE_MID + 7))
@@ -198,13 +157,13 @@ SMOKE_TEMP_LOW=$((SMOKE_MID - 7))
 
 if [ "$BATTERY" -le "$MIN_BATTERY" ] ; then
     #low battery
-    SetLEDState "red" "on"
+    LEDsSetState "red" "on"
     
     # TODO: make this a function
     # Play a sound through the 3.5mm jack to indicate low battery
     omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/kling.wav &
 else
-    SetLEDState "red" "off"
+    LEDsSetState "red" "off"
 fi
 
 # Data for Highcharts

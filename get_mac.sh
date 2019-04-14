@@ -2,16 +2,11 @@
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
+source "bt.sh"
+
 echo "Turn on your iGrill2 or iGrill3 now"
 
-function ResetBT()
-{
-    # Reset BT adapter
-    sudo hciconfig hci0 down
-    sudo hciconfig hci0 up
-}
-
-ResetBT
+BtReset
 
 coproc RunScan (
     # stdbuf is needed to prevent buffering of lines
@@ -33,4 +28,4 @@ while read -r CMD; do
 done <&"${RunScan[0]}"
 
 # This will forcably kill the scan
-ResetBT
+BtReset
