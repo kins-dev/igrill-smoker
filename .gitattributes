@@ -1,0 +1,3 @@
+# Force .sh to use LF for line endings even on Windows
+# this is to prevent errors with shellcheck
+*.sh text eol=lf
