@@ -24,7 +24,7 @@ if ! [ -f /tmp/igrill.json ] ; then
     
     # Link CSV file
     sudo rm -f "$CSV_FILE"
-    sudo ln -s "$FILE $CSV_FILE"
+    sudo ln -s "$FILE" "$CSV_FILE"
     
     # Setup state file
     sudo touch "$STATE_FILE"
