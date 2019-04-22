@@ -1,5 +1,9 @@
 #!/bin/bash
-set -ue
+# Defining variables for other scripts
+# shellcheck disable=2034
+true
+# shellcheck disable=2086
+set -$-ue${DEBUG+xv}
 # copy this file to user-config.sh amd edit amy config overrides here
 # You can even edit this while smoking
 SMOKE_MID=225

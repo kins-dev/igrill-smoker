@@ -13,30 +13,30 @@ case "$STAGE" in
     1)
         # Warmup stage, keep plate at a cooler temp and limit temp rise
         STAGE_NAME="Warmup"
-        SMOKE_MID=180
+        SMOKE_MID=250
         MAX_TEMP_CHANGE=1
-        INTERNAL_TEMP=70
+        INTERNAL_TEMP=50
     ;;
     2)
-        # Smoke stage, keep plate at cooler temp, but allow bigger temp rise
-        STAGE_NAME="Smoke"
-        SMOKE_MID=180
+        # Slow cook stage
+        STAGE_NAME="Slow Cook"
+        SMOKE_MID=250
         MAX_TEMP_CHANGE=2
-        INTERNAL_TEMP=120
+        INTERNAL_TEMP=110
     ;;
     3)
         # Cook stage, move hotplate to higher temp, allow bigger temp rise
-        STAGE_NAME="Cook"
-        SMOKE_MID=225
+        STAGE_NAME="Crust"
+        SMOKE_MID=400
         MAX_TEMP_CHANGE=2
-        INTERNAL_TEMP=190
+        INTERNAL_TEMP=135
     ;;
     4|5)
-        # Keep warm stage, move hotplate to higher temp, allow bigger temp rise
+        # Keep warm stage allow bigger temp rise
         STAGE_NAME="Keep warm"
-        SMOKE_MID=160
+        SMOKE_MID=135
         MAX_TEMP_CHANGE=2
-        INTERNAL_TEMP=200
+        INTERNAL_TEMP=190
         # signal we're done
         FD_DONE=1
         # Stay in this stage

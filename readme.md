@@ -4,7 +4,7 @@ You must have:
 
 * Raspberry Pi 3
 * TP-Link Kasa
-* iGrill v2
+* iGrill2 or iGrill3
 
 Optional items:
 

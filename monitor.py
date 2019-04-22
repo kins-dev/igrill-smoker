@@ -18,7 +18,7 @@ if __name__ == '__main__':
                 'temperature': periph.read_temperature(),
                 'battery': periph.read_battery(),
             }
-            os.system("bash ~/igrill-smoker/data.sh " + str(sensor_data['battery']) + ' ' + str(sensor_data['temperature'][1]) + ' ' + str(sensor_data['temperature'][4]))
+            os.system("./data.sh " + str(sensor_data['battery']) + ' ' + str(sensor_data['temperature'][1]) + ' ' + str(sensor_data['temperature'][4]))
 
             print 'Writing sensor data: {}'.format(sensor_data)
             with open(DATA_FILE, 'w') as f:
