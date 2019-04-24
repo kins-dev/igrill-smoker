@@ -1,8 +1,6 @@
 import bluepy.btle as btle
 import random
 
-from Crypto.Cipher import AES
-
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
 
@@ -54,38 +52,30 @@ class IDevicePeripheral(btle.Peripheral):
     def authenticate(self):
         """
         Performs iDevices challenge/response handshake. Returns if handshake succeeded
-
-        Works by taking the challenge replacing the last 8 bytes with 3 random bytes plus 5 empty bytes
-        Then encypts that based on the key.
-        
+        Works for all devices using this handshake, no key required
         """
         print "Authenticating..."
-        
-        key = "".join([chr((256 + x) % 256) for x in self.encryption_key])
-
-        aes = AES.new(key)
 
         # send app challenge (16 bytes)
-        challenge = str(bytearray([(random.randint(0, 255)) for i in range(8)] + [0] * 8))
+        challenge = str(bytearray([0] * 16))
         self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
 
-        # read device challenge
+        """
+        Normally we'd have to perform some crypto operations:
+            Write a challenge (in this case 16 bytes of 0)
+            Read the value
+            Decrypt w/ the key
+            Check the first 8 bytes match our challenge
+            Set the first 8 bytes 0
+            Encrypt with the key
+            Send back the new value
+        
+        But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
+        We just hand back the same encypted value we get and we're good.
+        """
         encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
         print "encrypted device challenge:", str(encrypted_device_challenge).encode("hex")
-        device_challenge = aes.decrypt(encrypted_device_challenge)
-        print "decrypted device challenge:", str(device_challenge).encode("hex")
-
-        # verify device challenge
-        if device_challenge[:8] != challenge[:8]:
-            print "Invalid device challenge"
-            return False
-
-        # send device response
-        # set the first 8 chars to '\0'
-        device_response = chr(0) * 8 + device_challenge[8:]
-        print "device response: ", str(device_response).encode("hex")
-        encrypted_device_response = aes.encrypt(device_response)
-        self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_response, True)
+        self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
 
         print("Authenticated")
 
@@ -94,11 +84,8 @@ class IDevicePeripheral(btle.Peripheral):
 
 class IGrillMiniPeripheral(IDevicePeripheral):
     """
-    Specialization of iDevice peripheral for the iGrill Mini (sets the correct encryption key
+    Specialization of iDevice peripheral for the iGrill Mini
     """
-
-    # encryption key for the iGrill Mini
-    encryption_key = [-19, 94, 48, -114, -117, -52, -111, 19, 48, 108, -44, 104, 84, 21, 62, -35]
 
     def __init__(self, address):
         IDevicePeripheral.__init__(self, address)
@@ -108,22 +95,17 @@ class IGrillMiniPeripheral(IDevicePeripheral):
         self.temp_char = self.characteristic(UUIDS.PROBE1_TEMPERATURE)
 
     def read_temperature(self):
+        # possibly change to unpack?
         temp = ord(self.temp_char.read()[1]) * 256
         temp += ord(self.temp_char.read()[0])
 
-        return { 1: int(temp), 2: 0.0, 3: 0.0, 4: 0.0 }
+        return { 1: int(temp), 2: 63536, 3: 63536, 4: 63536 }
 
     def read_battery(self):
         return int(ord(self.battery_char.read()[0]))
 
 
 class IGrillV2Peripheral(IDevicePeripheral):
-    """
-    Specialization of iDevice peripheral for the iGrill v2
-    """
-
-    # encryption key for the iGrill v2
-    encryption_key = [-33, 51, -32, -119, -12, 72, 78, 115, -110, -44, -49, -71, 70, -25, -123, -74]
 
     def __init__(self, address):
         IDevicePeripheral.__init__(self, address)
