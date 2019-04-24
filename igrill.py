@@ -1,5 +1,6 @@
 import bluepy.btle as btle
 import random
+import logging
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -36,6 +37,7 @@ class IDevicePeripheral(btle.Peripheral):
 
         # enumerate all characteristics so we can look up handles from uuids
         self.characteristics = self.getCharacteristics()
+        logging.debug("Pulling BLE characteristics")
 
         # authenticate with iDevices custom challenge/response protocol
         if not self.authenticate():
@@ -54,10 +56,11 @@ class IDevicePeripheral(btle.Peripheral):
         Performs iDevices challenge/response handshake. Returns if handshake succeeded
         Works for all devices using this handshake, no key required
         """
-        print "Authenticating..."
+        logging.debug("Authenticating...")
 
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
         challenge = str(bytearray([0] * 16))
+        logging.debug("Sending key of all 0's")
         self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
 
         """
@@ -74,10 +77,10 @@ class IDevicePeripheral(btle.Peripheral):
         We just hand back the same encypted value we get and we're good.
         """
         encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
-        print "encrypted device challenge:", str(encrypted_device_challenge).encode("hex")
+        logging.debug("encrypted device challenge:", str(encrypted_device_challenge).encode("hex"))
         self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
 
-        print("Authenticated")
+        logging.debug("Authenticated")
 
         return True
 
