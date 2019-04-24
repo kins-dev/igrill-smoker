@@ -56,7 +56,7 @@ class IDevicePeripheral(btle.Peripheral):
         """
         print "Authenticating..."
 
-        # send app challenge (16 bytes)
+        # send app challenge (16 bytes) (must be wrapped in a bytearray)
         challenge = str(bytearray([0] * 16))
         self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
 
@@ -118,7 +118,6 @@ class IGrillV2Peripheral(IDevicePeripheral):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
             temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
             self.temp_chars[probe_num] = temp_char
-
     def read_temperature(self):
         temps = {}
         for probe_num, temp_char in self.temp_chars.items():
