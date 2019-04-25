@@ -77,7 +77,7 @@ class IDevicePeripheral(btle.Peripheral):
         We just hand back the same encypted value we get and we're good.
         """
         encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
-        logging.debug("encrypted device challenge:", str(encrypted_device_challenge).encode("hex"))
+        logging.debug("encrypted device challenge:{0}".format(str(encrypted_device_challenge).encode("hex")))
         self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
@@ -121,6 +121,8 @@ class IGrillV2Peripheral(IDevicePeripheral):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
             temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
             self.temp_chars[probe_num] = temp_char
+# need to play with this more, but low temp is first 2 bytes, high temp 2nd two bytes
+#        self.characteristic(UUIDS.PROBE1_THRESHOLD).write(bytearray([60,0,80,0]), True)
     def read_temperature(self):
         temps = {}
         for probe_num, temp_char in self.temp_chars.items():

@@ -8,7 +8,7 @@ def setup_log(log_level, logfile):
         raise TypeError("Invalid log level: {0}".format(log_level))
 
     if logfile is not '':
-        logging.info("Logging redirected to: ".format(logfile))
+        logging.info("Logging redirected to: {0}".format(logfile))
         # Need to replace the current handler on the root logger:
         file_handler = logging.FileHandler(logfile, 'a')
         formatter = logging.Formatter('%(asctime)s %(threadName)s %(levelname)s: %(message)s')

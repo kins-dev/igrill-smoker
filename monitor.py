@@ -19,7 +19,6 @@ def main():
     parser.add_argument(
         '--test',
         help='Test mode, do not run data.sh',
-        dest='test_mode',
         action='store_true')
     parser.add_argument(
         '-l',
@@ -48,7 +47,9 @@ def main():
                     'temperature': periph.read_temperature(),
                     'battery': periph.read_battery(),
                 }
-                if not options.test_mode
+                if (True == options.test)
+                    logging.debug("Skipping data.sh call")
+                else
                     os.system("./data.sh " + str(sensor_data['battery']) + ' ' + str(sensor_data['temperature'][1]) + ' ' + str(sensor_data['temperature'][4]))
 
                 logging.info('Writing sensor data: {}'.format(sensor_data))
