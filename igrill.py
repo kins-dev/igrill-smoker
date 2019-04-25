@@ -1,6 +1,8 @@
 import bluepy.btle as btle
 import random
 import logging
+import configparser
+import struct
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -96,20 +98,22 @@ class IGrillMiniPeripheral(IDevicePeripheral):
         # find characteristics for battery and temperature
         self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
         self.temp_char = self.characteristic(UUIDS.PROBE1_TEMPERATURE)
+        self.threshold_char = self.characteristic(UUIDS.PROBE1_THRESHOLD)
 
     def read_temperature(self):
         # possibly change to unpack?
-        temp = ord(self.temp_char.read()[1]) * 256
-        temp += ord(self.temp_char.read()[0])
+        temp = struct.unpack('<h', self.temp_char.read())[0]
+        self.threshold_char.write(struct.pack("<hh", -32768, 32767))
 
-        return { 1: int(temp), 2: 63536, 3: 63536, 4: 63536 }
+        return { 1: temp, 2: -32768, 3: -32768, 4: -32768 }
 
     def read_battery(self):
-        return int(ord(self.battery_char.read()[0]))
+        return struct.unpack("<h",self.battery_char.read())[0]
+            self.threshold_char[probe_num].write(struct.pack("<hh",
+                config['Probe1']['LOW_TEMP'],
+                config['Probe1']['HIGH_TEMP']))
 
-
-class IGrillV2Peripheral(IDevicePeripheral):
-
+class IGrillPeripheral(IDevicePeripheral):
     def __init__(self, address):
         IDevicePeripheral.__init__(self, address)
 
@@ -120,17 +124,23 @@ class IGrillV2Peripheral(IDevicePeripheral):
         for probe_num in range(1,5):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
             temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
+            threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
+            threshold_char = self.characteristic(getattr(UUIDS, threshold_char_name))
             self.temp_chars[probe_num] = temp_char
-# need to play with this more, but low temp is first 2 bytes, high temp 2nd two bytes
-#        self.characteristic(UUIDS.PROBE1_THRESHOLD).write(bytearray([60,0,80,0]), True)
+            self.threshold_chars[probe_num] = threshold_char
+
     def read_temperature(self):
+        config = configparser.ConfigParser()
+        # does not throw an error, just returns the empty set if the file doesn't exist
+        config.read('tempdata.ini')
         temps = {}
         for probe_num, temp_char in self.temp_chars.items():
-            temp = ord(temp_char.read()[1]) * 256
-            temp += ord(temp_char.read()[0])
-            temps[probe_num] = int(temp)
+            temps[probe_num] = struct.unpack("<h",temp_char.read())[0]
+            self.threshold_char[probe_num].write(struct.pack("<hh",
+                config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
+                config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
 
         return temps
 
     def read_battery(self):
-        return int(ord(self.battery_char.read()[0]))
+        return struct.unpack("<h",self.battery_char.read())[0]

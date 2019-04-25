@@ -65,3 +65,4 @@ docs/_build/
 target/
 .vscode/settings.json
 .vscode/tags
+test.py

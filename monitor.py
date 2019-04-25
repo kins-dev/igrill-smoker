@@ -5,7 +5,7 @@ import mac_config
 import logging
 import argparse
 
-from igrill import IGrillV2Peripheral
+from igrill import IGrillPeripheral
 from utils import setup_log
 
 DATA_FILE = '/tmp/igrill.json'
@@ -39,7 +39,7 @@ def main():
 
     setup_log(options.log_level, options.log_destination)
 
-    periph = IGrillV2Peripheral(mac_config.ADDRESS)
+    periph = IGrillPeripheral(mac_config.ADDRESS)
 
     try:
         while True:
