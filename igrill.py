@@ -1,7 +1,7 @@
 import bluepy.btle as btle
 import random
 import logging
-import ConfigParser
+import configparser
 import struct
 
 
@@ -103,13 +103,13 @@ class IGrillMiniPeripheral(IDevicePeripheral):
 
     def read_temperature(self):
         # possibly change to unpack?
-        temp = struct.unpack('<h', self.temp_char.read())[0]
+        temp = struct.unpack('<h', self.temp_char.read()[:2])[0]
         self.threshold_char.write(struct.pack("<hh", -32768, 32767))
 
         return { 1: temp, 2: -32768, 3: -32768, 4: -32768 }
 
     def read_battery(self):
-        return struct.unpack("<h",self.battery_char.read())[0]
+        return int(ord(self.battery_char.read()))
 
 class IGrillPeripheral(IDevicePeripheral):
     def __init__(self, address):
@@ -134,7 +134,7 @@ class IGrillPeripheral(IDevicePeripheral):
         config.read('tempdata.ini')
         temps = {}
         for probe_num, temp_char in self.temp_chars.items():
-            temps[probe_num] = struct.unpack("<h",temp_char.read())[0]
+            temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
             self.threshold_chars[probe_num].write(struct.pack("<hh",
                 config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
                 config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
@@ -142,4 +142,4 @@ class IGrillPeripheral(IDevicePeripheral):
         return temps
 
     def read_battery(self):
-        return struct.unpack("<h",self.battery_char.read())[0]
+        return int(ord(self.battery_char.read()))
