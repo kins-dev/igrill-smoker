@@ -4,6 +4,7 @@ import logging
 import configparser
 import struct
 
+
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
 
@@ -109,9 +110,6 @@ class IGrillMiniPeripheral(IDevicePeripheral):
 
     def read_battery(self):
         return struct.unpack("<h",self.battery_char.read())[0]
-            self.threshold_char[probe_num].write(struct.pack("<hh",
-                config['Probe1']['LOW_TEMP'],
-                config['Probe1']['HIGH_TEMP']))
 
 class IGrillPeripheral(IDevicePeripheral):
     def __init__(self, address):
