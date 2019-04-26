@@ -1,7 +1,7 @@
 import bluepy.btle as btle
 import random
 import logging
-import configparser
+import ConfigParser
 import struct
 
 
