@@ -128,13 +128,13 @@ class IGrillPeripheral(IDevicePeripheral):
             self.threshold_chars[probe_num] = threshold_char
 
     def read_temperature(self):
-        config = configparser.ConfigParser()
+        config = ConfigParser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
         config.read('tempdata.ini')
         temps = {}
         for probe_num, temp_char in self.temp_chars.items():
             temps[probe_num] = struct.unpack("<h",temp_char.read())[0]
-            self.threshold_char[probe_num].write(struct.pack("<hh",
+            self.threshold_chars[probe_num].write(struct.pack("<hh",
                 config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
                 config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
 
