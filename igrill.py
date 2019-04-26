@@ -118,6 +118,7 @@ class IGrillPeripheral(IDevicePeripheral):
         # find characteristics for battery and temperature
         self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
         self.temp_chars = {}
+        self.threshold_chars = {}
 
         for probe_num in range(1,5):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
