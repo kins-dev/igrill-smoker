@@ -1,7 +1,6 @@
 import bluepy.btle as btle
 import logging
 import struct
-# Not ready yet
 import configparser
 
 class UUIDS:
@@ -71,8 +70,8 @@ class IDevicePeripheral(btle.Peripheral):
         for probe_num, temp_char in list(self.temp_chars.items()):
             temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
             self.threshold_chars[probe_num].write(struct.pack("<hh",
-                config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
-                config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
+                int(config['Probe{0}'.format(probe_num)]['LOW_TEMP']),
+                int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
 
         return temps
 
@@ -92,7 +91,7 @@ class IDevicePeripheral(btle.Peripheral):
         logging.debug("Authenticating...")
 
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
-        challenge = str(bytearray([0] * 16))
+        challenge = bytearray([0] * 16)
         logging.debug("Sending key of all 0's")
         self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
 
@@ -110,7 +109,7 @@ class IDevicePeripheral(btle.Peripheral):
         We just hand back the same encypted value we get and we're good.
         """
         encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
-        logging.debug("encrypted device challenge:{0}".format(str(encrypted_device_challenge).encode("hex")))
+        logging.debug("encrypted device challenge:{0}".format(str(encrypted_device_challenge).encode("utf-8").hex()))
         self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
