@@ -2,6 +2,7 @@ import bluepy.btle as btle
 import logging
 import struct
 import configparser
+import binascii
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -37,10 +38,6 @@ class IDevicePeripheral(btle.Peripheral):
         # if no bonding exists, so please use bluetoothctl to create a bond first
         self.setSecurityLevel("medium")
 
-        # enumerate all characteristics so we can look up handles from uuids
-        self.characteristics = self.getCharacteristics()
-        logging.debug("Pulling BLE characteristics")
-
         # authenticate with iDevices custom challenge/response protocol
         if not self.authenticate():
             raise RuntimeError("Unable to authenticate with device")
@@ -48,16 +45,16 @@ class IDevicePeripheral(btle.Peripheral):
         self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
 
         # Setup battery which is the same regardless of device
-        self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
+        self.battery_char = self.getCharacteristics(uuid=UUIDS.BATTERY_LEVEL)[0]
 
         self.temp_chars = {}
         self.threshold_chars = {}
 
         for probe_num in range(1, self.probe_count + 1):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
-            temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
+            temp_char = self.getCharacteristics(uuid=getattr(UUIDS, temp_char_name))[0]
             threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
-            threshold_char = self.characteristic(getattr(UUIDS, threshold_char_name))
+            threshold_char = self.getCharacteristics(uuid=getattr(UUIDS, threshold_char_name))[0]
             self.temp_chars[probe_num] = temp_char
             self.threshold_chars[probe_num] = threshold_char
 
@@ -74,14 +71,6 @@ class IDevicePeripheral(btle.Peripheral):
                 int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP'])))
         return temps
 
-    def characteristic(self, uuid):
-        """
-        Returns the characteristic for a given uuid.
-        """
-        for c in self.characteristics:
-            if c.uuid == uuid:
-                return c
-
     def authenticate(self):
         """
         Performs iDevices challenge/response handshake. Returns if handshake succeeded
@@ -92,7 +81,7 @@ class IDevicePeripheral(btle.Peripheral):
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
         challenge = bytearray([0] * 16)
         logging.debug("Sending key of all 0's")
-        self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
+        self.getCharacteristics(uuid=UUIDS.APP_CHALLENGE)[0].write(challenge, True)
 
         """
         Normally we'd have to perform some crypto operations:
@@ -107,9 +96,9 @@ class IDevicePeripheral(btle.Peripheral):
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
         We just hand back the same encypted value we get and we're good.
         """
-        encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
-        logging.debug("encrypted device challenge:{0}".format(str(encrypted_device_challenge).encode("utf-8").hex()))
-        self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
+        encrypted_device_challenge = self.getCharacteristics(uuid=UUIDS.DEVICE_CHALLENGE)[0].read()
+        logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
+        self.getCharacteristics(uuid=UUIDS.DEVICE_RESPONSE)[0].write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
 
