@@ -2,7 +2,7 @@ import bluepy.btle as btle
 import logging
 import struct
 # Not ready yet
-#import configparser
+import configparser
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -63,18 +63,16 @@ class IDevicePeripheral(btle.Peripheral):
             self.threshold_chars[probe_num] = threshold_char
 
     def read_temperature(self):
-        # Not ready yet
-        #config = configparser.ConfigParser()
+        config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        #config.read('tempdata.ini')
+        config.read('tempdata.ini')
 
         temps = {}
-        for probe_num, temp_char in self.temp_chars.items():
+        for probe_num, temp_char in list(self.temp_chars.items()):
             temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
-            # Not ready yet
-            #self.threshold_chars[probe_num].write(struct.pack("<hh",
-            #    config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
-            #    config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
+            self.threshold_chars[probe_num].write(struct.pack("<hh",
+                config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
+                config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
 
         return temps
 

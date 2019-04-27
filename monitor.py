@@ -14,8 +14,7 @@ INTERVAL = 20
 def main():
 
     parser = argparse.ArgumentParser(
-        description='Connects to iGrill device and calls a script to process results',
-        version="1.1")
+        description='Connects to iGrill device and calls a script to process results')
     parser.add_argument(
         '--test',
         dest='test_mode',

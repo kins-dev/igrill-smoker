@@ -50,7 +50,7 @@ if ! [ -f /tmp/igrill.json ] ; then
 
         # python may fail if disconnected
         set +e
-        python monitor.py
+        python3 monitor.py
         set -e
     done
     
