@@ -6,7 +6,7 @@ true
 set -$-ue${DEBUG+xv}
 CSV_FILE=/var/www/html/current.csv
 STATE_FILE=/var/www/html/state.json
-BAD_DATA=-32768
+BAD_DATA=-2000
 TIME=-1
 TIMESTAMP=0
 FOOD=brisket

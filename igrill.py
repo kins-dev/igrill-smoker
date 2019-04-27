@@ -46,7 +46,7 @@ class IDevicePeripheral(btle.Peripheral):
         if not self.authenticate():
             raise RuntimeError("Unable to authenticate with device")
 
-        self.temps = [-32768] * UUIDS.MAX_PROBE_COUNT
+        self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
 
         # Setup battery which is the same regardless of device
         self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
