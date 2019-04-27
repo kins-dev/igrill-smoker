@@ -13,7 +13,7 @@ Optional items:
 
 *Note: This has been tested using a Raspberry Pi B 3 with Raspian Strecth.  Your milage may vary.*
 
-This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Rember, you probably want to enable ssh access.  You must have your iGrill V2 ready to complete the installation and setup.
+This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Rember, you probably want to enable ssh access.  You must have your iGrill ready to complete the installation and setup.  This does require python 3 to be installed.
 
 ## Installation
 
