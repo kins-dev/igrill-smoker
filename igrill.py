@@ -71,8 +71,7 @@ class IDevicePeripheral(btle.Peripheral):
             temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
             self.threshold_chars[probe_num].write(struct.pack("<hh",
                 int(config['Probe{0}'.format(probe_num)]['LOW_TEMP']),
-                int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
-
+                int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP'])))
         return temps
 
     def characteristic(self, uuid):
