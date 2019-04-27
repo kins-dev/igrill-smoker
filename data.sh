@@ -2,13 +2,19 @@
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
+
+# pull in LED functions
 source leds.sh
+
 # Functions
+
+# Used with trap to make sure the file is written before the script exits
 function Finish () {
     #	echo "done"
     echo "$CSV_DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> "$CSV_FILE"
 }
 
+# Load the config/user config/stages files
 function LoadConfig () {
     local CONFIG_FILE="config.sh"
     if [ -f "$CONFIG_FILE" ]; then
@@ -20,8 +26,7 @@ function LoadConfig () {
     fi
 }
 
-
-
+# Should be moved out to another file
 function SetKasaState() {
     local STATE
     local MSG
@@ -58,6 +63,7 @@ function SetKasaState() {
     echo "$MSG"
 }
 
+# Updates the stages (at a transition point)
 function WriteStages()
 {
     #	echo "updating stages"
@@ -67,10 +73,8 @@ set -ue
 STAGE=$STAGE
 TIMESTAMP=$DATE_TS
 EOL
-    #	echo "reloading config"
     # Reload the config file with the new stage.
     LoadConfig
-    #	echo "update complete"
 }
 
 # Define initial values for variables
@@ -79,10 +83,10 @@ LAST_FD_TEMP="0"
 LAST_SM_TEMP="0"
 STAGE_TIME="0"
 KASA_STATE=""
-CSV_DATE=$(date -Iseconds)
-DATE_TS=$(date +'%s')
 STAGE_NAME="None"
 STAGE_FILE="stage.sh"
+CSV_DATE=$(date -Iseconds)
+DATE_TS=$(date +'%s')
 
 # Load the configuration
 LoadConfig
@@ -91,6 +95,7 @@ BATTERY="$1"
 FD_TEMP="$2"
 SM_TEMP="$3"
 
+# If any of the values are bad, just load the previous data and go forward
 if [ "$BATTERY" -eq "$BAD_DATA" ]; then
     BATTERY="$LAST_BATTERY"
 fi

@@ -1,5 +1,8 @@
 import bluepy.btle as btle
-import random
+import logging
+import struct
+# Not ready yet
+#import configparser
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -19,10 +22,11 @@ class UUIDS:
     PROBE3_THRESHOLD   = btle.UUID("06ef0007-2e06-4b79-9e33-fce2c42805ec")
     PROBE4_TEMPERATURE = btle.UUID("06ef0008-2e06-4b79-9e33-fce2c42805ec")
     PROBE4_THRESHOLD   = btle.UUID("06ef0009-2e06-4b79-9e33-fce2c42805ec")
-
+    MAX_PROBE_COUNT    = 4
 
 class IDevicePeripheral(btle.Peripheral):
     encryption_key = None
+    probe_count = 0
 
     def __init__(self, address):
         """
@@ -36,10 +40,43 @@ class IDevicePeripheral(btle.Peripheral):
 
         # enumerate all characteristics so we can look up handles from uuids
         self.characteristics = self.getCharacteristics()
+        logging.debug("Pulling BLE characteristics")
 
         # authenticate with iDevices custom challenge/response protocol
         if not self.authenticate():
             raise RuntimeError("Unable to authenticate with device")
+
+        self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
+
+        # Setup battery which is the same regardless of device
+        self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
+
+        self.temp_chars = {}
+        self.threshold_chars = {}
+
+        for probe_num in range(1, self.probe_count + 1):
+            temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
+            temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
+            threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
+            threshold_char = self.characteristic(getattr(UUIDS, threshold_char_name))
+            self.temp_chars[probe_num] = temp_char
+            self.threshold_chars[probe_num] = threshold_char
+
+    def read_temperature(self):
+        # Not ready yet
+        #config = configparser.ConfigParser()
+        # does not throw an error, just returns the empty set if the file doesn't exist
+        #config.read('tempdata.ini')
+
+        temps = {}
+        for probe_num, temp_char in self.temp_chars.items():
+            temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
+            # Not ready yet
+            #self.threshold_chars[probe_num].write(struct.pack("<hh",
+            #    config['Probe{0}'.format(probe_num)]['LOW_TEMP'],
+            #    config['Probe{0}'.format(probe_num)]['HIGH_TEMP']))
+
+        return temps
 
     def characteristic(self, uuid):
         """
@@ -54,10 +91,11 @@ class IDevicePeripheral(btle.Peripheral):
         Performs iDevices challenge/response handshake. Returns if handshake succeeded
         Works for all devices using this handshake, no key required
         """
-        print "Authenticating..."
+        logging.debug("Authenticating...")
 
-        # send app challenge (16 bytes)
+        # send app challenge (16 bytes) (must be wrapped in a bytearray)
         challenge = str(bytearray([0] * 16))
+        logging.debug("Sending key of all 0's")
         self.characteristic(UUIDS.APP_CHALLENGE).write(challenge, True)
 
         """
@@ -74,59 +112,24 @@ class IDevicePeripheral(btle.Peripheral):
         We just hand back the same encypted value we get and we're good.
         """
         encrypted_device_challenge = self.characteristic(UUIDS.DEVICE_CHALLENGE).read()
-        print "encrypted device challenge:", str(encrypted_device_challenge).encode("hex")
+        logging.debug("encrypted device challenge:{0}".format(str(encrypted_device_challenge).encode("hex")))
         self.characteristic(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
 
-        print("Authenticated")
+        logging.debug("Authenticated")
 
         return True
 
+    def read_battery(self):
+        return int(ord(self.battery_char.read()))
 
 class IGrillMiniPeripheral(IDevicePeripheral):
     """
     Specialization of iDevice peripheral for the iGrill Mini
     """
+    probe_count = 1
 
-    def __init__(self, address):
-        IDevicePeripheral.__init__(self, address)
-
-        # find characteristics for battery and temperature
-        self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
-        self.temp_char = self.characteristic(UUIDS.PROBE1_TEMPERATURE)
-
-    def read_temperature(self):
-        # possibly change to unpack?
-        temp = ord(self.temp_char.read()[1]) * 256
-        temp += ord(self.temp_char.read()[0])
-
-        return { 1: int(temp), 2: 63536, 3: 63536, 4: 63536 }
-
-    def read_battery(self):
-        return int(ord(self.battery_char.read()[0]))
-
-
-class IGrillV2Peripheral(IDevicePeripheral):
-
-    def __init__(self, address):
-        IDevicePeripheral.__init__(self, address)
-
-        # find characteristics for battery and temperature
-        self.battery_char = self.characteristic(UUIDS.BATTERY_LEVEL)
-        self.temp_chars = {}
-
-        for probe_num in range(1,5):
-            temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
-            temp_char = self.characteristic(getattr(UUIDS, temp_char_name))
-            self.temp_chars[probe_num] = temp_char
-
-    def read_temperature(self):
-        temps = {}
-        for probe_num, temp_char in self.temp_chars.items():
-            temp = ord(temp_char.read()[1]) * 256
-            temp += ord(temp_char.read()[0])
-            temps[probe_num] = int(temp)
-
-        return temps
-
-    def read_battery(self):
-        return int(ord(self.battery_char.read()[0]))
+class IGrillPeripheral(IDevicePeripheral):
+    """
+    Specialization of iDevice peripheral for the iGrill2/iGrill3
+    """
+    probe_count = 4

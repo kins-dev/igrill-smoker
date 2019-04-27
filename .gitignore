@@ -63,3 +63,6 @@ docs/_build/
 
 # PyBuilder
 target/
+.vscode/settings.json
+.vscode/tags
+test.py
