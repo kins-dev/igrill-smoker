@@ -4,7 +4,7 @@ You must have:
 
 * Raspberry Pi 3
 * TP-Link Kasa
-* iGrill2 or iGrill3 (iGrill mini would require script changes)
+* iGrill2 or iGrill3 (iGrill mini coming soon for time based smoking)
 
 Optional items:
 

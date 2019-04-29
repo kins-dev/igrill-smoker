@@ -21,6 +21,11 @@ def main():
         help='Test mode, do not run data.sh',
         action='store_true')
     parser.add_argument(
+        '--mini',
+        dest='use_mini',
+        help='Use an iGrill mini',
+        action='store_true')
+    parser.add_argument(
         '-l',
         '--log-level',
         action='store',
