@@ -49,8 +49,8 @@ def main():
         while True:
             if (int(time.time()) % INTERVAL) == 0:
                 sensor_data = {
-                    'temperature': periph.read_temperature(),
-                    'battery': periph.read_battery(),
+                    'temperature': periph.ReadTemperature(),
+                    'battery': periph.ReadBattery(),
                 }
                 if (True == options.test_mode):
                     logging.debug("Skipping data.sh call")

@@ -39,26 +39,29 @@ class IDevicePeripheral(btle.Peripheral):
         self.setSecurityLevel("medium")
 
         # authenticate with iDevices custom challenge/response protocol
-        if not self.authenticate():
+        if not self.Authenticate():
             raise RuntimeError("Unable to authenticate with device")
 
         self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
 
         # Setup battery which is the same regardless of device
-        self.battery_char = self.getCharacteristics(uuid=UUIDS.BATTERY_LEVEL)[0]
+        self.battery_char = self.GetCharFromUUID(UUIDS.BATTERY_LEVEL)
 
         self.temp_chars = {}
         self.threshold_chars = {}
 
         for probe_num in range(1, self.probe_count + 1):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
-            temp_char = self.getCharacteristics(uuid=getattr(UUIDS, temp_char_name))[0]
+            temp_char = self.GetCharFromUUID(getattr(UUIDS, temp_char_name))
             threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
-            threshold_char = self.getCharacteristics(uuid=getattr(UUIDS, threshold_char_name))[0]
+            threshold_char = self.GetCharFromUUID(getattr(UUIDS, threshold_char_name))
             self.temp_chars[probe_num] = temp_char
             self.threshold_chars[probe_num] = threshold_char
 
-    def read_temperature(self):
+    def GetCharFromUUID(self, uuidVal):
+            return self.getCharacteristics(uuid=uuidVal)[0]
+
+    def ReadTemperature(self):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
         config.read('tempdata.ini')
@@ -71,7 +74,7 @@ class IDevicePeripheral(btle.Peripheral):
                 int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP'])))
         return temps
 
-    def authenticate(self):
+    def Authenticate(self):
         """
         Performs iDevices challenge/response handshake. Returns if handshake succeeded
         Works for all devices using this handshake, no key required
@@ -104,7 +107,7 @@ class IDevicePeripheral(btle.Peripheral):
 
         return True
 
-    def read_battery(self):
+    def ReadBattery(self):
         return int(ord(self.battery_char.read()))
 
 class IGrillMiniPeripheral(IDevicePeripheral):
