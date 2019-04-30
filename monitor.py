@@ -43,7 +43,10 @@ def main():
 
     setup_log(options.log_level, options.log_destination)
 
-    periph = IGrillPeripheral(mac_config.ADDRESS)
+    if (True = use_mini):
+        periph = IGrillMiniPeripheral(mac_config.ADDRESS)
+    else:
+        periph = IGrillPeripheral(mac_config.ADDRESS)
 
     try:
         while True:
