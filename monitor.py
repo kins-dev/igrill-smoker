@@ -5,7 +5,7 @@ import mac_config
 import logging
 import argparse
 
-from igrill import IGrillPeripheral
+from igrill import IGrillPeripheral, IGrillMiniPeripheral
 from utils import setup_log
 
 DATA_FILE = '/tmp/igrill.json'
@@ -43,7 +43,7 @@ def main():
 
     setup_log(options.log_level, options.log_destination)
 
-    if (True = use_mini):
+    if (True == options.use_mini):
         periph = IGrillMiniPeripheral(mac_config.ADDRESS)
     else:
         periph = IGrillPeripheral(mac_config.ADDRESS)
