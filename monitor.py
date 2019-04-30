@@ -1,12 +1,12 @@
 import os
 import json
 import time
-import mac_config
 import logging
 import argparse
 
 from igrill import IGrillPeripheral, IGrillMiniPeripheral
-from utils import setup_log
+from utils import SetupLog
+from mac_config import ADDRESS
 
 DATA_FILE = '/tmp/igrill.json'
 INTERVAL = 20
@@ -41,12 +41,12 @@ def main():
         help='Set log destination (file), default: \'\' (stdout)')
     options = parser.parse_args()
 
-    setup_log(options.log_level, options.log_destination)
+    SetupLog(options.log_level, options.log_destination)
 
     if (True == options.use_mini):
-        periph = IGrillMiniPeripheral(mac_config.ADDRESS)
+        periph = IGrillMiniPeripheral(ADDRESS)
     else:
-        periph = IGrillPeripheral(mac_config.ADDRESS)
+        periph = IGrillPeripheral(ADDRESS)
 
     try:
         while True:

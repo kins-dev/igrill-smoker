@@ -1,6 +1,6 @@
 import logging
 
-def setup_log(log_level, logfile):
+def SetupLog(log_level, logfile):
     """Setup application logging"""
 
     numeric_level = logging.getLevelName(log_level.upper())
