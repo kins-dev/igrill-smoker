@@ -18,7 +18,7 @@ function Finish () {
 function LoadConfig () {
     local CONFIG_FILE="config.sh"
     if [ -f "$CONFIG_FILE" ]; then
-        # shellcheck source=config.sh
+        # shellcheck source=../config/config.sh
         source "$CONFIG_FILE"
     else
         echo "Missing $CONFIG_FILE, exiting!"

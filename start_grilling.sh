@@ -14,9 +14,8 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 IGRILL_BAS_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 export IGRILL_BAS_DIR
-
-# shellcheck source=utils/paths.sh
-source "${IGRILL_BAS_DIR}/utils/paths.sh"
+pushd "${IGRILL_BAS_DIR}"
+source "utils/paths.sh"
 
 export PYTHONPATH="${PYTHONPATH}:${IGRILL_CFG_DIR}:${IGRILL_UTL_DIR}"
 # shellcheck source=utils/bt.sh
