@@ -3,8 +3,24 @@ true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
+if [ -z "${IGRILL_BAS_DIR}" ]; then
+    # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+    export IGRILL_BAS_DIR="${DIR}/.."
+fi
+
+# shellcheck source=utils/paths.sh
+source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
+
 # pull in LED functions
-source leds.sh
+# shellcheck source=utils/leds.sh
+source "${IGRILL_UTL_DIR}/leds.sh"
 
 # Functions
 
@@ -16,7 +32,7 @@ function Finish () {
 
 # Load the config/user config/stages files
 function LoadConfig () {
-    local CONFIG_FILE="config.sh"
+    local CONFIG_FILE="${IGRILL_SCR_DIR}/config.sh"
     if [ -f "$CONFIG_FILE" ]; then
         # shellcheck source=config.sh
         source "$CONFIG_FILE"

@@ -1,25 +1,30 @@
 import os
 import json
 import time
-import mac_config
 import logging
 import argparse
+import sys
 
-from igrill import IGrillPeripheral
-from utils import setup_log
+from utils.igrill import IGrillPeripheral, IGrillMiniPeripheral
+from utils.utils import SetupLog
+from py_config.mac_config import ADDRESS
 
-DATA_FILE = '/tmp/igrill.json'
+DATA_FILE = sys.path[0]+'/../run/igrill.json'
 INTERVAL = 20
 
 def main():
 
     parser = argparse.ArgumentParser(
-        description='Connects to iGrill device and calls a script to process results',
-        version="1.1")
+        description='Connects to iGrill device and calls a script to process results')
     parser.add_argument(
         '--test',
         dest='test_mode',
         help='Test mode, do not run data.sh',
+        action='store_true')
+    parser.add_argument(
+        '--mini',
+        dest='use_mini',
+        help='Use an iGrill mini',
         action='store_true')
     parser.add_argument(
         '-l',
@@ -37,16 +42,19 @@ def main():
         help='Set log destination (file), default: \'\' (stdout)')
     options = parser.parse_args()
 
-    setup_log(options.log_level, options.log_destination)
+    SetupLog(options.log_level, options.log_destination)
 
-    periph = IGrillPeripheral(mac_config.ADDRESS)
+    if (True == options.use_mini):
+        periph = IGrillMiniPeripheral(ADDRESS)
+    else:
+        periph = IGrillPeripheral(ADDRESS)
 
     try:
         while True:
             if (int(time.time()) % INTERVAL) == 0:
                 sensor_data = {
-                    'temperature': periph.read_temperature(),
-                    'battery': periph.read_battery(),
+                    'temperature': periph.ReadTemperature(),
+                    'battery': periph.ReadBattery(),
                 }
                 if (True == options.test_mode):
                     logging.debug("Skipping data.sh call")

@@ -4,7 +4,7 @@ You must have:
 
 * Raspberry Pi 3
 * TP-Link Kasa
-* iGrill2 or iGrill3
+* iGrill2 or iGrill3 (iGrill mini coming soon for time based smoking)
 
 Optional items:
 
@@ -13,15 +13,15 @@ Optional items:
 
 *Note: This has been tested using a Raspberry Pi B 3 with Raspian Strecth.  Your milage may vary.*
 
-This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Rember, you probably want to enable ssh access.  You must have your iGrill V2 ready to complete the installation and setup.
+This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Rember, you probably want to enable ssh access.  You must have your iGrill ready to complete the installation and setup.  This does require python 3 to be installed.
 
 ## Installation
 
-Either download and run ```go.sh``` or run the following commands:
+Either download and run ```auto-install.sh``` from the installation directory or run the following commands:
 
 ```bash
 git clone https://git.kins.dev/igrill-smoker
-cd igrill-smoker
+cd igrill-smoker/install
 bash run-install.sh
 ```
 
@@ -37,14 +37,14 @@ tplink-smarthome-api search
 
 Copy ```user-config.example.sh``` to ```user-config.sh```.  Update ```user-config.sh``` with that IP address.
 
-Edit the chart.html file to suit your needs and copy it to your ```/var/www/html``` directory.
+Edit the chart.html file in the website_example directory to suit your needs and copy it to your ```/var/www/html``` directory.
 
 ## Running
 
 Start a smoking session by running:
 
 ```bash
-./startup.sh
+./start_smoking.sh
 ```
 
 ## Lighttpd Setup
