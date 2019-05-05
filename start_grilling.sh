@@ -15,12 +15,12 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 IGRILL_BAS_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 export IGRILL_BAS_DIR
 pushd "${IGRILL_BAS_DIR}"
-source "utils/paths.sh"
+source "scripts/utils/paths.sh"
 
 export PYTHONPATH="${PYTHONPATH}:${IGRILL_CFG_DIR}:${IGRILL_UTL_DIR}"
-# shellcheck source=utils/bt.sh
+# shellcheck source=scripts/utils/bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
-# shellcheck source=utils/leds.sh
+# shellcheck source=scripts/utils/leds.sh
 source "${IGRILL_UTL_DIR}/leds.sh"
 
 function finish  () {
@@ -30,10 +30,11 @@ function finish  () {
     rm -f last_temp.sh
     rm -f stage.sh
     popd
+    popd
 }
 
-# shellcheck source=config/config.sh
-source "${IGRILL_CFG_DIR}/config.sh"
+# shellcheck source=scripts/config.sh
+source "${IGRILL_SCR_DIR}/config.sh"
 # TODO: move to user config
 WEBDIR="/var/www/html"
 

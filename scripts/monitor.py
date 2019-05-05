@@ -3,12 +3,13 @@ import json
 import time
 import logging
 import argparse
+import sys
 
-from igrill import IGrillPeripheral, IGrillMiniPeripheral
-from utils import SetupLog
+from utils.igrill import IGrillPeripheral, IGrillMiniPeripheral
+from utils.utils import SetupLog
 from mac_config import ADDRESS
 
-DATA_FILE = '/tmp/igrill.json'
+DATA_FILE = sys.path[0]+'../run/igrill.json'
 INTERVAL = 20
 
 def main():
