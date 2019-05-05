@@ -3,6 +3,7 @@ import logging
 import struct
 import configparser
 import binascii
+import sys
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -64,7 +65,7 @@ class IDevicePeripheral(btle.Peripheral):
     def ReadTemperature(self):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        config.read('tempdata.ini')
+        config.read(sys.path[0]+'/../config/tempdata.ini')
 
         temps = {}
         for probe_num, temp_char in list(self.temp_chars.items()):

@@ -7,9 +7,9 @@ import sys
 
 from utils.igrill import IGrillPeripheral, IGrillMiniPeripheral
 from utils.utils import SetupLog
-from mac_config import ADDRESS
+from py_config.mac_config import ADDRESS
 
-DATA_FILE = sys.path[0]+'../run/igrill.json'
+DATA_FILE = sys.path[0]+'/../run/igrill.json'
 INTERVAL = 20
 
 def main():

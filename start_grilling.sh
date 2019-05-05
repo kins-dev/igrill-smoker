@@ -17,7 +17,6 @@ export IGRILL_BAS_DIR
 pushd "${IGRILL_BAS_DIR}"
 source "scripts/utils/paths.sh"
 
-export PYTHONPATH="${PYTHONPATH}:${IGRILL_CFG_DIR}:${IGRILL_UTL_DIR}"
 # shellcheck source=scripts/utils/bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
 # shellcheck source=scripts/utils/leds.sh
