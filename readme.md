@@ -17,11 +17,11 @@ This guide assumes you've done the basic setup of network and updated the system
 
 ## Installation
 
-Either download and run ```go.sh``` or run the following commands:
+Either download and run ```auto-install.sh``` from the installation directory or run the following commands:
 
 ```bash
 git clone https://git.kins.dev/igrill-smoker
-cd igrill-smoker
+cd igrill-smoker/install
 bash run-install.sh
 ```
 
