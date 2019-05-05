@@ -44,7 +44,7 @@ Edit the chart.html file to suit your needs and copy it to your ```/var/www/html
 Start a smoking session by running:
 
 ```bash
-./startup.sh
+./start_smoking.sh
 ```
 
 ## Lighttpd Setup
