@@ -37,7 +37,7 @@ tplink-smarthome-api search
 
 Copy ```user-config.example.sh``` to ```user-config.sh```.  Update ```user-config.sh``` with that IP address.
 
-Edit the chart.html file to suit your needs and copy it to your ```/var/www/html``` directory.
+Edit the chart.html file in the website_example directory to suit your needs and copy it to your ```/var/www/html``` directory.
 
 ## Running
 
