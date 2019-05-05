@@ -84,7 +84,7 @@ class IDevicePeripheral(btle.Peripheral):
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
         challenge = bytearray([0] * 16)
         logging.debug("Sending key of all 0's")
-        self.getCharacteristics(uuid=UUIDS.APP_CHALLENGE)[0].write(challenge, True)
+        self.GetCharFromUUID(UUIDS.APP_CHALLENGE).write(challenge, True)
 
         """
         Normally we'd have to perform some crypto operations:
@@ -99,9 +99,9 @@ class IDevicePeripheral(btle.Peripheral):
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
         We just hand back the same encypted value we get and we're good.
         """
-        encrypted_device_challenge = self.getCharacteristics(uuid=UUIDS.DEVICE_CHALLENGE)[0].read()
+        encrypted_device_challenge = self.GetCharFromUUID(UUIDS.DEVICE_CHALLENGE).read()
         logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
-        self.getCharacteristics(uuid=UUIDS.DEVICE_RESPONSE)[0].write(encrypted_device_challenge, True)
+        self.GetCharFromUUID(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
 

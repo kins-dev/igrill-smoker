@@ -40,7 +40,7 @@ fi
 
 # allow user overrides
 if [ -f "$USER_CFG" ]; then
-    # shellcheck source=user-config.sh
+    # shellcheck source=user-config.example.sh
     source "$USER_CFG"
 fi
 
