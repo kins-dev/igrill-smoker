@@ -173,8 +173,9 @@ else
     LEDsSetState "green" "off"
 fi
 
-SMOKE_TEMP_HIGH=$((SMOKE_MID + 7))
-SMOKE_TEMP_LOW=$((SMOKE_MID - 7))
+
+SMOKE_TEMP_HIGH=$((SMOKE_MID + TEMP_SLOP))
+SMOKE_TEMP_LOW=$((SMOKE_MID - TEMP_SLOP))
 
 if [ "$BATTERY" -le "$MIN_BATTERY" ] ; then
     #low battery
