@@ -74,7 +74,7 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
 
         # python may fail if disconnected
         set +e
-        python3 "${IGRILL_UTL_DIR}/monitor.py"
+        python3 "${IGRILL_SCR_DIR}/monitor.py"
         set -e
     done
 fi
