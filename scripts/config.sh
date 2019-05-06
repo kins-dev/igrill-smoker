@@ -26,6 +26,7 @@ BAD_DATA=-2000
 TIME=-1
 TIMESTAMP=0
 FOOD=brisket
+TEMP_SLOP=7
 # Used to warn on low battery
 MIN_BATTERY=15
 # overriden by user-config.sh
