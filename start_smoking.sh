@@ -61,7 +61,7 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
 
     trap finish INT
     trap finish EXIT
-    if [ ! -f "${IGRILL_SCR_DIR}/pyconfig/mac_config.py" ]; then
+    if [ ! -f "${IGRILL_SCR_DIR}/py_config/mac_config.py" ]; then
         "${IGRILL_UTL_DIR}/get_mac.sh"
     fi
     
@@ -74,7 +74,7 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
 
         # python may fail if disconnected
         set +e
-        python3 "${IGRILL_UTL_DIR}/monitor.py"
+        python3 "${IGRILL_SCR_DIR}/monitor.py"
         set -e
     done
 fi
