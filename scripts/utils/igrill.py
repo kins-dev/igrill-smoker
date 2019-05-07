@@ -46,21 +46,18 @@ class IDevicePeripheral(btle.Peripheral):
         self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
 
         # Setup battery which is the same regardless of device
-        self.battery_char = self.GetCharFromUUID(UUIDS.BATTERY_LEVEL)
+        self.battery_char = self.getCharacteristics(uuid=UUIDS.BATTERY_LEVEL)[0]
 
         self.temp_chars = {}
         self.threshold_chars = {}
 
         for probe_num in range(1, self.probe_count + 1):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
-            temp_char = self.GetCharFromUUID(getattr(UUIDS, temp_char_name))
+            temp_char = self.getCharacteristics(uuid=getattr(UUIDS, temp_char_name))[0]
             threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
-            threshold_char = self.GetCharFromUUID(getattr(UUIDS, threshold_char_name))
+            threshold_char = self.getCharacteristics(uuid=getattr(UUIDS, threshold_char_name))[0]
             self.temp_chars[probe_num] = temp_char
             self.threshold_chars[probe_num] = threshold_char
-
-    def GetCharFromUUID(self, uuidVal):
-            return self.getCharacteristics(uuid=uuidVal)[0]
 
     def ReadTemperature(self):
         config = configparser.ConfigParser()
@@ -85,7 +82,7 @@ class IDevicePeripheral(btle.Peripheral):
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
         challenge = bytearray([0] * 16)
         logging.debug("Sending key of all 0's")
-        self.GetCharFromUUID(UUIDS.APP_CHALLENGE).write(challenge, True)
+        self.getCharacteristics(uuid=UUIDS.APP_CHALLENGE)[0].write(challenge, True)
 
         """
         Normally we'd have to perform some crypto operations:
@@ -102,7 +99,7 @@ class IDevicePeripheral(btle.Peripheral):
         """
         encrypted_device_challenge = self.GetCharFromUUID(UUIDS.DEVICE_CHALLENGE).read()
         logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
-        self.GetCharFromUUID(UUIDS.DEVICE_RESPONSE).write(encrypted_device_challenge, True)
+        self.getCharacteristics(uuid=UUIDS.DEVICE_RESPONSE)[0].write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
 
