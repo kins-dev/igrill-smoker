@@ -1,5 +1,7 @@
 # Starting with Raspberry Pi Stretch
 
+## PLease use the 1.1 branch for now, this is a work in progress
+
 You must have:
 
 * Raspberry Pi 3

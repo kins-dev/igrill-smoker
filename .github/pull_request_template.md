@@ -2,7 +2,9 @@
 
 ## Status
 
-IN DEVELOPMENT
+- [ ] In Development
+- [ ] Testing
+- [ ] Complete
 
 ## Description
 
