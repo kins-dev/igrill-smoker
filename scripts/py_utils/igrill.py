@@ -80,7 +80,7 @@ class IDevicePeripheral(btle.Peripheral):
         logging.debug("Authenticating...")
 
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
-        challenge = bytearray([0] * 16)
+        challenge = str('\0' * 16)
         logging.debug("Sending key of all 0's")
         self.getCharacteristics(uuid=UUIDS.APP_CHALLENGE)[0].write(challenge, True)
 
