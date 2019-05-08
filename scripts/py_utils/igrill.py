@@ -39,6 +39,12 @@ class IDevicePeripheral(btle.Peripheral):
         # if no bonding exists, so please use bluetoothctl to create a bond first
         self.setSecurityLevel("medium")
 
+        # save all the characteristics in a dictionary, as the iGrill will disconnect
+        # if they are querried at the wrong time
+        characteristics = self.getCharacteristics()
+        for c in characteristics:
+            self.iGrillChars[c.uuid] = c
+
         # authenticate with iDevices custom challenge/response protocol
         if not self.Authenticate():
             raise RuntimeError("Unable to authenticate with device")
@@ -46,16 +52,16 @@ class IDevicePeripheral(btle.Peripheral):
         self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
 
         # Setup battery which is the same regardless of device
-        self.battery_char = self.getCharacteristics(uuid=UUIDS.BATTERY_LEVEL)[0]
+        self.battery_char = self.iGrillChars[UUIDS.BATTERY_LEVEL]
 
         self.temp_chars = {}
         self.threshold_chars = {}
 
         for probe_num in range(1, self.probe_count + 1):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
-            temp_char = self.getCharacteristics(uuid=getattr(UUIDS, temp_char_name))[0]
+            temp_char = self.iGrillChars[getattr(UUIDS, temp_char_name)]
             threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
-            threshold_char = self.getCharacteristics(uuid=getattr(UUIDS, threshold_char_name))[0]
+            threshold_char = self.iGrillChars[getattr(UUIDS, threshold_char_name)]
             self.temp_chars[probe_num] = temp_char
             self.threshold_chars[probe_num] = threshold_char
 
@@ -80,9 +86,9 @@ class IDevicePeripheral(btle.Peripheral):
         logging.debug("Authenticating...")
 
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
-        challenge = str('\0' * 16)
+        challenge = (b'\0' * 16)
         logging.debug("Sending key of all 0's")
-        self.getCharacteristics(uuid=UUIDS.APP_CHALLENGE)[0].write(challenge, True)
+        self.iGrillChars[UUIDS.APP_CHALLENGE].write(challenge, True)
 
         """
         Normally we'd have to perform some crypto operations:
@@ -97,9 +103,9 @@ class IDevicePeripheral(btle.Peripheral):
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
         We just hand back the same encypted value we get and we're good.
         """
-        encrypted_device_challenge = self.getCharacteristics(uuid=UUIDS.DEVICE_CHALLENGE)[0].read()
+        encrypted_device_challenge = self.iGrillChars[UUIDS.DEVICE_CHALLENGE].read()
         logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
-        self.getCharacteristics(uuid=UUIDS.DEVICE_RESPONSE)[0].write(encrypted_device_challenge, True)
+        self.iGrillChars[UUIDS.DEVICE_RESPONSE].write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
 
