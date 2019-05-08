@@ -99,7 +99,7 @@ class IDevicePeripheral(btle.Peripheral):
             Set the first 8 bytes 0
             Encrypt with the key
             Send back the new value
-        
+
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
         We just hand back the same encypted value we get and we're good.
         """
