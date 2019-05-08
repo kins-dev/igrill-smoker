@@ -12,6 +12,7 @@ from py_config.mac_config import ADDRESS
 DATA_FILE = sys.path[0]+'/../run/igrill.json'
 INTERVAL = 20
 
+
 def main():
 
     parser = argparse.ArgumentParser(
@@ -20,6 +21,11 @@ def main():
         '--test',
         dest='test_mode',
         help='Test mode, do not run data.sh',
+        action='store_true')
+    parser.add_argument(
+        '--once',
+        dest='single_shot_mode',
+        help='Run now, no wait, only once (implies test mode)',
         action='store_true')
     parser.add_argument(
         '--mini',
@@ -50,22 +56,31 @@ def main():
         periph = IGrillPeripheral(ADDRESS)
 
     try:
-        while True:
-            if (int(time.time()) % INTERVAL) == 0:
-                sensor_data = {
-                    'temperature': periph.ReadTemperature(),
-                    'battery': periph.ReadBattery(),
-                }
-                if (True == options.test_mode):
-                    logging.debug("Skipping data.sh call")
+        if (True == options.single_shot_mode):
+            sensor_data = {
+                'temperature': periph.ReadTemperature(),
+                'battery': periph.ReadBattery(),
+            }
+            logging.info('Sensor data: {}'.format(sensor_data))
+        else:
+            while True:
+                if (int(time.time()) % INTERVAL) == 0:
+                    sensor_data = {
+                        'temperature': periph.ReadTemperature(),
+                        'battery': periph.ReadBattery(),
+                    }
+                    if (True == options.test_mode):
+                        logging.debug("Skipping data.sh call")
+                    else:
+                        os.system("./data.sh " + str(sensor_data['battery']) + ' ' + str(sensor_data['temperature'][1]) + ' ' + str(sensor_data['temperature'][4]))
+                    if (True == options.test_mode):
+                        logging.info("Skipping sensor data write.  Data: {}".format(sensor_data))
+                    else:
+                        logging.info('Writing sensor data: {}'.format(sensor_data))
+                        with open(DATA_FILE, 'w') as f:
+                            f.write(json.dumps(sensor_data))
                 else:
-                    os.system("./data.sh " + str(sensor_data['battery']) + ' ' + str(sensor_data['temperature'][1]) + ' ' + str(sensor_data['temperature'][4]))
-
-                logging.info('Writing sensor data: {}'.format(sensor_data))
-                with open(DATA_FILE, 'w') as f:
-                    f.write(json.dumps(sensor_data))
-            else:
-                time.sleep(0.5)
+                    time.sleep(0.5)
     except KeyboardInterrupt:
         logging.info("exiting")
     
