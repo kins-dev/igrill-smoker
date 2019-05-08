@@ -97,7 +97,7 @@ class IDevicePeripheral(btle.Peripheral):
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
         We just hand back the same encypted value we get and we're good.
         """
-        encrypted_device_challenge = self.GetCharFromUUID(UUIDS.DEVICE_CHALLENGE).read()
+        encrypted_device_challenge = self.getCharacteristics(uuid=UUIDS.DEVICE_CHALLENGE)[0].read()
         logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
         self.getCharacteristics(uuid=UUIDS.DEVICE_RESPONSE)[0].write(encrypted_device_challenge, True)
 
