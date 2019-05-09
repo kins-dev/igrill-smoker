@@ -28,6 +28,7 @@ class UUIDS:
 class IDevicePeripheral(btle.Peripheral):
     encryption_key = None
     probe_count = 0
+    iGrillChars = {}
 
     def __init__(self, address):
         """
