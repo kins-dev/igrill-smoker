@@ -1,0 +1,10 @@
+[iGrill]
+# can be standard or mini
+type=standard
+# time in seconds between polls of the iGrill
+# faster polling means more power use
+poll_time=20
+meat_probe=1
+smoke_probe=4
+log_level=INFO
+log_file=

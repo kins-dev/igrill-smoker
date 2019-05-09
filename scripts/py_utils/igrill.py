@@ -76,8 +76,8 @@ class IDevicePeripheral(btle.Peripheral):
             temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
             probe_name = 'Probe{0}'.format(probe_num)
             self.m_threshold_chars[probe_num].write(struct.pack("<hh",
-                config.getint(probe_name, LOW_TEMP_KEY, fallback=LOW_DEFAULT),
-                config.getint(probe_name, HIGH_TEMP_KEY, fallback=HIGH_DEFAULT)))
+                config.getint(probe_name, self.LOW_TEMP_KEY, fallback=self.LOW_DEFAULT),
+                config.getint(probe_name, self.HIGH_TEMP_KEY, fallback=self.HIGH_DEFAULT)))
         return temps
 
     def Authenticate(self):

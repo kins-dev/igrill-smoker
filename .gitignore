@@ -28,6 +28,7 @@ user-config.sh
 stage.sh
 mac_config.py
 threshold_config.ini
+iGrill_config.ini
 
 
 

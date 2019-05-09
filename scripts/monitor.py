@@ -3,6 +3,7 @@ import json
 import time
 import logging
 import argparse
+import configparser
 import sys
 
 from py_utils.igrill import IGrillPeripheral, IGrillMiniPeripheral
@@ -14,7 +15,7 @@ INTERVAL = 20
 
 
 def main():
-
+    
     parser = argparse.ArgumentParser(
         description='Connects to iGrill device and calls a script to process results')
     parser.add_argument(
@@ -47,6 +48,8 @@ def main():
         default='',
         help='Set log destination (file), default: \'\' (stdout)')
     options = parser.parse_args()
+
+
 
     SetupLog(options.log_level, options.log_destination)
 
