@@ -2,7 +2,6 @@ import bluepy.btle as btle
 import logging
 import struct
 import configparser
-import binascii
 import sys
 
 class UUIDS:
@@ -31,6 +30,10 @@ class IDevicePeripheral(btle.Peripheral):
     m_battery_char = None
     m_temp_chars = {}
     m_threshold_chars = {}
+    LOW_TEMP_KEY = "LOW_TEMP"
+    HIGH_TEMP_KEY = "HIGH_TEMP"
+    LOW_DEFAULT = -32768
+    HIGH_DEFAULT = 32767
 
     def __init__(self, address):
         """
@@ -66,14 +69,15 @@ class IDevicePeripheral(btle.Peripheral):
     def ReadTemperature(self):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        config.read(sys.path[0]+'/../config/tempdata.ini')
+        config.read(sys.path[0]+'/py_config/threshold_config.ini')
 
         temps = [-2000] * UUIDS.MAX_PROBE_COUNT
         for probe_num, temp_char in list(self.m_temp_chars.items()):
             temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
+            probe_name = 'Probe{0}'.format(probe_num)
             self.m_threshold_chars[probe_num].write(struct.pack("<hh",
-                int(config['Probe{0}'.format(probe_num)]['LOW_TEMP']),
-                int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP'])))
+                config.getint(probe_name, LOW_TEMP_KEY, fallback=LOW_DEFAULT),
+                config.getint(probe_name, HIGH_TEMP_KEY, fallback=HIGH_DEFAULT)))
         return temps
 
     def Authenticate(self):
@@ -84,8 +88,8 @@ class IDevicePeripheral(btle.Peripheral):
         logging.debug("Authenticating...")
 
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
-        challenge = (b'\0' * 16)
-        logging.debug("Sending key of all 0's")
+        challenge = bytes(b'\0' * 16)
+        logging.debug(("Sending key of all 0's: {}").format(challenge.hex()))
         self.m_iGrillChars[UUIDS.APP_CHALLENGE].write(challenge, True)
 
         """
@@ -102,7 +106,7 @@ class IDevicePeripheral(btle.Peripheral):
         We just hand back the same encypted value we get and we're good.
         """
         encrypted_device_challenge = self.m_iGrillChars[UUIDS.DEVICE_CHALLENGE].read()
-        logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
+        logging.debug("encrypted device challenge: {0}".format((encrypted_device_challenge).hex()))
         self.m_iGrillChars[UUIDS.DEVICE_RESPONSE].write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
