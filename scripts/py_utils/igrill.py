@@ -2,7 +2,6 @@ import bluepy.btle as btle
 import logging
 import struct
 import configparser
-import binascii
 import sys
 
 class UUIDS:
@@ -26,9 +25,15 @@ class UUIDS:
     MAX_PROBE_COUNT    = 4
 
 class IDevicePeripheral(btle.Peripheral):
-    encryption_key = None
-    probe_count = 0
-    iGrillChars = {}
+    m_probe_count = 0
+    m_iGrillChars = {}
+    m_battery_char = None
+    m_temp_chars = {}
+    m_threshold_chars = {}
+    LOW_TEMP_KEY = "LOW_TEMP"
+    HIGH_TEMP_KEY = "HIGH_TEMP"
+    LOW_DEFAULT = -32768
+    HIGH_DEFAULT = 32767
 
     def __init__(self, address):
         """
@@ -44,39 +49,35 @@ class IDevicePeripheral(btle.Peripheral):
         # if they are querried at the wrong time
         characteristics = self.getCharacteristics()
         for c in characteristics:
-            self.iGrillChars[c.uuid] = c
+            self.m_iGrillChars[c.uuid] = c
 
         # authenticate with iDevices custom challenge/response protocol
         if not self.Authenticate():
             raise RuntimeError("Unable to authenticate with device")
 
-        self.temps = [-2000] * UUIDS.MAX_PROBE_COUNT
-
         # Setup battery which is the same regardless of device
-        self.battery_char = self.iGrillChars[UUIDS.BATTERY_LEVEL]
+        self.m_battery_char = self.m_iGrillChars[UUIDS.BATTERY_LEVEL]
 
-        self.temp_chars = {}
-        self.threshold_chars = {}
-
-        for probe_num in range(1, self.probe_count + 1):
+        for probe_num in range(1, self.m_probe_count + 1):
             temp_char_name = 'PROBE{}_TEMPERATURE'.format(probe_num)
-            temp_char = self.iGrillChars[getattr(UUIDS, temp_char_name)]
+            temp_char = self.m_iGrillChars[getattr(UUIDS, temp_char_name)]
             threshold_char_name = 'PROBE{}_THRESHOLD'.format(probe_num)
-            threshold_char = self.iGrillChars[getattr(UUIDS, threshold_char_name)]
-            self.temp_chars[probe_num] = temp_char
-            self.threshold_chars[probe_num] = threshold_char
+            threshold_char = self.m_iGrillChars[getattr(UUIDS, threshold_char_name)]
+            self.m_temp_chars[probe_num] = temp_char
+            self.m_threshold_chars[probe_num] = threshold_char
 
     def ReadTemperature(self):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        config.read(sys.path[0]+'/../config/tempdata.ini')
+        config.read(sys.path[0]+'/py_config/threshold_config.ini')
 
-        temps = {}
-        for probe_num, temp_char in list(self.temp_chars.items()):
-            temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
-            self.threshold_chars[probe_num].write(struct.pack("<hh",
-                int(config['Probe{0}'.format(probe_num)]['LOW_TEMP']),
-                int(config['Probe{0}'.format(probe_num)]['HIGH_TEMP'])))
+        temps = [-2000] * UUIDS.MAX_PROBE_COUNT
+        for probe_num, temp_char in list(self.m_temp_chars.items()):
+            temps[probe_num - 1] = struct.unpack("<h",temp_char.read()[:2])[0]
+            probe_name = 'Probe{0}'.format(probe_num)
+            self.m_threshold_chars[probe_num].write(struct.pack("<hh",
+                config.getint(probe_name, self.LOW_TEMP_KEY, fallback=self.LOW_DEFAULT),
+                config.getint(probe_name, self.HIGH_TEMP_KEY, fallback=self.HIGH_DEFAULT)))
         return temps
 
     def Authenticate(self):
@@ -87,9 +88,9 @@ class IDevicePeripheral(btle.Peripheral):
         logging.debug("Authenticating...")
 
         # send app challenge (16 bytes) (must be wrapped in a bytearray)
-        challenge = (b'\0' * 16)
-        logging.debug("Sending key of all 0's")
-        self.iGrillChars[UUIDS.APP_CHALLENGE].write(challenge, True)
+        challenge = bytes(b'\0' * 16)
+        logging.debug(("Sending key of all 0's: {}").format(challenge.hex()))
+        self.m_iGrillChars[UUIDS.APP_CHALLENGE].write(challenge, True)
 
         """
         Normally we'd have to perform some crypto operations:
@@ -104,25 +105,25 @@ class IDevicePeripheral(btle.Peripheral):
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
         We just hand back the same encypted value we get and we're good.
         """
-        encrypted_device_challenge = self.iGrillChars[UUIDS.DEVICE_CHALLENGE].read()
-        logging.debug("encrypted device challenge:{0}".format(binascii.hexlify(encrypted_device_challenge)))
-        self.iGrillChars[UUIDS.DEVICE_RESPONSE].write(encrypted_device_challenge, True)
+        encrypted_device_challenge = self.m_iGrillChars[UUIDS.DEVICE_CHALLENGE].read()
+        logging.debug("encrypted device challenge: {0}".format((encrypted_device_challenge).hex()))
+        self.m_iGrillChars[UUIDS.DEVICE_RESPONSE].write(encrypted_device_challenge, True)
 
         logging.debug("Authenticated")
 
         return True
 
     def ReadBattery(self):
-        return int(ord(self.battery_char.read()))
+        return int(ord(self.m_battery_char.read()))
 
 class IGrillMiniPeripheral(IDevicePeripheral):
     """
     Specialization of iDevice peripheral for the iGrill Mini
     """
-    probe_count = 1
+    m_probe_count = 1
 
 class IGrillPeripheral(IDevicePeripheral):
     """
     Specialization of iDevice peripheral for the iGrill2/iGrill3
     """
-    probe_count = 4
+    m_probe_count = 4
