@@ -11,11 +11,19 @@ from py_utils.logging import SetupLog
 from py_config.mac_config import ADDRESS
 
 DATA_FILE = sys.path[0]+'/../run/igrill.json'
-INTERVAL = 20
 
 
 def main():
-    
+    config = configparser.ConfigParser()
+    # does not throw an error, just returns the empty set if the file doesn't exist
+    config.read(sys.path[0]+'/../config/iGrill_config.ini')
+    meat_probe = config.getint("iGrill", "meat_probe", fallback=1)
+    smoke_probe = config.getint("iGrill", "smoke_probe", fallback=4)
+    poll_time = config.getint("iGrill", "poll_time", fallback=20)
+    loglevel = config.get("iGrill", "log_level", fallback="INFO")
+    logfile = config.get("iGrill", "log_file", fallback="")
+    igrill_type = config.get("iGrill", "type", fallback="standard")
+
     parser = argparse.ArgumentParser(
         description='Connects to iGrill device and calls a script to process results')
     parser.add_argument(
@@ -38,22 +46,20 @@ def main():
         '--log-level',
         action='store',
         dest='log_level',
-        default='INFO',
-        help='Set log level, default: \'info\'')
+        default=loglevel,
+        help='Set log level, default: \'' + loglevel + '\'')
     parser.add_argument(
         '-d',
         '--log-destination',
         action='store',
         dest='log_destination',
-        default='',
-        help='Set log destination (file), default: \'\' (stdout)')
+        default=logfile,
+        help='Set log destination (file), default: \'' + logfile + '\'')
     options = parser.parse_args()
-
-
 
     SetupLog(options.log_level, options.log_destination)
 
-    if (True == options.use_mini):
+    if (True == options.use_mini or "mini" == igrill_type):
         periph = IGrillMiniPeripheral(ADDRESS)
     else:
         periph = IGrillPeripheral(ADDRESS)
@@ -67,7 +73,7 @@ def main():
             logging.info('Sensor data: {}'.format(sensor_data))
         else:
             while True:
-                if (int(time.time()) % INTERVAL) == 0:
+                if (int(time.time()) % poll_time) == 0:
                     sensor_data = {
                         'temperature': periph.ReadTemperature(),
                         'battery': periph.ReadBattery(),
@@ -75,7 +81,10 @@ def main():
                     if (True == options.test_mode):
                         logging.debug("Skipping data.sh call")
                     else:
-                        os.system("./data.sh " + str(sensor_data['battery']) + ' ' + str(sensor_data['temperature'][1]) + ' ' + str(sensor_data['temperature'][4]))
+                        os.system("./data.sh " +
+                            str(sensor_data['battery']) + ' ' +
+                            str(sensor_data['temperature'][meat_probe]) + ' ' +
+                            str(sensor_data['temperature'][smoke_probe]))
                     if (True == options.test_mode):
                         logging.info("Skipping sensor data write.  Data: {}".format(sensor_data))
                     else:
