@@ -83,8 +83,8 @@ def main():
                     else:
                         os.system("./data.sh " +
                             str(sensor_data['battery']) + ' ' +
-                            str(sensor_data['temperature'][meat_probe]) + ' ' +
-                            str(sensor_data['temperature'][smoke_probe]))
+                            str(sensor_data['temperature'][smoke_probe - 1]) + ' ' +
+                            str(sensor_data['temperature'][meat_probe - 1]))
                     if (True == options.test_mode):
                         logging.info("Skipping sensor data write.  Data: {}".format(sensor_data))
                     else:
