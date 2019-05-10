@@ -107,9 +107,10 @@ DATE_TS=$(date +'%s')
 # Load the configuration
 LoadConfig
 
+# TODO: check number of args
 BATTERY="$1"
-FD_TEMP="$2"
-SM_TEMP="$3"
+SM_TEMP="$2"
+FD_TEMP="$3"
 
 # If any of the values are bad, just load the previous data and go forward
 if [ "$BATTERY" -eq "$BAD_DATA" ]; then
