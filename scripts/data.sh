@@ -22,6 +22,10 @@ source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 # shellcheck source=utils/leds.sh
 source "${IGRILL_UTL_DIR}/leds.sh"
 
+# pull in sound functions
+# shellcheck source=utils/sounds.sh
+source "${IGRILL_UTL_DIR}/sounds.sh"
+
 # Functions
 
 # Used with trap to make sure the file is written before the script exits
@@ -108,6 +112,7 @@ DATE_TS=$(date +'%s')
 LoadConfig
 
 # TODO: check number of args
+# TODO: Support iGrill mini
 BATTERY="$1"
 SM_TEMP="$2"
 FD_TEMP="$3"
@@ -157,14 +162,14 @@ if [ "$FD_DONE" -eq "1" ]; then
     LEDsSetState "green" "on"
     
     # Play a sound
-    omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
+    PlaySound "complete"
     
 elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
     #done
     LEDsSetState "green" "on"
     
     # Play a sound
-    omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
+    PlaySound "complete"
     
     if [ "$STAGE" -eq "0" ]; then
         # keep warm at target temp
@@ -181,10 +186,7 @@ SMOKE_TEMP_LOW=$((SMOKE_MID - TEMP_SLOP))
 if [ "$BATTERY" -le "$MIN_BATTERY" ] ; then
     #low battery
     LEDsSetState "red" "on"
-    
-    # TODO: make this a function
-    # Play a sound through the 3.5mm jack to indicate low battery
-    omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/kling.wav &
+    PlaySound "low_battery"
 else
     LEDsSetState "red" "off"
 fi
