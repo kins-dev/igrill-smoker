@@ -73,7 +73,7 @@ class IDevicePeripheral(btle.Peripheral):
 
         temps = [-2000] * UUIDS.MAX_PROBE_COUNT
         for probe_num, temp_char in list(self.m_temp_chars.items()):
-            temps[probe_num] = struct.unpack("<h",temp_char.read()[:2])[0]
+            temps[probe_num - 1] = struct.unpack("<h",temp_char.read()[:2])[0]
             probe_name = 'Probe{0}'.format(probe_num)
             self.m_threshold_chars[probe_num].write(struct.pack("<hh",
                 config.getint(probe_name, self.LOW_TEMP_KEY, fallback=self.LOW_DEFAULT),
