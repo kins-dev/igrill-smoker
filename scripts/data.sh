@@ -34,6 +34,8 @@ source "${IGRILL_UTL_DIR}/kasa.sh"
 
 # Used with trap to make sure the file is written before the script exits
 function Finish () {
+    # Data for Highcharts
+    # order must mach startup.sh
     #	echo "done"
     echo "$CSV_DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> "$CSV_FILE"
 }
@@ -161,8 +163,6 @@ else
     LEDsSetState "red" "off"
 fi
 
-# Data for Highcharts
-# order must mach startup.sh
 
 #echo "writing state"
 cat > "$STATE_FILE" <<EOL
