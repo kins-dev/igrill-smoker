@@ -103,7 +103,7 @@ class IDevicePeripheral(btle.Peripheral):
             Send back the new value
 
         But wait!  Our first 8 bytes are already 0.  That means we don't need the key.
-        We just hand back the same encypted value we get and we're good.
+        We just hand back the same encrypted value we get and we're good.
         """
         encrypted_device_challenge = self.m_iGrillChars[UUIDS.DEVICE_CHALLENGE].read()
         logging.debug("encrypted device challenge: {0}".format((encrypted_device_challenge).hex()))

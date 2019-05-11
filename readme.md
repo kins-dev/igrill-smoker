@@ -11,9 +11,9 @@ Optional items:
 * LEDs with current limiting resistors
 * Speaker with 3.5 mm stereo jack input
 
-*Note: This has been tested using a Raspberry Pi B 3 with Raspian Strecth.  Your milage may vary.*
+*Note: This has been tested using a Raspberry Pi B 3 with Raspian Stretch.  Your milage may vary.*
 
-This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Rember, you probably want to enable ssh access.  You must have your iGrill ready to complete the installation and setup.  This does require python 3 to be installed.
+This guide assumes you've done the basic setup of network and updated the system on your Raspberry Pi.  Remember, you probably want to enable ssh access.  You must have your iGrill ready to complete the installation and setup.  This does require python 3 to be installed.
 
 ## Installation
 
@@ -35,9 +35,15 @@ Find your Kasa IP address:
 tplink-smarthome-api search
 ```
 
-Copy ```user-config.example.sh``` to ```user-config.sh```.  Update ```user-config.sh``` with that IP address.
+Copy ```config/user-config.example.sh``` to ```config/user-config.sh```.  Update ```user-config.sh``` with that IP address.
+
+Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
 Edit the chart.html file in the website_example directory to suit your needs and copy it to your ```/var/www/html``` directory.
+
+## Using iGrill Mini
+
+The iGrill mini has a single probe.  That means you can either monitor the smoke temperature or the food temperature.  Since this is controlling a plug for the smoke, you should not monitor the food temperature via the iGrill mini probe.
 
 ## Running
 

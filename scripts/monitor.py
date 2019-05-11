@@ -60,23 +60,23 @@ def main():
     SetupLog(options.log_level, options.log_destination)
 
     if (True == options.use_mini or "mini" == igrill_type):
-        periph = IGrillMiniPeripheral(ADDRESS)
+        peripheral = IGrillMiniPeripheral(ADDRESS)
     else:
-        periph = IGrillPeripheral(ADDRESS)
+        peripheral = IGrillPeripheral(ADDRESS)
 
     try:
         if (True == options.single_shot_mode):
             sensor_data = {
-                'temperature': periph.ReadTemperature(),
-                'battery': periph.ReadBattery(),
+                'temperature': peripheral.ReadTemperature(),
+                'battery': peripheral.ReadBattery(),
             }
             logging.info('Sensor data: {}'.format(sensor_data))
         else:
             while True:
                 if (int(time.time()) % poll_time) == 0:
                     sensor_data = {
-                        'temperature': periph.ReadTemperature(),
-                        'battery': periph.ReadBattery(),
+                        'temperature': peripheral.ReadTemperature(),
+                        'battery': peripheral.ReadBattery(),
                     }
                     if (True == options.test_mode):
                         logging.debug("Skipping data.sh call")

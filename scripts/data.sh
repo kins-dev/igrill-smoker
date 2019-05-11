@@ -22,6 +22,14 @@ source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 # shellcheck source=utils/leds.sh
 source "${IGRILL_UTL_DIR}/leds.sh"
 
+# pull in sound functions
+# shellcheck source=utils/sounds.sh
+source "${IGRILL_UTL_DIR}/sounds.sh"
+
+# pull in sound functions
+# shellcheck source=utils/kasa.sh
+source "${IGRILL_UTL_DIR}/kasa.sh"
+
 # Functions
 
 # Used with trap to make sure the file is written before the script exits
@@ -43,41 +51,7 @@ function LoadConfig () {
 }
 
 # Should be moved out to another file
-function SetKasaState() {
-    local STATE
-    local MSG
-    if [ "$#" -eq "1" ]; then
-        MSG="Turning hotplate $1"
-    elif [ "$#" -eq "2" ]; then
-        MSG="Turning hotplate $1 due to $2"
-    else
-        echo "Wrong number of arguements to SetKasaState"
-        echo "Expected 1 or 2, got $#"
-        exit 1
-    fi
-    STATE="$1"
-    tplink-smarthome-api send "$TP_LINK_IP" '{"count_down":{"delete_all_rules":{}}}}'
-    # NOTE: api commands must be blocking as they take a second or two
-    # and another state update may come in
-    case "$STATE" in
-        "on")
-            KASA_STATE="lightgreen"
-            tplink-smarthome-api setPowerState "$TP_LINK_IP" true
-            # Force off after 5 minutes if there's no commands
-            tplink-smarthome-api send "$TP_LINK_IP" '{"count_down":{"add_rule":{"enable":1,"delay":300,"act":0,"name":"turn off"}}}'
-        ;;
-        "off")
-            KASA_STATE="red"
-            tplink-smarthome-api setPowerState "$TP_LINK_IP" false
-        ;;
-        *)
-            echo "bad value for hotplate state sent to SetKasaState"
-            echo "expected \"on\" or \"off\", got \"$STATE\""
-            exit 1
-        ;;
-    esac
-    echo "$MSG"
-}
+
 
 # Updates the stages (at a transition point)
 function WriteStages()
@@ -108,6 +82,7 @@ DATE_TS=$(date +'%s')
 LoadConfig
 
 # TODO: check number of args
+# TODO: Support iGrill mini
 BATTERY="$1"
 SM_TEMP="$2"
 FD_TEMP="$3"
@@ -157,14 +132,14 @@ if [ "$FD_DONE" -eq "1" ]; then
     LEDsSetState "green" "on"
     
     # Play a sound
-    omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
+    PlaySound "complete"
     
 elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
     #done
     LEDsSetState "green" "on"
     
     # Play a sound
-    omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/train.wav &
+    PlaySound "complete"
     
     if [ "$STAGE" -eq "0" ]; then
         # keep warm at target temp
@@ -181,10 +156,7 @@ SMOKE_TEMP_LOW=$((SMOKE_MID - TEMP_SLOP))
 if [ "$BATTERY" -le "$MIN_BATTERY" ] ; then
     #low battery
     LEDsSetState "red" "on"
-    
-    # TODO: make this a function
-    # Play a sound through the 3.5mm jack to indicate low battery
-    omxplayer -o local /usr/lib/libreoffice/share/gallery/sounds/kling.wav &
+    PlaySound "low_battery"
 else
     LEDsSetState "red" "off"
 fi
@@ -192,7 +164,7 @@ fi
 # Data for Highcharts
 # order must mach startup.sh
 
-#echo "writting state"
+#echo "writing state"
 cat > "$STATE_FILE" <<EOL
 [
   {
@@ -249,7 +221,7 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
 fi
 
 if [ "$DIFF" -gt "$MAX_TEMP_CHANGE" ] ; then
-    # temp moving up too fast, disable the hotplate (trying to prevemt fires)
+    # temp moving up too fast, disable the hotplate (trying to prevent fires)
     SetKasaState "off" "smoke temp change meets or exceeds threshold ($DIFF >= $MAX_TEMP_CHANGE)"
 else
     #	echo "Temp change was $DIFF"
