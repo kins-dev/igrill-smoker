@@ -13,7 +13,7 @@ function LEDsReset() {
 
 function LEDsSetState () {
     if [ "$#" -ne "2" ]; then
-        echo "Wrong number of arguements to SetLEDState"
+        echo "Wrong number of arguments to SetLEDState"
         echo "Expected 2, got $#"
         exit 1
     fi

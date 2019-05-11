@@ -5,7 +5,7 @@ set -$-ue${DEBUG+xv}
 
 function PlaySound () {
     if [ "$#" -ne "1" ]; then
-        echo "Wrong number of arguements to SetLEDState"
+        echo "Wrong number of arguments to SetLEDState"
         echo "Expected 1, got $#"
         exit 1
     fi

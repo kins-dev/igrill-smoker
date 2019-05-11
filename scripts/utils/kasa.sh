@@ -12,7 +12,7 @@ function SetKasaState() {
     elif [ "$#" -eq "2" ]; then
         MSG="Turning hotplate $1 due to $2"
     else
-        echo "Wrong number of arguements to SetKasaState"
+        echo "Wrong number of arguments to SetKasaState"
         echo "Expected 1 or 2, got $#"
         exit 1
     fi

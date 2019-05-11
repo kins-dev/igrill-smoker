@@ -29,7 +29,7 @@ FOOD=brisket
 TEMP_SLOP=7
 # Used to warn on low battery
 MIN_BATTERY=15
-# overriden by user-config.sh
+# overridden by user-config.sh
 TP_LINK_IP="192.168.0.1"
 STAGE_NAME="Unknown"
 # Set to 1 to use stages

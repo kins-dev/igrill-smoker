@@ -42,5 +42,5 @@ while read -r CMD; do
     fi
 done <&"${COPROC[0]}"
 
-# This will forcably kill the scan
+# This will forcibly kill the scan
 BtReset

@@ -164,7 +164,7 @@ fi
 # Data for Highcharts
 # order must mach startup.sh
 
-#echo "writting state"
+#echo "writing state"
 cat > "$STATE_FILE" <<EOL
 [
   {
@@ -221,7 +221,7 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
 fi
 
 if [ "$DIFF" -gt "$MAX_TEMP_CHANGE" ] ; then
-    # temp moving up too fast, disable the hotplate (trying to prevemt fires)
+    # temp moving up too fast, disable the hotplate (trying to prevent fires)
     SetKasaState "off" "smoke temp change meets or exceeds threshold ($DIFF >= $MAX_TEMP_CHANGE)"
 else
     #	echo "Temp change was $DIFF"
