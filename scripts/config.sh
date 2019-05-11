@@ -5,6 +5,7 @@ true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
+
 if [ -z "${IGRILL_BAS_DIR}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
     SOURCE="${BASH_SOURCE[0]}"
