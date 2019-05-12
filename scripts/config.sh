@@ -19,8 +19,14 @@ if [ -z "${IGRILL_BAS_DIR}" ]; then
 fi
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
-# shellcheck source=utils/bash-ini-parser.sh
-source "${IGRILL_UTL_DIR}/bash-ini-parser.sh"
+# shellcheck source=utils/read_ini.sh
+source "${IGRILL_UTL_DIR}/read_ini.sh"
+
+if [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
+    read_ini "$IGRILL_CFG_DIR/iGrill_config.ini" --prefix "iGrill"
+else
+    echo "Error $IGRILL_CFG_DIR/iGrill_config.ini does not exist, please read the setup instructions"
+fi
 
 CSV_FILE=/var/www/html/current.csv
 STATE_FILE=/var/www/html/state.json
