@@ -19,6 +19,7 @@ if [ -z "${IGRILL_BAS_DIR}" ]; then
 fi
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
+
 # shellcheck source=utils/read_ini.sh
 source "${IGRILL_UTL_DIR}/read_ini.sh"
 
@@ -35,18 +36,18 @@ STATE_FILE="${RESULTS_DIRECTORY}/${iGrill__Reporting__StateFile}"
 BAD_DATA=-2000
 TIME=-1
 TIMESTAMP=0
-FOOD=brisket
-TEMP_SLOP=7
+FOOD="${iGrill__Smoking__Food}"
+TEMP_SLOP="${iGrill__Smoking__TempBandSize}"
 # Used to warn on low battery
 MIN_BATTERY=15
 # overridden by user-config.sh
-TP_LINK_IP="192.168.0.1"
+TP_LINK_IP="${iGrill__TPLink__IP}"
 STAGE_NAME="Unknown"
 # Set to 1 to use stages
 STAGE=0
-SMOKE_MID=225
-INTERNAL_TEMP=190
-MAX_TEMP_CHANGE=2
+SMOKE_MID="${iGrill__Smoking__SmokeMid}"
+INTERNAL_TEMP="${iGrill__Smoking__InternalTarget}"
+MAX_TEMP_CHANGE="${iGrill__Smoking__MaxTempChange}"
 FD_DONE=0
 STAGE_FILE="${IGRILL_RUN_DIR}/stage.sh"
 LAST_TEMP_FILE="${IGRILL_RUN_DIR}/last_temp.sh"
@@ -59,16 +60,9 @@ if [ -f "${STAGE_FILE}" ]; then
     source "${STAGE_FILE}"
 fi
 
-
 if [ -f "${LAST_TEMP_FILE}" ]; then
     # shellcheck source=../run/last_temp.sh
     source "${LAST_TEMP_FILE}"
-fi
-
-# allow user overrides
-if [ -f "${USER_CFG}" ]; then
-    # shellcheck source=../config/user-config.example.sh
-    source "${USER_CFG}"
 fi
 
 if [ -f "${IGRILL_CFG_DIR}/stages/${FOOD}.sh" ]; then
@@ -79,4 +73,12 @@ if [ -f "${IGRILL_CFG_DIR}/stages/${FOOD}.sh" ]; then
     # shellcheck source=../config/stages/pork-shoulder.sh
     # shellcheck source=../config/stages/baby-back-ribs.sh
     source "${IGRILL_CFG_DIR}/stages/${FOOD}.sh"
+    if [ "mini" == "${iGrill__iGrill__Type}" ]
+    then
+        if ! [ true == "${MINI_COMPATIBLE}" ]
+        then
+            echo "Error: Using an iGrill mini with a stage that is incompatible"
+            exit 1
+        fi
+    fi
 fi

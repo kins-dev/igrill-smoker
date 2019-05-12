@@ -37,6 +37,12 @@ function Finish () {
     # Data for Highcharts
     # order must mach startup.sh
     #	echo "done"
+
+    if [ "mini" == "${iGrill__iGrill__Type}" ]
+    then
+        FD_TEMP=""
+        INTERNAL_TEMP=""
+    fi
     echo "$CSV_DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> "$CSV_FILE"
 }
 

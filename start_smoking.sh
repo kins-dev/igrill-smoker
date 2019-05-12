@@ -17,6 +17,13 @@ export IGRILL_BAS_DIR
 pushd "${IGRILL_BAS_DIR}"
 source "scripts/utils/paths.sh"
 
+if ! [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
+    echo "Error: $IGRILL_CFG_DIR/iGrill_config.ini mot found"
+    echo "Please setup the ini file based on the example"
+    exit 1
+fi
+RESULTS_DIRECTORY="${iGrill__Reporting__ResultsDirectory}"
+
 # shellcheck source=scripts/utils/bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
 # shellcheck source=scripts/utils/leds.sh
@@ -34,8 +41,8 @@ function finish  () {
 
 # shellcheck source=scripts/config.sh
 source "${IGRILL_SCR_DIR}/config.sh"
-# TODO: move to user config
-WEBDIR="/var/www/html"
+
+WEBDIR="${iGrill__Reporting__ResultsDirectory}"
 
 if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     # Setup CSV file
