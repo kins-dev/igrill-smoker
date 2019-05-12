@@ -5,9 +5,7 @@ true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
-# Note: for this to work. Internal temp must be increased at each stage
-# the system will go to the next stage when the food hits the designated
-# internal temp
+MINI_COMPATIBLE=true
 
 case "$STAGE" in
     1)
