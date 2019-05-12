@@ -22,14 +22,16 @@ source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 # shellcheck source=utils/read_ini.sh
 source "${IGRILL_UTL_DIR}/read_ini.sh"
 
+# shellcheck source=utils/defaults.sh
+source "${IGRILL_UTL_DIR}/defaults.sh"
+
 if [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
     read_ini "$IGRILL_CFG_DIR/iGrill_config.ini" --prefix "iGrill"
-else
-    echo "Error $IGRILL_CFG_DIR/iGrill_config.ini does not exist, please read the setup instructions"
 fi
+RESULTS_DIRECTORY="${iGrill__Reporting__ResultsDirectory}"
 
-CSV_FILE=/var/www/html/current.csv
-STATE_FILE=/var/www/html/state.json
+CSV_FILE="${RESULTS_DIRECTORY}/${iGrill__Reporting__CSVFile}"
+STATE_FILE="${RESULTS_DIRECTORY}/${iGrill__Reporting__StateFile}"
 BAD_DATA=-2000
 TIME=-1
 TIMESTAMP=0

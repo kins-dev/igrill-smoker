@@ -45,6 +45,7 @@ function read_ini()
 		if ! shopt -q nocasematch ;then
 			SWITCH_SHOPT="${SWITCH_SHOPT} nocasematch"
 		fi
+		# shellcheck disable=2086
 		shopt -q -s ${SWITCH_SHOPT}
 	}
 	
@@ -52,6 +53,7 @@ function read_ini()
 	# from read_ini()
 	function cleanup_bash()
 	{
+		# shellcheck disable=2086
 		shopt -q -u ${SWITCH_SHOPT}
 		unset -f check_prefix check_ini_file pollute_bash cleanup_bash
 	}
@@ -133,8 +135,11 @@ function read_ini()
 	if [ "${CLEAN_ENV}" = 1 ] ;then
 		eval unset "\$${INI_ALL_VARNAME}"
 	fi
+	# shellcheck disable=2086
 	unset ${INI_ALL_VARNAME}
+	# shellcheck disable=2086
 	unset ${INI_ALL_SECTION}
+	# shellcheck disable=2086
 	unset ${INI_NUMSECTIONS_VARNAME}
 
 	if [ -z "$INI_FILE" ] ;then

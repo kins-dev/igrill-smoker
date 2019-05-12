@@ -61,7 +61,10 @@ function WriteStages()
     #	echo "updating stages"
 	cat > "$STAGE_FILE" <<EOL
 #!/bin/bash
-set -ue
+# shellcheck disable=2034
+true
+# shellcheck disable=2086
+set -\$-ue\${DEBUG+xv}
 STAGE=$STAGE
 TIMESTAMP=$DATE_TS
 EOL
