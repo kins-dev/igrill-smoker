@@ -12,6 +12,10 @@
 #
 #
 
+true
+# shellcheck disable=2086
+set -$-ue${DEBUG+xv}
+
 function read_ini()
 {
 	# Be strict with the prefix, since it's going to be run through eval
@@ -65,7 +69,7 @@ function read_ini()
 	# {{{ START Options
 
 	# Available options:
-	#	--boolean		Whether to recognise special boolean values: ie for 'yes', 'true'
+	#	--boolean		Whether to recognize special boolean values: ie for 'yes', 'true'
 	#					and 'on' return 1; for 'no', 'false' and 'off' return 0. Quoted
 	#					values will be left as strings
 	#					Default: on
@@ -143,7 +147,7 @@ function read_ini()
 		return 1
 	fi
 
-	# Sanitise BOOLEANS - interpret "0" as 0, anything else as 1
+	# Sanitize BOOLEANS - interpret "0" as 0, anything else as 1
 	if [ "$BOOLEANS" != "0" ]
 	then
 		BOOLEANS=1
@@ -171,7 +175,7 @@ function read_ini()
 	do
 #echo line = "$line"
 
-		((LINE_NUM++))
+		((LINE_NUM++)) || true
 
 		# Skip blank lines and comments
 		if [ -z "$line" ] ||  [ "${line:0:1}" = ";"  ] || [ "${line:0:1}" = "#" ]
@@ -186,8 +190,10 @@ function read_ini()
 			# Set SECTION var to name of section (strip [ and ] from section marker)
 			SECTION="${line#[}"
 			SECTION="${SECTION%]}"
+			set +u
 			eval "${INI_ALL_SECTION}=\"\${${INI_ALL_SECTION}# } $SECTION\""
-			((SECTIONS_NUM++))
+			set -u
+			((SECTIONS_NUM++)) || true
 
 			continue
 		fi
@@ -210,16 +216,14 @@ function read_ini()
 			return 1
 		fi
 
+		# delete spaces around the equal sign 
+		line=${line/*([[:space:]])=*([[:space:]])/=}
 
 		# split line at "=" sign
 		IFS="="
 		read -r VAR VAL <<< "${line}"
 		IFS="${IFS_OLD}"
 		
-		# delete spaces around the equal sign (using extglob)
-		VAR="${VAR%%+[[:space:]]}"
-		VAL="${VAL##+[[:space:]]}"
-		VAR=$(echo $VAR)
 
 
 		# Construct variable name:
@@ -233,7 +237,9 @@ function read_ini()
 		else
 			VARNAME=${VARNAME_PREFIX}__${SECTION}__${VAR//./_}
 		fi
+		set +u
 		eval "${INI_ALL_VARNAME}=\"\${${INI_ALL_VARNAME}# } ${VARNAME}\""
+		set -u
 
 		if [[ "${VAL}" =~ ^\".*\"$  ]]
 		then
