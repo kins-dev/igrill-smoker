@@ -22,7 +22,6 @@ if ! [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
     echo "Please setup the ini file based on the example"
     exit 1
 fi
-RESULTS_DIRECTORY="${iGrill__Reporting__ResultsDirectory}"
 
 # shellcheck source=scripts/utils/bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
