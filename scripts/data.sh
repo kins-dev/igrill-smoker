@@ -27,6 +27,10 @@ source "${IGRILL_UTL_DIR}/leds.sh"
 source "${IGRILL_UTL_DIR}/sounds.sh"
 
 # pull in sound functions
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
 # shellcheck source=utils/kasa.sh
 source "${IGRILL_UTL_DIR}/kasa.sh"
 
