@@ -97,7 +97,7 @@ DATE_TS=$(date +'%s')
 LoadConfig
 
 # TODO: check number of args
-# TODO: Support iGrill mini
+# TODO: Support iGrill mini / single probe setup
 BATTERY="$1"
 SM_TEMP="$2"
 FD_TEMP="$3"

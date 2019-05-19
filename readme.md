@@ -1,5 +1,23 @@
 # Starting with Raspberry Pi Stretch
 
+<h2>Table of Contents</h2>
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Setup](#setup)
+* [Using iGrill Mini](#using-igrill-mini)
+* [Running](#running)
+* [Lighttpd Setup](#lighttpd-setup)
+
+<!-- /code_chunk_output -->
+
+
+## Requirements
+
 You must have:
 
 * Raspberry Pi 3
@@ -35,9 +53,72 @@ Find your Kasa IP address:
 tplink-smarthome-api search
 ```
 
-Copy ```config/user-config.example.sh``` to ```config/user-config.sh```.  Update ```user-config.sh``` with that IP address.
-
 Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
+
+
+```bash {cmd hide modify_source}
+echo -n \`\`\`ini
+cat config/iGrill_config.example.ini
+echo -n \`\`\`
+```
+
+<!-- code_chunk_output -->
+
+```ini
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
+[iGrill]
+# can be Standard or Mini
+Type=Standard
+
+[Probes]
+# Possible probe values:
+#   Smoke
+#   Food
+#   None
+# 
+# At most one probe can be marked as Food
+# One an only one probe must be marked smoke
+# Two or three probes must be marked as None or left blank
+
+# Valid for all iGrills
+Probe1=Food
+# Valid for only iGrill 2/iGrill 3
+Probe2=None
+Probe3=None
+Probe4=Smoke
+
+[Logging]
+LogLevel=INFO
+LogFile=
+
+[TPLink]
+IP=192.168.0.1
+
+[Smoking]
+MaxTempChange=2
+TempBandSize=7
+
+# Can be the name of any file in the stages directory (excluding the .sh) or None
+Food=brisket
+
+# Only valid if Food=None
+SmokeMid=225
+InternalTarget=185
+
+[Reporting]
+# time in seconds between polls of the iGrill
+# faster polling means more power use
+PollTime=20
+
+ResultsDirectory=/var/www/html
+CSVFile=current.csv
+StateFile=state.json
+```
+
+<!-- /code_chunk_output -->
 
 Edit the chart.html file in the website_example directory to suit your needs and copy it to your ```/var/www/html``` directory.
 
