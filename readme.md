@@ -15,7 +15,6 @@
 
 <!-- /code_chunk_output -->
 
-
 ## Requirements
 
 You must have:
@@ -55,12 +54,13 @@ tplink-smarthome-api search
 
 Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
-
+<!--
 ```bash {cmd hide modify_source}
 echo -n \`\`\`ini
 cat config/iGrill_config.example.ini
 echo -n \`\`\`
 ```
+-->
 
 <!-- code_chunk_output -->
 
@@ -74,21 +74,9 @@ echo -n \`\`\`
 Type=Standard
 
 [Probes]
-# Possible probe values:
-#   Smoke
-#   Food
-#   None
-# 
-# At most one probe can be marked as Food
-# One an only one probe must be marked smoke
-# Two or three probes must be marked as None or left blank
-
-# Valid for all iGrills
-Probe1=Food
-# Valid for only iGrill 2/iGrill 3
-Probe2=None
-Probe3=None
-Probe4=Smoke
+# For iGrill mini set food probe to 0 and smoke probe to 1
+FoodProbe=1
+SmokeProbe=4
 
 [Logging]
 LogLevel=INFO

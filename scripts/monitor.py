@@ -21,12 +21,12 @@ def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
     config.read(sys.path[0]+'/../config/iGrill_config.ini')
-    meat_probe = config.getint("iGrill", "MeatProbe", fallback=1)
-    smoke_probe = config.getint("iGrill", "SmokeProbe", fallback=4)
-    poll_time = config.getint("iGrill", "PollTime", fallback=20)
-    loglevel = config.get("iGrill", "LogLevel", fallback="INFO")
-    logfile = config.get("iGrill", "LogFile", fallback="")
-    igrill_type = config.get("iGrill", "Type", fallback="standard")
+    food_probe = config.getint("Probes", "FoodProbe", fallback=1)
+    smoke_probe = config.getint("Probes", "SmokeProbe", fallback=4)
+    poll_time = config.getint("Reporting", "PollTime", fallback=20)
+    loglevel = config.get("Logging", "LogLevel", fallback="INFO")
+    logfile = config.get("Logging", "LogFile", fallback="")
+    igrill_type = config.get("iGrill", "Type", fallback="Standard")
 
     parser = argparse.ArgumentParser(
         description='Connects to iGrill device and calls a script to process results')

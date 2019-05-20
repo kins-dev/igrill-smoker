@@ -42,7 +42,7 @@ function Finish () {
     # order must mach startup.sh
     #	echo "done"
 
-    if [ "mini" == "${iGrill__iGrill__Type}" ]
+    if [ "0" == "${iGrill__Probes__FoodProbe}" ]
     then
         FD_TEMP=""
         INTERNAL_TEMP=""

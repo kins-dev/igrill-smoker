@@ -77,11 +77,37 @@ if [ -f "${IGRILL_CFG_DIR}/stages/${FOOD}.sh" ]; then
     # shellcheck source=../config/stages/pork-shoulder.sh
     # shellcheck source=../config/stages/baby-back-ribs.sh
     source "${IGRILL_CFG_DIR}/stages/${FOOD}.sh"
-    if [ "mini" == "${iGrill__iGrill__Type}" ]
+    if [ "Mini" == "${iGrill__iGrill__Type}" ]
     then
         if ! [ true == "${MINI_COMPATIBLE}" ]
         then
             echo "Error: Using an iGrill mini with a stage that is incompatible"
+            exit 1
+        fi
+        if ! [ "0" == "${iGrill__Probes__FoodProbe}" ]
+        then
+            echo "Error: Using an iGrill mini means food probe must be set to 0 in iGrill_config.ini"
+            exit 1
+        fi
+        if ! [ "1" == "${iGrill__Probes__SmokeProbe}" ]
+        then
+            echo "Error: Using an iGrill mini means smoke probe must be set to 1 in iGrill_config.ini"
+            exit 1
+        fi
+    else
+        if ! [ "0" -le "${iGrill__Probes__FoodProbe}" -a "4" -ge "${iGrill__Probes__FoodProbe}" ]
+        then
+            echo "Error: Food probe must be set between 0 and 4 in iGrill_config.ini"
+            exit 1
+        fi
+        if ! [ "1" -le "${iGrill__Probes__SmokeProbe}" -a "4" -ge "${iGrill__Probes__SmokeProbe}" ]
+        then
+            echo "Error: Smoke probe must be set between 0 and 4 in iGrill_config.ini"
+            exit 1
+        fi
+        if [ "${iGrill__Probes__FoodProbe}" == "${iGrill__Probes__SmokeProbe}" ]
+        then
+            echo "Error: Smoke probe must be set to a different value than the food probe iGrill_config.ini"
             exit 1
         fi
     fi
