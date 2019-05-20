@@ -1,4 +1,6 @@
 # iGrill Smoker Design
+
+Copyright &copy; 2019 Scott Atkins
 <!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
 <!-- markdownlint-enable MD033 -->
