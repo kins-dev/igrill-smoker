@@ -1,7 +1,7 @@
 # Starting with Raspberry Pi Stretch
-
+<!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
-
+<!-- markdownlint-enable MD033 -->
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
@@ -183,7 +183,7 @@ $SERVER["socket"] == ":443" {
         )
 
         setenv.add-response-header  = (
-                # Allow cross domain accesss
+                # Allow cross domain access
                 # Safari requires *
                 "Access-Control-Allow-Origin"   => "*",
 
@@ -205,7 +205,7 @@ $SERVER["socket"] == ":443" {
         # This option is enabled by default, but only used if ssl.cipher-list is set.
         ssl.honor-cipher-order                  = "enable"
 
-        # Mitigate CVE-2009-3555 by disabling client triggered renegotation
+        # Mitigate CVE-2009-3555 by disabling client triggered renegotiation
         # This is enabled by default.
         ssl.disable-client-renegotiation        = "enable"
         ssl.ec-curve                            = "secp384r1"
