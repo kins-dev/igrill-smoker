@@ -69,6 +69,7 @@ if [ -f "${LAST_TEMP_FILE}" ]; then
     source "${LAST_TEMP_FILE}"
 fi
 
+# TODO: Error out if stage is unknown and food is not None
 if [ -f "${IGRILL_CFG_DIR}/stages/${FOOD}.sh" ]; then
     if [ $STAGE -eq 0 ]; then
         STAGE=1
@@ -103,20 +104,20 @@ if [ -f "${IGRILL_CFG_DIR}/stages/${FOOD}.sh" ]; then
                 exit 1
             fi
         fi
-        if ! [ "0" -le "${iGrill__Probes__FoodProbe}" -a "4" -ge "${iGrill__Probes__FoodProbe}" ]
-        then
-            echo "Error: Food probe must be set between 0 and 4 in iGrill_config.ini"
-            exit 1
-        fi
-        if ! [ "1" -le "${iGrill__Probes__SmokeProbe}" -a "4" -ge "${iGrill__Probes__SmokeProbe}" ]
-        then
-            echo "Error: Smoke probe must be set between 0 and 4 in iGrill_config.ini"
-            exit 1
-        fi
-        if [ "${iGrill__Probes__FoodProbe}" == "${iGrill__Probes__SmokeProbe}" ]
-        then
-            echo "Error: Smoke probe must be set to a different value than the food probe iGrill_config.ini"
-            exit 1
-        fi
     fi
+fi
+if ! [ "0" -le "${iGrill__Probes__FoodProbe}" -a "4" -ge "${iGrill__Probes__FoodProbe}" ]
+then
+    echo "Error: Food probe must be set between 0 and 4 in iGrill_config.ini"
+    exit 1
+fi
+if ! [ "1" -le "${iGrill__Probes__SmokeProbe}" -a "4" -ge "${iGrill__Probes__SmokeProbe}" ]
+then
+    echo "Error: Smoke probe must be set between 0 and 4 in iGrill_config.ini"
+    exit 1
+fi
+if [ "${iGrill__Probes__FoodProbe}" == "${iGrill__Probes__SmokeProbe}" ]
+then
+    echo "Error: Smoke probe must be set to a different value than the food probe iGrill_config.ini"
+    exit 1
 fi
