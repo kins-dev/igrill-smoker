@@ -95,6 +95,14 @@ if [ -f "${IGRILL_CFG_DIR}/stages/${FOOD}.sh" ]; then
             exit 1
         fi
     else
+        if [ "0" == "${iGrill__Probes__FoodProbe}" ]
+        then
+            if ! [ true == "${MINI_COMPATIBLE}" ]
+            then
+                echo "Error: Using a stage that is incompatible with the food probe disabled"
+                exit 1
+            fi
+        fi
         if ! [ "0" -le "${iGrill__Probes__FoodProbe}" -a "4" -ge "${iGrill__Probes__FoodProbe}" ]
         then
             echo "Error: Food probe must be set between 0 and 4 in iGrill_config.ini"

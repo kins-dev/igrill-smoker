@@ -54,13 +54,14 @@ tplink-smarthome-api search
 
 Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
-<!--
+Here is what that file looks like:
+<!----
 ```bash {cmd hide modify_source}
 echo -n \`\`\`ini
 cat config/iGrill_config.example.ini
 echo -n \`\`\`
 ```
--->
+<!---->
 
 <!-- code_chunk_output -->
 
@@ -75,7 +76,17 @@ Type=Standard
 
 [Probes]
 # For iGrill mini set food probe to 0 and smoke probe to 1
+
+# Food probe must be set between 0 and 4, where 0 means the
+# probe is disabled.  The left most probe is 1 and right most
+# is 4 on the iGrill 2/3
+#
+# If you disable the food probe, you must use a stage that
+# is iGrill mini compatible (see stage file) or disable stages
 FoodProbe=1
+
+# Smoke probe must be set between 1 and 4.  The left most probe
+# is 1 and right most is 4 on the iGrill 2/3
 SmokeProbe=4
 
 [Logging]
@@ -112,7 +123,7 @@ Edit the chart.html file in the website_example directory to suit your needs and
 
 ## Using iGrill Mini
 
-The iGrill mini has a single probe.  That means you can either monitor the smoke temperature or the food temperature.  Since this is controlling a plug for the smoke, you should not monitor the food temperature via the iGrill mini probe.
+The iGrill mini has a single probe.  That means you can either monitor the smoke temperature or the food temperature.  Since this is controlling a plug for the smoke, you should not monitor the food temperature via the iGrill mini probe.  Follow the instructions in iGrill_config.example.ini for setting the probe values.
 
 ## Running
 
