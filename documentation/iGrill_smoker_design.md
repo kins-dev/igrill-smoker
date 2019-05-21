@@ -17,6 +17,7 @@ Copyright &copy; 2019 Scott Atkins
 * [Scripts](#scripts)
 	* [Bash](#bash)
 	* [Python](#python)
+* [File relation graph](#file-relation-graph)
 
 <!-- /code_chunk_output -->
 <!-- markdownlint-enable MD007 -->
@@ -35,8 +36,14 @@ Like most projects this has come from a number of different sources.
 
 ### INI File
 
+The ini file is a one stop shop to configure this project.
+
 ## Scripts
 
 ### Bash
 
 ### Python
+
+## File relation graph
+
+![relations](assets/relation.svg)

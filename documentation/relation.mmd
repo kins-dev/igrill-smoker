@@ -1,0 +1,22 @@
+graph TD
+start_smoking --> paths.sh
+start_smoking --> bt.sh
+start_smoking --> leds.sh
+start_smoking --> config.sh
+start_smoking --> gen_json.sh
+start_smoking --> get_mac.sh
+start_smoking --> monitor.py
+monitor.py --> data.sh
+monitor.py --> logging.py
+monitor.py --> igrill.py
+config.sh --> paths.sh
+config.sh --> read_ini.sh
+config.sh --> defaults.sh
+config.sh --> stage.sh
+config.sh --> last_temp.sh
+config.sh --> $food.sh
+data.sh --> paths.sh
+data.sh --> leds.sh
+data.sh --> sounds.sh
+data.sh --> kasa.sh
+data.sh --> config.sh
