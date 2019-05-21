@@ -14,8 +14,8 @@ from py_utils.igrill import IGrillPeripheral, IGrillMiniPeripheral
 from py_utils.logging import SetupLog
 from py_config.mac_config import ADDRESS
 
+# TODO: make this a config variable
 DATA_FILE = sys.path[0]+'/../run/igrill.json'
-
 
 def main():
     config = configparser.ConfigParser()
@@ -88,7 +88,7 @@ def main():
                         os.system("./data.sh " +
                             str(sensor_data['battery']) + ' ' +
                             str(sensor_data['temperature'][smoke_probe - 1]) + ' ' +
-                            str(sensor_data['temperature'][meat_probe - 1]))
+                            str(sensor_data['temperature'][food_probe - 1]))
                     if (True == options.test_mode):
                         logging.info("Skipping sensor data write.  Data: {}".format(sensor_data))
                     else:
