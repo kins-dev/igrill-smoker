@@ -1,22 +1,61 @@
 graph TD
-start_smoking --> paths.sh
-start_smoking --> bt.sh
-start_smoking --> leds.sh
-start_smoking --> config.sh
-start_smoking --> gen_json.sh
-start_smoking --> get_mac.sh
-start_smoking --> monitor.py
-monitor.py --> data.sh
-monitor.py --> logging.py
-monitor.py --> igrill.py
-config.sh --> paths.sh
-config.sh --> read_ini.sh
-config.sh --> defaults.sh
-config.sh --> stage.sh
-config.sh --> last_temp.sh
-config.sh --> $food.sh
-data.sh --> paths.sh
-data.sh --> leds.sh
-data.sh --> sounds.sh
-data.sh --> kasa.sh
-data.sh --> config.sh
+    subgraph /
+        start_smoking
+    
+        subgraph scripts
+            monitor.py
+            config.sh
+            data.sh
+            subgraph py_utils
+                igrill.py
+                logging.py
+            end
+            subgraph py_config
+                mac_address.py
+            end
+            subgraph utils
+                read_ini.sh
+                paths.sh
+                defaults.sh
+                leds.sh
+                sounds.sh
+                kasa.sh
+                bt.sh
+                get_mac.sh
+                gen_json.sh
+            end
+        end
+        subgraph run
+            stage.sh
+            last_temp.sh
+        end
+        subgraph config
+            subgraph stages
+                $food.sh
+            end
+            iGrill_config.ini
+        end
+    end
+    config.sh --> iGrill_config.ini
+    config.sh --> $food.sh
+    config.sh --> stage.sh
+    config.sh --> last_temp.sh
+    start_smoking --> paths.sh
+    start_smoking --> bt.sh
+    start_smoking --> leds.sh
+    start_smoking --> config.sh
+    start_smoking --> gen_json.sh
+    start_smoking --> get_mac.sh
+    start_smoking --> monitor.py
+    monitor.py --> data.sh
+    monitor.py --> mac_address.py
+    monitor.py --> logging.py
+    monitor.py --> igrill.py
+    config.sh --> paths.sh
+    config.sh --> read_ini.sh
+    config.sh --> defaults.sh
+    data.sh --> paths.sh
+    data.sh --> sounds.sh
+    data.sh --> kasa.sh
+    data.sh --> config.sh
+    data.sh --> leds.sh

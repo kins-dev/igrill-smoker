@@ -22,10 +22,12 @@ function SetKasaState() {
     fi
     STATE="$1"
     tplink-smarthome-api send "$TP_LINK_IP" '{"count_down":{"delete_all_rules":{}}}}'
+    
     # NOTE: api commands must be blocking as they take a second or two
     # and another state update may come in
     case "$STATE" in
         "on")
+            # TODO: Move kasa state to something that can be queried at write time
             KASA_STATE="lightgreen"
             tplink-smarthome-api setPowerState "$TP_LINK_IP" true
             # Force off after 5 minutes if there's no commands
