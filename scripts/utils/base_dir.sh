@@ -20,28 +20,3 @@ if [ -z "${VALUE}" ]; then
     IGRILL_BAS_DIR="$(readlink -f "${DIR}/../..")"
     export IGRILL_BAS_DIR
 fi
-
-# shellcheck source=paths.sh
-source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
-
-# shellcheck source=../config.sh
-source "${IGRILL_SCR_DIR}/config.sh"
-
-WEBDIR="${iGrill__Reporting__ResultsDirectory}"
-
-OUTFILE="$WEBDIR/items.json"
-echo "[" > "${OUTFILE}"
-ADD_COMMA=0
-pushd "$WEBDIR"
-# need items in a specific order so I cannot use globs
-# shellcheck disable=2045
-for file in $(ls -t -1 [0-9]*.csv)
-do
-    if [ $ADD_COMMA -ne "0" ]; then
-        echo "," >> "${OUTFILE}"
-    fi
-    ADD_COMMA=1
-    echo "{\"name\":\"$file\"}" >> "${OUTFILE}"
-done
-popd
-echo "]" >> "${OUTFILE}"
