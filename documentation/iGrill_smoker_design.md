@@ -30,7 +30,9 @@ There are a lot of moving parts in this project, so this is an attempt to docume
 
 Like most projects this has come from a number of different sources.
 <!-- TODO: Add links -->
-* Github iGrill
+* [Github iGrill](https://github.com/kvantetore/igrill)
+* [Bash ini Parser](https://github.com/rudimeier/bash_ini_parser)
+* [Path helper](https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself)
 
 ## Configuration
 

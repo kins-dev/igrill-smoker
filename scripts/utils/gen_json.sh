@@ -28,6 +28,7 @@ source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 source "${IGRILL_SCR_DIR}/config.sh"
 
 WEBDIR="${iGrill__Reporting__ResultsDirectory}"
+
 # TODO: Move to ini file
 OUTFILE="$WEBDIR/items.json"
 echo "[" > "${OUTFILE}"
