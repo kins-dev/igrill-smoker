@@ -55,7 +55,7 @@ tplink-smarthome-api search
 Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
 Here is what that file looks like:
-<!-- TODO: add > at the end of this line and use shift enter to regenerate --
+<!-- TODO: add > at the end of this line, open MPE, and use shift enter to regenerate --
 ```bash {cmd hide modify_source}
 echo -n \`\`\`ini
 cat config/iGrill_config.example.ini
@@ -93,8 +93,9 @@ SmokeProbe=4
 LogLevel=INFO
 LogFile=
 
-[TPLink]
-IP=192.168.0.1
+[Kasa]
+# Name of your plug in the Kasa app, case sensitive
+Name=iGrill-smoker
 
 [Smoking]
 MaxTempChange=2
