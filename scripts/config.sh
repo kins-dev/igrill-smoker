@@ -27,6 +27,9 @@ fi
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 
+# shellcheck source=utils/kasa.sh
+source "${IGRILL_UTL_DIR}/kasa.sh"
+
 # shellcheck source=utils/read_ini.sh
 source "${IGRILL_UTL_DIR}/read_ini.sh"
 
@@ -48,7 +51,10 @@ TEMP_SLOP="${iGrill__Smoking__TempBandSize}"
 # Used to warn on low battery
 MIN_BATTERY=15
 # overridden by user-config.sh
-TP_LINK_IP="${iGrill__TPLink__IP}"
+VALUE=${TP_LINK_IP:-}
+if [ -z "${VALUE}" ]; then
+    GetKasaIP "${iGrill__Kasa__Name}"
+fi
 STAGE_NAME="Unknown"
 # Set to 1 to use stages
 STAGE=0

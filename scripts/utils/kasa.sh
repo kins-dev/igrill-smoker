@@ -45,3 +45,15 @@ function SetKasaState() {
     esac
     echo "$MSG"
 }
+
+function GetKasaIp() {
+
+    if ! [ "$#" -eq "1" ]; then
+        echo "Wrong number of arguments to GetKasaIp"
+        echo "Expected 1, got $#"
+        exit 1
+    fi
+    local NAME=$1
+    TP_LINK_IP=$(tplink-smarthome-api -t 1000 search | grep "${NAME}" | cut -d " " -f 4)
+    export TP_LINK_IP
+}

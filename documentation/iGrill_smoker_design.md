@@ -29,10 +29,12 @@ There are a lot of moving parts in this project, so this is an attempt to docume
 ## Sources
 
 Like most projects this has come from a number of different sources.
-<!-- TODO: Add links -->
+
 * [Github iGrill](https://github.com/kvantetore/igrill)
 * [Bash ini Parser](https://github.com/rudimeier/bash_ini_parser)
 * [Path helper](https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself)
+* [Highcharts](https://www.highcharts.com/)
+* [tplink-smarthome-api](https://www.npmjs.com/package/tplink-smarthome-api)
 
 ## Configuration
 
