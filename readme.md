@@ -46,12 +46,6 @@ After starting the ```run-install.sh``` script, you should turn on your iGrill v
 
 ## Setup
 
-Find your Kasa IP address:
-
-```bash
-tplink-smarthome-api search
-```
-
 Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
 Here is what that file looks like:
