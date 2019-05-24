@@ -1,9 +1,14 @@
 #!/bin/bash
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
-if [ -z "${IGRILL_BAS_DIR}" ]; then
+VALUE=${IGRILL_BAS_DIR:-}
+if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
     SOURCE="${BASH_SOURCE[0]}"
     while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -12,7 +17,8 @@ if [ -z "${IGRILL_BAS_DIR}" ]; then
     [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-    export IGRILL_BAS_DIR="${DIR}/.."
+    IGRILL_BAS_DIR="$(readlink -f "${DIR}/..")"
+    export IGRILL_BAS_DIR
 fi
 
 # shellcheck source=utils/paths.sh
@@ -34,7 +40,15 @@ source "${IGRILL_UTL_DIR}/kasa.sh"
 
 # Used with trap to make sure the file is written before the script exits
 function Finish () {
+    # Data for Highcharts
+    # order must mach startup.sh
     #	echo "done"
+
+    if [ "0" == "${iGrill__Probes__FoodProbe}" ]
+    then
+        FD_TEMP=""
+        INTERNAL_TEMP=""
+    fi
     echo "$CSV_DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> "$CSV_FILE"
 }
 
@@ -59,7 +73,10 @@ function WriteStages()
     #	echo "updating stages"
 	cat > "$STAGE_FILE" <<EOL
 #!/bin/bash
-set -ue
+# shellcheck disable=2034
+true
+# shellcheck disable=2086
+set -\$-ue\${DEBUG+xv}
 STAGE=$STAGE
 TIMESTAMP=$DATE_TS
 EOL
@@ -82,7 +99,6 @@ DATE_TS=$(date +'%s')
 LoadConfig
 
 # TODO: check number of args
-# TODO: Support iGrill mini
 BATTERY="$1"
 SM_TEMP="$2"
 FD_TEMP="$3"
@@ -161,8 +177,6 @@ else
     LEDsSetState "red" "off"
 fi
 
-# Data for Highcharts
-# order must mach startup.sh
 
 #echo "writing state"
 cat > "$STATE_FILE" <<EOL

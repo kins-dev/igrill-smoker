@@ -6,6 +6,7 @@
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
-git clone https://git.kins.dev/igrill-smoker
-cd igrill-smoker/install
-bash run-install.sh
+
+source "../../scripts/utils/kasa.sh"
+GetKasaIP "iGrill-smoker"
+echo "${TP_LINK_IP}"

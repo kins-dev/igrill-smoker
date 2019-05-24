@@ -1,3 +1,7 @@
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
 import logging
 
 def SetupLog(log_level, logfile):

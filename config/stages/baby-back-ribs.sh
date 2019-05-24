@@ -1,13 +1,15 @@
 #!/bin/bash
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
 # Defining variables for other scripts
 # shellcheck disable=2034
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
-# Note: for this to work. Internal temp must be increased at each stage
-# the system will go to the next stage when the food hits the designated
-# internal temp
+MINI_COMPATIBLE=true
 
 case "$STAGE" in
     1)

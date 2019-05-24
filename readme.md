@@ -1,4 +1,21 @@
 # Starting with Raspberry Pi Stretch
+<!-- markdownlint-disable MD033 -->
+<h2>Table of Contents</h2>
+<!-- markdownlint-enable MD033 -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Setup](#setup)
+* [Using iGrill Mini](#using-igrill-mini)
+* [Running](#running)
+* [Lighttpd Setup](#lighttpd-setup)
+
+<!-- /code_chunk_output -->
+
+## Requirements
 
 You must have:
 
@@ -29,21 +46,79 @@ After starting the ```run-install.sh``` script, you should turn on your iGrill v
 
 ## Setup
 
-Find your Kasa IP address:
+Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
-```bash
-tplink-smarthome-api search
+Here is what that file looks like:
+<!-- TODO: add > at the end of this line, open MPE, and use shift enter to regenerate --
+```bash {cmd hide modify_source}
+echo -n \`\`\`ini
+cat config/iGrill_config.example.ini
+echo -n \`\`\`
+```
+<!---->
+
+<!-- code_chunk_output -->
+
+```ini
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
+[iGrill]
+# can be Standard or Mini
+Type=Standard
+
+[Probes]
+# For iGrill mini set food probe to 0 and smoke probe to 1
+
+# Food probe must be set between 0 and 4, where 0 means the
+# probe is disabled.  The left most probe is 1 and right most
+# is 4 on the iGrill 2/3
+#
+# If you disable the food probe, you must use a stage that
+# is iGrill mini compatible (see stage file) or disable stages
+FoodProbe=1
+
+# Smoke probe must be set between 1 and 4.  The left most probe
+# is 1 and right most is 4 on the iGrill 2/3
+SmokeProbe=4
+
+[Logging]
+LogLevel=INFO
+LogFile=
+
+[Kasa]
+# Name of your plug in the Kasa app, case sensitive
+Name=iGrill-smoker
+
+[Smoking]
+MaxTempChange=2
+TempBandSize=7
+
+# Can be the name of any file in the stages directory (excluding the .sh) or None
+Food=brisket
+
+# Only valid if Food=None
+SmokeMid=225
+InternalTarget=185
+
+[Reporting]
+# time in seconds between polls of the iGrill
+# faster polling means more power use
+PollTime=20
+
+ResultsDirectory=/var/www/html
+CSVFile=current.csv
+StateFile=state.json
 ```
 
-Copy ```config/user-config.example.sh``` to ```config/user-config.sh```.  Update ```user-config.sh``` with that IP address.
-
-Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
+<!-- /code_chunk_output -->
 
 Edit the chart.html file in the website_example directory to suit your needs and copy it to your ```/var/www/html``` directory.
 
 ## Using iGrill Mini
 
-The iGrill mini has a single probe.  That means you can either monitor the smoke temperature or the food temperature.  Since this is controlling a plug for the smoke, you should not monitor the food temperature via the iGrill mini probe.
+The iGrill mini has a single probe.  That means you can either monitor the smoke temperature or the food temperature.  Since this is controlling a plug for the smoke, you should not monitor the food temperature via the iGrill mini probe.  Follow the instructions in iGrill_config.example.ini for setting the probe values.
 
 ## Running
 
@@ -103,7 +178,7 @@ $SERVER["socket"] == ":443" {
         )
 
         setenv.add-response-header  = (
-                # Allow cross domain accesss
+                # Allow cross domain access
                 # Safari requires *
                 "Access-Control-Allow-Origin"   => "*",
 
@@ -125,7 +200,7 @@ $SERVER["socket"] == ":443" {
         # This option is enabled by default, but only used if ssl.cipher-list is set.
         ssl.honor-cipher-order                  = "enable"
 
-        # Mitigate CVE-2009-3555 by disabling client triggered renegotation
+        # Mitigate CVE-2009-3555 by disabling client triggered renegotiation
         # This is enabled by default.
         ssl.disable-client-renegotiation        = "enable"
         ssl.ec-curve                            = "secp384r1"
