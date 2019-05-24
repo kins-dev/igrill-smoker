@@ -7,6 +7,12 @@ true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
+if ! [ "$#" -eq "3" ]; then
+    echo "Wrong number of arguments to data.sh"
+    echo "Expected 3, got $#"
+    exit 1
+fi
+
 VALUE=${IGRILL_BAS_DIR:-}
 if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
@@ -98,7 +104,6 @@ DATE_TS=$(date +'%s')
 # Load the configuration
 LoadConfig
 
-# TODO: check number of args
 BATTERY="$1"
 SM_TEMP="$2"
 FD_TEMP="$3"
