@@ -85,7 +85,7 @@ def main():
                     if (True == options.test_mode):
                         logging.debug("Skipping data.sh call")
                     else:
-                        os.system("./data.sh " +
+                        os.system(sys.path[0]+"/data.sh " +
                             str(sensor_data['battery']) + ' ' +
                             str(sensor_data['temperature'][smoke_probe - 1]) + ' ' +
                             str(sensor_data['temperature'][food_probe - 1]))
