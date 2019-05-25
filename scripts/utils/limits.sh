@@ -69,5 +69,5 @@ HIGH_TEMP=32767
 }
 
 function WriteLimits () {
-    
+    true
 }
