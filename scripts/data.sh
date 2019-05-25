@@ -69,13 +69,52 @@ function LoadConfig () {
         exit 1
     fi
 }
+function ResetLimits () {
+    for i in $(seq 1 4); do
+        local PROBE_NAME=LIMITS_Probe${i}
+        eval "${PROBE_NAME}='[Probe${i}]'"
+    done
+}
 
-# Should be moved out to another file
+function SetLimits () {
+    local PROBE_NAME=LIMITS_Probe${1}
+    local LOW
+    local HIGH
+    local CURRENT=$2
+    local TARGET=$3
+    local SLOP=$4
+    if [ "${CURRENT}" -lt "${TARGET}" ]; then
+        LOW=$((CURRENT - SLOP))
+        HIGH=$((TARGET + SLOP))
+    else
+        LOW=$((TARGET - SLOP))
+        HIGH=$((CURRENT + SLOP))
+    fi
+    VAL="[Probe${1}]
+LOW_TEMP=${LOW}
+HIGH_TEMP=${HIGH}"
+    eval "${PROBE_NAME}=\${VAL}"
+}
+
+function PrintLimits () {
+    echo "[DEFAULT]
+LOW_TEMP=-32768
+HIGH_TEMP=32767
+"
+
+    for i in $(seq 1 4); do
+        local PROBE_NAME=LIMITS_Probe${i}
+        eval "VAL=\${${PROBE_NAME}}"
+        echo "$VAL"
+        echo ""
+    done
+}
 
 
 # Updates the stages (at a transition point)
 function WriteStages()
 {
+    ResetLimits
     #	echo "updating stages"
 	cat > "$STAGE_FILE" <<EOL
 #!/bin/bash
@@ -86,6 +125,11 @@ set -\$-ue\${DEBUG+xv}
 STAGE=$STAGE
 TIMESTAMP=$DATE_TS
 EOL
+    if ! [ "0" == "${iGrill__Probes__FoodProbe}" ]; then
+        SetLimits "${iGrill__Probes__FoodProbe}" "$FD_TEMP" "$INTERNAL_TEMP" 5
+    fi
+    SetLimits "${iGrill__Probes__SmokeProbe}" "$SM_TEMP" "$SMOKE_MID" 20
+     
     # Reload the config file with the new stage.
     LoadConfig
 }
