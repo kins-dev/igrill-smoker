@@ -1,0 +1,73 @@
+graph TD
+    %% TODO: add non-script files
+    subgraph /
+        start_smoking
+    
+        subgraph scripts
+            monitor.py
+            config.sh
+            data.sh
+            subgraph py_utils
+                igrill.py
+                logging.py
+            end
+            subgraph py_config
+                mac_config.py
+            end
+            subgraph utils
+                read_ini.sh
+                paths.sh
+                defaults.sh
+                leds.sh
+                sounds.sh
+                kasa.sh
+                bt.sh
+                get_mac.sh
+                gen_json.sh
+                limits.sh
+            end
+        end
+        subgraph run
+            stage.sh
+            last_temp.sh
+            igrill.json
+            limits.ini
+        end
+        subgraph config
+            subgraph stages
+                $food.sh
+            end
+            iGrill_config.ini
+        end
+    end
+    start_smoking --- bt.sh
+    iGrill_config.ini --> config.sh
+    config.sh --- $food.sh
+    config.sh --- stage.sh
+    config.sh --- last_temp.sh
+    start_smoking --- paths.sh
+    start_smoking --- leds.sh
+    start_smoking --- config.sh
+    start_smoking --- gen_json.sh
+    start_smoking --- get_mac.sh
+    start_smoking --> monitor.py
+    start_smoking --- limits.sh
+    limits.sh --- paths.sh
+    monitor.py --> data.sh
+    monitor.py --- mac_config.py
+    monitor.py --- logging.py
+    monitor.py --- igrill.py
+    monitor.py --> igrill.json
+    limits.ini --> igrill.py
+    limits.sh --> limits.ini
+    config.sh --- paths.sh
+    config.sh --- read_ini.sh
+    config.sh --- defaults.sh
+    data.sh --- paths.sh
+    data.sh --- sounds.sh
+    data.sh --- kasa.sh
+    data.sh --- config.sh
+    data.sh --- leds.sh
+    get_mac.sh --- paths.sh
+    get_mac.sh --> mac_config.py
+    gen_json.sh --- paths.sh

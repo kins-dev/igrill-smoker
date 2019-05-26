@@ -1,0 +1,16 @@
+graph TD
+    subgraph 
+
+    config[config.sh]
+    iGrill_config[iGrill_config.ini]
+    read_ini[read_ini.sh]
+    last_temp[last_temp.sh]
+    paths[paths.sh]
+
+    config --- last_temp
+    config --- read_ini
+    config --- paths
+    
+    config --> iGrill_config
+    
+end

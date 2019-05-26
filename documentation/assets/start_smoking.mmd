@@ -1,0 +1,22 @@
+graph TD
+    subgraph 
+
+    start_smoking[start_smoking.sh]
+    config[config.sh]
+limits[limits.sh]               
+                paths[paths.sh]
+                gen_json[gen_json.sh]
+            monitor[monitor.py]
+                bt[bt.sh]
+                leds[leds.sh]
+                get_mac[get_mac.sh]
+            
+start_smoking --- config
+start_smoking --- gen_json
+start_smoking --- limits
+start_smoking --- paths
+start_smoking --- bt
+start_smoking --- leds
+start_smoking --- get_mac
+start_smoking --> monitor
+end

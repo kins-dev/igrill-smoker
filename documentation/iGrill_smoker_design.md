@@ -50,4 +50,5 @@ The ini file is a one stop shop to configure this project.
 
 ## File relation graph
 
-![relations](assets/relation.svg)
+![start_smoking](assets/start_smoking.svg)
+![config](assets/config.svg)
