@@ -7,6 +7,7 @@ import logging
 import struct
 import configparser
 import sys
+import os
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -45,12 +46,10 @@ class IDevicePeripheral(btle.Peripheral):
         """
         btle.Peripheral.__init__(self, address)
 
-        # iDevice devices require bonding. I don't think this will give us bonding
-        # if no bonding exists, so please use bluetoothctl to create a bond first
         self.setSecurityLevel("medium")
 
         # save all the characteristics in a dictionary, as the iGrill will disconnect
-        # if they are querried at the wrong time
+        # if they are queried at the wrong time
         characteristics = self.getCharacteristics()
         for c in characteristics:
             self.m_iGrillChars[c.uuid] = c
@@ -71,17 +70,22 @@ class IDevicePeripheral(btle.Peripheral):
             self.m_threshold_chars[probe_num] = threshold_char
 
     def ReadTemperature(self):
-        config = configparser.ConfigParser()
-        # does not throw an error, just returns the empty set if the file doesn't exist
-        config.read(sys.path[0]+'/py_config/threshold_config.ini')
+        setLimits = False
+        configFile = sys.path[0]+'/../run/limits.ini' 
+        if os.path.isfile(configFile):
+            config = configparser.ConfigParser()
+            # does not throw an error, just returns the empty set if the file doesn't exist
+            config.read(sys.path[0]+'/py_config/threshold_config.ini')
+            setLimits = True
 
         temps = [-2000] * UUIDS.MAX_PROBE_COUNT
         for probe_num, temp_char in list(self.m_temp_chars.items()):
             temps[probe_num - 1] = struct.unpack("<h",temp_char.read()[:2])[0]
-            probe_name = 'Probe{0}'.format(probe_num)
-            self.m_threshold_chars[probe_num].write(struct.pack("<hh",
-                config.getint(probe_name, self.LOW_TEMP_KEY, fallback=self.LOW_DEFAULT),
-                config.getint(probe_name, self.HIGH_TEMP_KEY, fallback=self.HIGH_DEFAULT)))
+            if setLimits:
+                probe_name = 'Probe{0}'.format(probe_num)
+                self.m_threshold_chars[probe_num].write(struct.pack("<hh",
+                    config.getint(probe_name, self.LOW_TEMP_KEY, fallback=self.LOW_DEFAULT),
+                    config.getint(probe_name, self.HIGH_TEMP_KEY, fallback=self.HIGH_DEFAULT)))
         return temps
 
     def Authenticate(self):

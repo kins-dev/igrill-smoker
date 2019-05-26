@@ -13,6 +13,7 @@ function finish  () {
     rm -f "${IGRILL_RUN_DIR}/igrill.json"
     rm -f "${IGRILL_RUN_DIR}/last_temp.sh"
     rm -f "${IGRILL_RUN_DIR}/stage.sh"
+    rm -f "${IGRILL_RUN_DIR}/limits.ini"
 }
 
 VALUE=${IGRILL_BAS_DIR:-}
@@ -36,10 +37,13 @@ source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 source "${IGRILL_SCR_DIR}/config.sh"
 
 # shellcheck source=scripts/utils/bt.sh
-
 source "${IGRILL_UTL_DIR}/bt.sh"
+
 # shellcheck source=scripts/utils/leds.sh
 source "${IGRILL_UTL_DIR}/leds.sh"
+
+# shellcheck source=scripts/utils/limits.sh
+source "${IGRILL_UTL_DIR}/limits.sh"
 
 if ! [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
     echo "Error: $IGRILL_CFG_DIR/iGrill_config.ini mot found"
@@ -76,6 +80,10 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     if [ ! -f "${IGRILL_SCR_DIR}/py_config/mac_config.py" ]; then
         "${IGRILL_UTL_DIR}/get_mac.sh"
     fi
+
+    ResetLimits
+
+    WriteLimits
     
     LEDsReset
 

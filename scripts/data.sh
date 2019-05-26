@@ -93,7 +93,9 @@ EOL
         SetLimits "${iGrill__Probes__FoodProbe}" "$FD_TEMP" "$INTERNAL_TEMP" 5
     fi
     SetLimits "${iGrill__Probes__SmokeProbe}" "$SM_TEMP" "$SMOKE_MID" 20
-     
+    
+    WriteLimits
+
     # Reload the config file with the new stage.
     LoadConfig
 }

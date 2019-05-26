@@ -41,6 +41,7 @@ function SetLimits () {
     local CURRENT=$2
     local TARGET=$3
     local SLOP=$4
+    DIFF=$((TARGET - CURRENT))
     if [ "${CURRENT}" -lt "${TARGET}" ]; then
         LOW=$((CURRENT - SLOP))
         HIGH=$((TARGET + SLOP))
@@ -50,7 +51,9 @@ function SetLimits () {
     fi
     VAL="[Probe${1}]
 LOW_TEMP=${LOW}
-HIGH_TEMP=${HIGH}"
+HIGH_TEMP=${HIGH}
+TEMP_DIFF=${DIFF}
+"
     eval "${PROBE_NAME}=\${VAL}"
 }
 
@@ -69,5 +72,5 @@ HIGH_TEMP=32767
 }
 
 function WriteLimits () {
-    true
+    PrintLimits > "${IGRILL_RUN_DIR}/limits.ini"
 }

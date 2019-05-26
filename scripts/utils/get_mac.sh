@@ -26,7 +26,7 @@ source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 # shellcheck source=bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
 
-OUTPUT="${IGRILL_SCR_DIR}/py_config/mac_config.py"
+OUTPUT="${IGRILL_PYC_DIR}/mac_config.py"
 
 echo "Turn on your iGrill now"
 
