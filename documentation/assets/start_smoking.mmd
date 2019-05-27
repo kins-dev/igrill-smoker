@@ -1,22 +1,33 @@
 graph TD
+style config stroke-width:4px
+style monitor stroke-width:4px
+style start_smoking stroke-width:4px
     subgraph 
 
     start_smoking[start_smoking.sh]
     config[config.sh]
-limits[limits.sh]               
-                paths[paths.sh]
+items[items.json]
+paths[paths.sh]      
+limits[limits.sh]          
+limits_ini[limits.ini]
                 gen_json[gen_json.sh]
+                get_mac[get_mac.sh]
+                mac_config[mac_config.py]
             monitor[monitor.py]
                 bt[bt.sh]
                 leds[leds.sh]
-                get_mac[get_mac.sh]
-            
 start_smoking --- config
+gen_json --- paths
 start_smoking --- gen_json
 start_smoking --- limits
 start_smoking --- paths
 start_smoking --- bt
 start_smoking --- leds
 start_smoking --- get_mac
-start_smoking --> monitor
+get_mac -.- mac_config
+gen_json -.- items
+gen_json --- config
+limits --- paths
+limits -.- limits_ini
+start_smoking ==> monitor
 end

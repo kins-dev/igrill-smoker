@@ -14,10 +14,17 @@ Copyright &copy; 2019 Scott Atkins
 * [Sources](#sources)
 * [Configuration](#configuration)
 	* [INI File](#ini-file)
-* [Scripts](#scripts)
+* [Files](#files)
 	* [Bash](#bash)
 	* [Python](#python)
+	* [JSON](#json)
+	* [CSV](#csv)
+	* [INI](#ini)
 * [File relation graph](#file-relation-graph)
+	* [/start_smoking.sh](#start_smokingsh)
+	* [/scripts/config.sh](#scriptsconfigsh)
+	* [/scripts/monitor.py](#scriptsmonitorpy)
+	* [/scripts/data.sh](#scriptsdatash)
 
 <!-- /code_chunk_output -->
 <!-- markdownlint-enable MD007 -->
@@ -42,13 +49,40 @@ Like most projects this has come from a number of different sources.
 
 The ini file is a one stop shop to configure this project.
 
-## Scripts
+## Files
 
 ### Bash
 
+* **/start_smoking.sh** - the main script to start a smoking session.
+  * Cleans up after the last run
+  * Finds iGrill device if needed
+  * Creates list of CSV files
+  * Creates new CSV file and links it to current.csv
+  * Resets the BT device on the Raspberry Pi
+  * Calls monitor.py to capture data over bluetooth
+  
 ### Python
+
+### JSON
+
+### CSV
+
+### INI
 
 ## File relation graph
 
+### /start_smoking.sh
+
 ![start_smoking](assets/start_smoking.svg)
+
+### /scripts/config.sh
+
 ![config](assets/config.svg)
+
+### /scripts/monitor.py
+
+![monitor](assets/monitor.svg)
+
+### /scripts/data.sh
+
+![data](assets/data.svg)

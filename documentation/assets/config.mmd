@@ -1,4 +1,6 @@
 graph TD
+style config stroke-width:4px
+
     subgraph 
 
     config[config.sh]
@@ -6,11 +8,19 @@ graph TD
     read_ini[read_ini.sh]
     last_temp[last_temp.sh]
     paths[paths.sh]
+    defaults[defaults.sh]
+    kasa[kasa.sh]
+    stage[stage.sh]
+    $food[$food.sh]
 
     config --- last_temp
     config --- read_ini
     config --- paths
-    
-    config --> iGrill_config
+    config --- defaults
+    config --- kasa
+    config --- stage
+    config --- $food
+
+    config -.- iGrill_config
     
 end

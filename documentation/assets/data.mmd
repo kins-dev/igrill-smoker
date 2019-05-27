@@ -1,0 +1,29 @@
+graph TD
+    style config stroke-width:4px
+    style data stroke-width:4px
+    subgraph 
+        data[data.sh]
+        config[config.sh]
+        paths[paths.sh]
+        leds[leds.sh]
+        kasa[kasa.sh]
+        sounds[sounds.sh]
+        current[current.csv]
+        stage[stage.sh]
+        state[state.json]
+        last_temp[last_temp.sh]
+        limits[limits.sh]
+    end
+    data --- config
+    data --- limits
+    data --- leds
+    data --- kasa
+    data --- sounds
+    data -.- current
+    data -.- stage
+    data -.- last_temp
+    data -.- state
+    limits --- paths
+    data --- paths
+    click data "#scriptsdatash" "data.sh"
+    click config "#scriptsconfigsh" "config.sh"
