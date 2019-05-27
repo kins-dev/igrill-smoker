@@ -17,9 +17,9 @@ Copyright &copy; 2019 Scott Atkins
 * [Files](#files)
 	* [Bash](#bash)
 	* [Python](#python)
+	* [INI](#ini)
 	* [JSON](#json)
 	* [CSV](#csv)
-	* [INI](#ini)
 * [File relation graph](#file-relation-graph)
 	* [/start_smoking.sh](#start_smokingsh)
 	* [/scripts/config.sh](#scriptsconfigsh)
@@ -51,11 +51,12 @@ The ini file is a one stop shop to configure this project.
 
 ## Files
 
+This is an attempt to document all the files in the project.  Relations between files is shown [below](#file-relation-graph).
+
 ### Bash
 
 * **[start_smoking.sh](../start_smoking.sh)** - The main script to start a smoking session.
   * Cleans up after the last run
-  * Loads the configuration
   * Resets the limits
   * Resets the LEDs
   * Finds iGrill device if needed
@@ -64,18 +65,24 @@ The ini file is a one stop shop to configure this project.
   * Resets the BT device on the Raspberry Pi
   * Calls [scripts/monitor.py](../scripts/monitor.py) to capture data over bluetooth
   
+* **[scripts/config.sh](../scripts/config.sh)** - Loads configuration
+
 ### Python
 
 * **[scripts/monitor.py](../scripts/monitor.py)** - Top level python script
   * Loads the configuration
   * Formats the results
-  * Calls [data.sh](../scripts/data.sh)
+  * Calls [scripts/data.sh](../scripts/data.sh) with the temperature data
+* **[scripts/py_utils/igrill.py](../scripts/py_utils/igrill.py)** - Interface to iGrill
+  * Performs handshake
+  * Grabs temperature/battery data
+  * Sets probe limits
+
+### INI
 
 ### JSON
 
 ### CSV
-
-### INI
 
 ## File relation graph
 
