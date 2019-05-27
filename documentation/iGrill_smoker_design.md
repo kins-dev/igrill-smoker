@@ -86,6 +86,12 @@ This is an attempt to document all the files in the project.  Relations between 
 
 ## File relation graph
 
+This is broken down into multiple graphs so it is easier to follow.
+
+* Dotted lines are file reads/writes
+* Bold lines are system calls to execute a script
+* Normal lines are standard includes
+
 ### /start_smoking.sh
 
 ![start_smoking](assets/start_smoking.svg)
