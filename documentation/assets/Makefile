@@ -1,5 +1,5 @@
+# Makefile for building SVG files from mmd files
 
-# the build target executable:
 all: monitor.svg data.svg start_smoking.svg config.svg
 
 %.svg: %.mmd
