@@ -53,15 +53,23 @@ The ini file is a one stop shop to configure this project.
 
 ### Bash
 
-* **[/start_smoking.sh](../start_smoking.sh)** - the main script to start a smoking session.
+* **[start_smoking.sh](../start_smoking.sh)** - The main script to start a smoking session.
   * Cleans up after the last run
+  * Loads the configuration
+  * Resets the limits
+  * Resets the LEDs
   * Finds iGrill device if needed
   * Creates list of CSV files
   * Creates new CSV file and links it to current.csv
   * Resets the BT device on the Raspberry Pi
-  * Calls monitor.py to capture data over bluetooth
+  * Calls [scripts/monitor.py](../scripts/monitor.py) to capture data over bluetooth
   
 ### Python
+
+* **[scripts/monitor.py](../scripts/monitor.py)** - Top level python script
+  * Loads the configuration
+  * Formats the results
+  * Calls [data.sh](../scripts/data.sh)
 
 ### JSON
 
