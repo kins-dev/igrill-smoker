@@ -53,7 +53,7 @@ The ini file is a one stop shop to configure this project.
 
 ### Bash
 
-* **/start_smoking.sh** - the main script to start a smoking session.
+* **[/start_smoking.sh](../start_smoking.sh)** - the main script to start a smoking session.
   * Cleans up after the last run
   * Finds iGrill device if needed
   * Creates list of CSV files
