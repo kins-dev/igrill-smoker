@@ -64,8 +64,8 @@ This is an attempt to document all the files in the project.  Relations between 
   * Creates new CSV file and links it to current.csv
   * Resets the BT device on the Raspberry Pi
   * Calls [scripts/monitor.py](../scripts/monitor.py) to capture data over bluetooth
-* **[grill-smoker/scripts/config.sh](../scripts/config.sh)** - Loads configuration
-* **[grill-smoker/scripts/data.sh](../scripts/data.sh)** - Handles temperature data
+* **[igrill-smoker/scripts/config.sh](../scripts/config.sh)** - Loads configuration
+* **[igrill-smoker/scripts/data.sh](../scripts/data.sh)** - Handles temperature data
   * Loads [config.sh](../scripts/config.sh)
   * Determines if it is time to load the next stage
     * If so writes stage.sh and reloads [config.sh](../scripts/config.sh)
@@ -76,33 +76,43 @@ This is an attempt to document all the files in the project.  Relations between 
   * Writes state.json
   * Writes last_temp.sh
   * Writes data to current.csv
-* **[grill-smoker/scripts/utils/bt.sh](../scripts/utils/bt.sh)** - Bluetooth functions
+* **[igrill-smoker/scripts/utils/bt.sh](../scripts/utils/bt.sh)** - Bluetooth functions
   * **BtReset** - Resets Bluetooth
-* **[grill-smoker/scripts/utils/create_vars.sh](../scripts/utils/create_vars.sh)** - Setup default values
+* **[igrill-smoker/scripts/utils/create_vars.sh](../scripts/utils/create_vars.sh)** - Setup default values
   * Reads iGrill_config.example.ini
   * Creates default.sh
-* **[grill-smoker/scripts/utils/defaults.sh](../scripts/utils/defaults.sh)** - Config default values if iGrill_config.ini does not exist
-* **[grill-smoker/scripts/utils/gen_json.sh](../scripts/utils/gen_json.sh)** - Creates JSON file for Website
+* **[igrill-smoker/scripts/utils/defaults.sh](../scripts/utils/defaults.sh)** - Config default values if iGrill_config.ini does not exist
+* **[igrill-smoker/scripts/utils/gen_json.sh](../scripts/utils/gen_json.sh)** - Creates JSON file for Website
   * Finds all CSV files that match the date format
   * Writes a JSON file with the list of files
-* **[grill-smoker/scripts/utils/get_mac.sh](../scripts/utils/get_mac.sh)** - Creates mac_config.py based on iGrill Bluetooth address
+* **[igrill-smoker/scripts/utils/get_mac.sh](../scripts/utils/get_mac.sh)** - Creates mac_config.py based on iGrill Bluetooth address
   * Loads [bt.sh](../scripts/utils/bt.sh)
   * Calls BtReset
   * Starts a scan for iGrill
     * Scan is killed when iGrill is found
   * Writes mac_config.py
   * Calls BtReset
+* **[igrill-smoker/scripts/utils/kasa.sh](../scripts/utils/kasa.sh)**
+* **[igrill-smoker/scripts/utils/leds.sh](../scripts/utils/leds.sh)**
+* **[igrill-smoker/scripts/utils/limits.sh](../scripts/utils/limits.sh)**
+* **[igrill-smoker/scripts/utils/paths.sh](../scripts/utils/paths.sh)**
+* **[igrill-smoker/scripts/utils/read_ini.sh](../scripts/utils/read_ini.sh)**
+* **[igrill-smoker/scripts/utils/sounds.sh](../scripts/utils/sounds.sh)**
+* **igrill-smoker/run/stage.sh**
+* **igrill-smoker/run/last_temp.sh**
 
 ### Python
 
-* **[grill-smoker/scripts/monitor.py](../scripts/monitor.py)** - Top level python script
+* **[igrill-smoker/scripts/monitor.py](../scripts/monitor.py)** - Top level python script
   * Loads the configuration
   * Formats the results
   * Calls [scripts/data.sh](../scripts/data.sh) with the temperature data
-* **[grill-smoker/scripts/py_utils/igrill.py](../scripts/py_utils/igrill.py)** - Interface to iGrill
+* **[igrill-smoker/scripts/py_utils/igrill.py](../scripts/py_utils/igrill.py)** - Interface to iGrill
   * Performs handshake
   * Grabs temperature/battery data
   * Sets probe limits
+* **[igrill-smoker/scripts/py_utils/logging.py](../scripts/py_utils/logging.py)**
+* **igrill-smoker/scripts/py_config/mac_config.py**
 
 ### INI
 
