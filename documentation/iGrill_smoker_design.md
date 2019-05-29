@@ -56,6 +56,11 @@ This is an attempt to document all the files in the project.  Relations between 
 ### Bash
 
 * **[igrill-smoker/start_smoking.sh](../start_smoking.sh)** - The main script to start a smoking session.
+  * Loads [paths.sh](../scripts/utils/paths.sh)
+  * Loads [leds.sh](../scripts/utils/leds.sh)
+  * Loads [kasa.sh](../scripts/utils/kasa.sh)
+  * Loads [limits.sh](../scripts/utils/limits.sh)
+  * Loads [config.sh](../scripts/config.sh)
   * Cleans up after the last run
   * Resets the limits
   * Resets the LEDs
@@ -65,7 +70,11 @@ This is an attempt to document all the files in the project.  Relations between 
   * Resets the BT device on the Raspberry Pi
   * Calls [scripts/monitor.py](../scripts/monitor.py) to capture data over bluetooth
 * **[igrill-smoker/scripts/config.sh](../scripts/config.sh)** - Loads configuration
+  * Loads [read_ini.sh](../scripts/utils/read_ini.sh)
+  * Loads [defaults.sh](../scripts/utils/defaults.sh)
+  * Loads [food script](../config/stage/)
 * **[igrill-smoker/scripts/data.sh](../scripts/data.sh)** - Handles temperature data
+  * Loads [paths.sh](../scripts/utils/paths.sh)
   * Loads [config.sh](../scripts/config.sh)
   * Determines if it is time to load the next stage
     * If so writes stage.sh and reloads [config.sh](../scripts/config.sh)
@@ -83,6 +92,7 @@ This is an attempt to document all the files in the project.  Relations between 
   * Creates default.sh
 * **[igrill-smoker/scripts/utils/defaults.sh](../scripts/utils/defaults.sh)** - Config default values if iGrill_config.ini does not exist
 * **[igrill-smoker/scripts/utils/gen_json.sh](../scripts/utils/gen_json.sh)** - Creates JSON file for Website
+  * Loads [paths.sh](../scripts/utils/paths.sh)
   * Finds all CSV files that match the date format
   * Writes a JSON file with the list of files
 * **[igrill-smoker/scripts/utils/get_mac.sh](../scripts/utils/get_mac.sh)** - Creates mac_config.py based on iGrill Bluetooth address
@@ -92,14 +102,25 @@ This is an attempt to document all the files in the project.  Relations between 
     * Scan is killed when iGrill is found
   * Writes mac_config.py
   * Calls BtReset
-* **[igrill-smoker/scripts/utils/kasa.sh](../scripts/utils/kasa.sh)**
-* **[igrill-smoker/scripts/utils/leds.sh](../scripts/utils/leds.sh)**
-* **[igrill-smoker/scripts/utils/limits.sh](../scripts/utils/limits.sh)**
-* **[igrill-smoker/scripts/utils/paths.sh](../scripts/utils/paths.sh)**
-* **[igrill-smoker/scripts/utils/read_ini.sh](../scripts/utils/read_ini.sh)**
-* **[igrill-smoker/scripts/utils/sounds.sh](../scripts/utils/sounds.sh)**
-* **igrill-smoker/run/stage.sh**
-* **igrill-smoker/run/last_temp.sh**
+* **[igrill-smoker/scripts/utils/kasa.sh](../scripts/utils/kasa.sh)** - P;ug control
+  * GetKasaIP - Locates the specified plug by name
+  * SetKasaState - Changes the plug state with a debug message.  Also sets a timer to turn the plug off after 5 minutes
+* **[igrill-smoker/scripts/utils/leds.sh](../scripts/utils/leds.sh)** - Controls notification LEDs
+  * LEDsReset - Turns LEDs off
+  * LEDsSetState - Sets a LED to a particular state
+* **[igrill-smoker/scripts/utils/limits.sh](../scripts/utils/limits.sh)** - Sets upper and lower limits for the iGrill
+  * Loads [paths.sh](../scripts/utils/paths.sh)
+  * Reset limits - Sets limits for all 4 probes to be -32768 to 32767
+  * SetLimits - Sets limits for a particular probe
+  * PrintLimits - Output set limits in an INI format
+  * WriteLimits - Uses PrintLimits to write to a file
+* **[igrill-smoker/scripts/utils/paths.sh](../scripts/utils/paths.sh)** - Sets up standard path variables
+* **[igrill-smoker/scripts/utils/read_ini.sh](../scripts/utils/read_ini.sh)** - Reads ini file
+  * read_ini - Reads the specified file and sets variables
+* **[igrill-smoker/scripts/utils/sounds.sh](../scripts/utils/sounds.sh)** - plays sounds through the 3.5 mm jack
+  * PlaySound - calls omxplayer to play a sound
+* **igrill-smoker/run/stage.sh** - Tracks the current cooking stage
+* **igrill-smoker/run/last_temp.sh** - Tracks the last temperature
 
 ### Python
 
@@ -111,10 +132,15 @@ This is an attempt to document all the files in the project.  Relations between 
   * Performs handshake
   * Grabs temperature/battery data
   * Sets probe limits
-* **[igrill-smoker/scripts/py_utils/logging.py](../scripts/py_utils/logging.py)**
+* **[igrill-smoker/scripts/py_utils/logging.py](../scripts/py_utils/logging.py)** - Sets up logging
+  * Report specific log level
+  * Redirects to file if specified
 * **igrill-smoker/scripts/py_config/mac_config.py**
 
 ### INI
+
+* **[iGrill_config.ini](../config/iGrill_config.example.ini)** - Main configuration
+* **limits.ini** - iGrill upper and lower limits for alarm
 
 ### JSON
 
