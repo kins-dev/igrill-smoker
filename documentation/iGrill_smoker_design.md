@@ -12,8 +12,6 @@ Copyright &copy; 2019 Scott Atkins
 
 * [Introduction](#introduction)
 * [Sources](#sources)
-* [Configuration](#configuration)
-	* [INI File](#ini-file)
 * [Files](#files)
 	* [Bash](#bash)
 	* [Python](#python)
@@ -25,6 +23,8 @@ Copyright &copy; 2019 Scott Atkins
 	* [/scripts/config.sh](#scriptsconfigsh)
 	* [/scripts/monitor.py](#scriptsmonitorpy)
 	* [/scripts/data.sh](#scriptsdatash)
+* [Configuration](#configuration)
+	* [INI File](#ini-file)
 
 <!-- /code_chunk_output -->
 <!-- markdownlint-enable MD007 -->
@@ -42,12 +42,6 @@ Like most projects this has come from a number of different sources.
 * [Path helper](https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself)
 * [Highcharts](https://www.highcharts.com/)
 * [tplink-smarthome-api](https://www.npmjs.com/package/tplink-smarthome-api)
-
-## Configuration
-
-### INI File
-
-The ini file is a one stop shop to configure this project.
 
 ## Files
 
@@ -169,3 +163,9 @@ This is broken down into multiple graphs so it is easier to follow.
 ### /scripts/data.sh
 
 ![data](assets/data.svg)
+
+## Configuration
+
+### INI File
+
+The ini file is a one stop shop to configure this project.
