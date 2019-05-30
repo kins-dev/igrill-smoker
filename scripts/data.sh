@@ -7,6 +7,12 @@ true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
+if ! [ "$#" -eq "3" ]; then
+    echo "Wrong number of arguments to data.sh"
+    echo "Expected 3, got $#"
+    exit 1
+fi
+
 VALUE=${IGRILL_BAS_DIR:-}
 if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
@@ -32,9 +38,13 @@ source "${IGRILL_UTL_DIR}/leds.sh"
 # shellcheck source=utils/sounds.sh
 source "${IGRILL_UTL_DIR}/sounds.sh"
 
-# pull in sound functions
+# pull in plug functions
 # shellcheck source=utils/kasa.sh
 source "${IGRILL_UTL_DIR}/kasa.sh"
+
+# pull in limit functions
+# shellcheck source=utils/limits.sh
+source "${IGRILL_UTL_DIR}/limits.sh"
 
 # Functions
 
@@ -64,12 +74,11 @@ function LoadConfig () {
     fi
 }
 
-# Should be moved out to another file
-
 
 # Updates the stages (at a transition point)
 function WriteStages()
 {
+    ResetLimits
     #	echo "updating stages"
 	cat > "$STAGE_FILE" <<EOL
 #!/bin/bash
@@ -80,6 +89,13 @@ set -\$-ue\${DEBUG+xv}
 STAGE=$STAGE
 TIMESTAMP=$DATE_TS
 EOL
+    if ! [ "0" == "${iGrill__Probes__FoodProbe}" ]; then
+        SetLimits "${iGrill__Probes__FoodProbe}" "$FD_TEMP" "$INTERNAL_TEMP" 5
+    fi
+    SetLimits "${iGrill__Probes__SmokeProbe}" "$SM_TEMP" "$SMOKE_MID" 20
+    
+    WriteLimits
+
     # Reload the config file with the new stage.
     LoadConfig
 }
@@ -98,7 +114,6 @@ DATE_TS=$(date +'%s')
 # Load the configuration
 LoadConfig
 
-# TODO: check number of args
 BATTERY="$1"
 SM_TEMP="$2"
 FD_TEMP="$3"

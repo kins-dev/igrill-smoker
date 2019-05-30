@@ -3,9 +3,12 @@
 #                       (https://git.kins.dev/igrill-smoker)
 # License:              MIT License
 #                       See the LICENSE file
+# Defining variables for other scripts
+# shellcheck disable=2034
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
+
 
 VALUE=${IGRILL_BAS_DIR:-}
 if [ -z "${VALUE}" ]; then
@@ -23,31 +26,51 @@ fi
 
 # shellcheck source=paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
-# shellcheck source=bt.sh
-source "${IGRILL_UTL_DIR}/bt.sh"
 
-OUTPUT="${IGRILL_PYC_DIR}/mac_config.py"
+function ResetLimits () {
+    for i in $(seq 1 4); do
+        local PROBE_NAME=LIMITS_Probe${i}
+        eval "${PROBE_NAME}='[Probe${i}]'"
+    done
+}
 
-echo "Turn on your iGrill now"
-
-BtReset
-
-# stdbuf is needed to prevent buffering of lines
-# by hcitool
-coproc sudo stdbuf -oL hcitool lescan
-
-while read -r CMD; do
-
-    # when we find the iGrill_V2 setup that information
-    if [[ $CMD = *"iGrill"* ]]; then
-        MAC=${CMD:0:17}
-        echo "$MAC"
-        echo -n "ADDRESS='" > "${OUTPUT}"
-        echo -n "$MAC" >> "${OUTPUT}"
-        echo "'" >> "${OUTPUT}"
-        break
+function SetLimits () {
+    local PROBE_NAME=LIMITS_Probe${1}
+    local LOW
+    local HIGH
+    local CURRENT=$2
+    local TARGET=$3
+    local SLOP=$4
+    DIFF=$((TARGET - CURRENT))
+    if [ "${CURRENT}" -lt "${TARGET}" ]; then
+        LOW=$((CURRENT - SLOP))
+        HIGH=$((TARGET + SLOP))
+    else
+        LOW=$((TARGET - SLOP))
+        HIGH=$((CURRENT + SLOP))
     fi
-done <&"${COPROC[0]}"
+    VAL="[Probe${1}]
+LOW_TEMP=${LOW}
+HIGH_TEMP=${HIGH}
+TEMP_DIFF=${DIFF}
+"
+    eval "${PROBE_NAME}=\${VAL}"
+}
 
-# This will forcibly kill the scan
-BtReset
+function PrintLimits () {
+    echo "[DEFAULT]
+LOW_TEMP=-32768
+HIGH_TEMP=32767
+"
+
+    for i in $(seq 1 4); do
+        local PROBE_NAME=LIMITS_Probe${i}
+        eval "VAL=\${${PROBE_NAME}}"
+        echo "$VAL"
+        echo ""
+    done
+}
+
+function WriteLimits () {
+    PrintLimits > "${IGRILL_RUN_DIR}/limits.ini"
+}

@@ -1,4 +1,9 @@
 #!/bin/bash
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
+# Defining variables for other scripts
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
