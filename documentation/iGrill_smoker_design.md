@@ -138,7 +138,12 @@ This is an attempt to document all the files in the project.  Relations between 
 
 ### JSON
 
+* **state.json** - Current state of the smoking for website processing
+* **items.json** - A list of csv files which can put into highcharts
+
 ### CSV
+
+* **current.csv** - The current data set
 
 ## File relation graph
 
@@ -169,3 +174,66 @@ This is broken down into multiple graphs so it is easier to follow.
 ### INI File
 
 The ini file is a one stop shop to configure this project.
+
+<!-- TODO: add > at the end of this line, open MPE, and use shift enter to regenerate --
+```bash {cmd hide modify_source}
+echo -n \`\`\`ini
+cat ../config/iGrill_config.example.ini
+echo -n \`\`\`
+```>
+<!---->
+
+<!-- code_chunk_output -->
+
+```ini
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
+[iGrill]
+# can be Standard or Mini
+Type=Standard
+
+[Probes]
+# For iGrill mini set food probe to 0 and smoke probe to 1
+
+# Food probe must be set between 0 and 4, where 0 means the
+# probe is disabled.  The left most probe is 1 and right most
+# is 4 on the iGrill 2/3
+#
+# If you disable the food probe, you must use a stage that
+# is iGrill mini compatible (see stage file) or disable stages
+FoodProbe=1
+
+# Smoke probe must be set between 1 and 4.  The left most probe
+# is 1 and right most is 4 on the iGrill 2/3
+SmokeProbe=4
+
+[Logging]
+LogLevel=INFO
+LogFile=
+
+[Kasa]
+# Name of your plug in the Kasa app, case sensitive
+Name=iGrill-smoker
+
+[Smoking]
+MaxTempChange=2
+TempBandSize=7
+
+# Can be the name of any file in the stages directory (excluding the .sh) or None
+Food=brisket
+
+# Only valid if Food=None
+SmokeMid=225
+InternalTarget=185
+
+[Reporting]
+# time in seconds between polls of the iGrill
+# faster polling means more power use
+PollTime=20
+
+ResultsDirectory=/var/www/html
+CSVFile=current.csv
+StateFile=state.json
+```
