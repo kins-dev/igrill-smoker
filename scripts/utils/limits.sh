@@ -41,13 +41,15 @@ function SetLimits () {
     local CURRENT=$2
     local TARGET=$3
     local SLOP=$4
-    local DIFF=$((TARGET - CURRENT))
+    local DIFF
     if [ "${CURRENT}" -lt "${TARGET}" ]; then
         LOW=$((CURRENT - SLOP))
         HIGH=$((TARGET + SLOP))
+        DIFF=$((TARGET - CURRENT))
     else
         LOW=$((TARGET - SLOP))
         HIGH=$((CURRENT + SLOP))
+        DIFF=$((CURRENT - TARGET))
     fi
     VAL="[Probe${1}]
 LOW_TEMP=${LOW}
@@ -82,13 +84,15 @@ function RecheckLimits () {
     local CURRENT=$2
     local TARGET=$3
     local SLOP=$4
-    local DIFF=$((TARGET - CURRENT))
+    local DIFF
     if [ "${CURRENT}" -lt "${TARGET}" ]; then
         LOW=$((CURRENT - SLOP))
         HIGH=$((TARGET + SLOP))
+        DIFF=$((TARGET - CURRENT))
     else
         LOW=$((TARGET - SLOP))
         HIGH=$((CURRENT + SLOP))
+        DIFF=$((CURRENT - TARGET))
     fi
     VAL="[Probe${1}]
 LOW_TEMP=${LOW}
