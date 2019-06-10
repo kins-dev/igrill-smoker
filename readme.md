@@ -1,5 +1,6 @@
 # Starting with Raspberry Pi Stretch
 
+<!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
 <!-- markdownlint-enable MD033 -->
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
@@ -24,6 +25,18 @@ Create a low cost smoking unit that can be controlled/monitored via the internet
 ## Design
 
 See the [design document](documentation/iGrill_smoker_design.md).
+
+## Equipment
+
+Prices as of June 10th, 2019.  Some items like the hotplates or skillet can be found at Goodwill instead.
+
+* [Weber Grill](https://www.amazon.com/Weber-741001-Original-22-Inch-Charcoal/dp/B00004RALU/ref=sr_1_3) - $109
+* [iGrill2](https://www.amazon.com/Weber-7203-iGrill-2-Thermometer/dp/B01MG2CNDL/ref=sr_1_3) - $64.99
+* [Hotplate](https://www.amazon.com/Cuisine-ESB-300X-Maxi-Matic-Single-Electric/dp/B0006A2ZTS/ref=sr_1_70) - 2x @ $12.96
+* [TP-Link Kasa](https://www.amazon.com/TP-Link-HS100-Required-Google-Assistant/dp/B0178IC734/ref=sr_1_4) - $14.69
+* [Raspberry Pi](https://www.target.com/p/raspberry-pi-3-model-b-project-board/-/A-53349740) - $34.49
+* [SD Card](https://www.amazon.com/Kingston-Digital-microSDHC-SDC4-8GBSP/dp/B0027CA7UW/ref=sr_1_11) - $3.99
+* [Skillets](https://www.amazon.com/dp/B073Q8P6C8/ref=psdc_289821_t1_B00008GKDN) - 2x @ $10.93
 
 ## Requirements
 
