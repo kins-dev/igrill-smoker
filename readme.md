@@ -28,7 +28,7 @@ See the [design document](documentation/iGrill_smoker_design.md).
 
 ## Equipment
 
-Prices as of June 10th, 2019.  Some items like the hotplates or skillet can be found at Goodwill instead.
+Prices as of June 10th, 2019.  Some items like the hotplates or skillet can be found at Goodwill instead.  Total cost (new) $287.96.  Every item can be used for more than one task.  Meat, wood chips, and extension cords not included.
 
 * [Weber Grill](https://www.amazon.com/Weber-741001-Original-22-Inch-Charcoal/dp/B00004RALU/ref=sr_1_3) - $109
 * [iGrill2](https://www.amazon.com/Weber-7203-iGrill-2-Thermometer/dp/B01MG2CNDL/ref=sr_1_3) - $64.99
@@ -37,6 +37,7 @@ Prices as of June 10th, 2019.  Some items like the hotplates or skillet can be f
 * [Raspberry Pi](https://www.target.com/p/raspberry-pi-3-model-b-project-board/-/A-53349740) - $34.49
 * [SD Card](https://www.amazon.com/Kingston-Digital-microSDHC-SDC4-8GBSP/dp/B0027CA7UW/ref=sr_1_11) - $3.99
 * [Skillets](https://www.amazon.com/dp/B073Q8P6C8/ref=psdc_289821_t1_B00008GKDN) - 2x @ $10.93
+* [8 inch rings](https://www.amazon.com/Ateco-14408-8-Inch-Stainless-Cutter/dp/B002A5BU5M/ref=pd_sbs_79_5/140-6446357-6003018) - 2x @ $6.51
 
 ## Requirements
 
