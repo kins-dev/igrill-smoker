@@ -1,11 +1,13 @@
 # Starting with Raspberry Pi Stretch
-<!-- markdownlint-disable MD033 -->
+
 <h2>Table of Contents</h2>
 <!-- markdownlint-enable MD033 -->
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
+* [Problem Statement](#problem-statement)
+* [Design](#design)
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Setup](#setup)
@@ -14,6 +16,14 @@
 * [Lighttpd Setup](#lighttpd-setup)
 
 <!-- /code_chunk_output -->
+
+## Problem Statement
+
+Create a low cost smoking unit that can be controlled/monitored via the internet.
+
+## Design
+
+See the [design document](documentation/iGrill_smoker_design.md).
 
 ## Requirements
 

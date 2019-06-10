@@ -9,6 +9,7 @@ set -$-ue${DEBUG+xv}
 
 
 function finish  () {
+    LEDsReset
     # Cleanup on exit
     rm -f "${IGRILL_RUN_DIR}/igrill.json"
     rm -f "${IGRILL_RUN_DIR}/last_temp.sh"
