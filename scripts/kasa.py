@@ -76,16 +76,20 @@ def Discover(alias):
                 return (addr[0], json_data["system"]["get_sysinfo"]["relay_state"])
     except socket.timeout:
         logging.debug("Timeout: closing socket")
+        logging.info("\"{}\" was not found, exiting.".format(alias))
         sock.close()
+        sys.exit(1)
 
-def TurnOff(plug):
-    ip = plug[0]
-    if 0 != plug[1]:
+def TurnOff(alias):
+    ip, state = Discover(alias)
+    if 0 != state:
         SendCommand(ip, py_utils.constant.KASA_JSON_PLUG_OFF)
+    else:
+        SendCommand(ip, py_utils.constant.KASA_JSON_COUNTDOWN_DELETE)
 
-def TurnOn(plug):
-    ip = plug[0]
-    if 1 != plug[1]:
+def TurnOn(alias):
+    ip, state = Discover(alias)
+    if 1 != state:
         SendCommand(ip, py_utils.constant.KASA_JSON_PLUG_ON)
     else:
         SendCommand(ip, py_utils.constant.KASA_JSON_COUNTDOWN_DELETE_AND_RUN)
@@ -107,9 +111,9 @@ def main():
         help='Test mode, do not run data.sh',
         action='store_true')
     parser.add_argument(
-        '--once',
-        dest='single_shot_mode',
-        help='Run now, no wait, only once (implies test mode)',
+        '--on',
+        dest='turn_on',
+        help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
         action='store_true')
     parser.add_argument(
         '-l',
@@ -128,10 +132,13 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    logging.info("starting")
-    plug = Discover(kasa_alias)
-    logging.info("IP: {}".format(plug[0]))
-    TurnOn(plug)
+    if (True == options.turn_on):
+        logging.info("Turning on plug")
+        TurnOn(kasa_alias)
+    else:
+        logging.info("Turning off plug")
+        TurnOff(kasa_alias)
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
