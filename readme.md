@@ -68,7 +68,7 @@ bash run-install.sh
 
 After starting the ```run-install.sh``` script, you should turn on your iGrill v2.  Installation shouldn't take long and the device is needed for setup.
 
-## Setup
+## Software Setup
 
 Copy ```config/iGrill_config.example.ini``` to ```config/iGrill_config.ini```.  Update ```iGrill_config.ini``` with any system settings you want to change.
 
@@ -143,6 +143,8 @@ Edit the chart.html file in the website_example directory to suit your needs and
 ## Using iGrill Mini
 
 The iGrill mini has a single probe.  That means you can either monitor the smoke temperature or the food temperature.  Since this is controlling a plug for the smoke, you should not monitor the food temperature via the iGrill mini probe.  Follow the instructions in iGrill_config.example.ini for setting the probe values.
+
+## Grill Setup
 
 ## Running
 
