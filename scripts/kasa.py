@@ -106,13 +106,13 @@ def main():
     parser = argparse.ArgumentParser(
         description='Connects to iGrill device and calls a script to process results')
     parser.add_argument(
-        '--test',
-        dest='test_mode',
-        help='Test mode, do not run data.sh',
-        action='store_true')
-    parser.add_argument(
         '--on',
         dest='turn_on',
+        help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
+        action='store_true')
+    parser.add_argument(
+        '--off',
+        dest='turn_off',
         help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
         action='store_true')
     parser.add_argument(
@@ -133,11 +133,18 @@ def main():
 
     SetupLog(options.log_level, options.log_destination)
     if (True == options.turn_on):
+        if (True == options.turn_off):
+            logging.info("Bad options, both on and off")
+            sys.exit(1)
         logging.info("Turning on plug")
         TurnOn(kasa_alias)
     else:
-        logging.info("Turning off plug")
-        TurnOff(kasa_alias)
+        if (True == options.turn_off):
+            logging.info("Turning off plug")
+            TurnOff(kasa_alias)
+        else:
+            ip, state = Discover(kasa_alias)
+            print("{} {}".format(ip, state))
     sys.exit(0)
 
 if __name__ == '__main__':
