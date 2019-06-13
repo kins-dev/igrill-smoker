@@ -85,7 +85,23 @@ class Kasa(object):
         options = parser.parse_args()
 
         SetupLog(options.log_level, options.log_destination)
-        self.m_ip, state = self.Discover(kasa_alias)
+        self.name = kasa_alias
+        self.FindAndCreateSocket()
+        self.exitCode = 0
+
+    def ExitCode(self):
+        return self.exitCode
+
+    def FindAndCreateSocket(self):
+        state = -1
+        cnt = 0
+        # Try to discover up to 5 times
+        while (state == -1) and (cnt < 5):
+            self.m_ip, state = self.Discover(self.name)
+            cnt += 1
+        if (state == -1):
+            self.exitCode = 1
+            self.Exit()
         self.m_active = (state == 1)
         logging.debug("Setting up socket")
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -122,6 +138,7 @@ class Kasa(object):
             logging.debug("Timeout: closing socket")
             logging.info("\"{}\" was not found, exiting.".format(alias))
             sock.close()
+            return ("", -1)
 
     def GetIP(self):
         return self.m_ip
@@ -146,6 +163,7 @@ def main():
     print('exited requestLoop')
     daemon.close()
     print('daemon closed')
+    sys.exit(kasaObj.ExitCode())
 
 if __name__=="__main__":
     main()
