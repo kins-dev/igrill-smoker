@@ -11,7 +11,7 @@ import configparser
 import sys
 import py_utils.constant
 from struct import pack
-from py_utils.logging import SetupLog
+from py_utils.locallogging import SetupLog
 # Encryption and Decryption of TP-Link Kasa Protocol
 # XOR Autokey Cipher with starting key = 171
 def Encrypt(string):
