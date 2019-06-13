@@ -87,19 +87,16 @@ class Kasa(object):
         SetupLog(options.log_level, options.log_destination)
         self.m_ip, state = self.Discover(kasa_alias)
         self.m_active = (state == 1)
+        logging.debug("Setting up socket")
+        self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        logging.debug("Connecting")
+        self.m_sock.connect((self.m_ip, constant.KASA_NET_PORT))
     
     def SendCommand(self, ip, command):
         logging.debug("Sending to \"{}\" \"{}\"".format(ip, command))
-        logging.debug("Setting up socket")
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        logging.debug("Connecting")
-        sock.connect((ip, constant.KASA_NET_PORT))
-        logging.debug("Sending JSON data")
-        sock.send(EncryptWithHeader(command))
+        self.m_sock.send(EncryptWithHeader(command))
         logging.debug("Reading result")
-        result = DecryptWithHeader(sock.recv(constant.KASA_NET_BUFFER_SIZE))
-        logging.debug("Closing socket")
-        sock.close()
+        result = DecryptWithHeader(self.m_sock.recv(constant.KASA_NET_BUFFER_SIZE))
         logging.debug("Result: {}".format(result))
 
     def Discover(self, alias):
@@ -127,12 +124,17 @@ class Kasa(object):
             sock.close()
 
     def GetIP(self):
-        print(self.m_ip)
+        return self.m_ip
     
     def GetActive(self):
-        print(self.m_active)
+        return self.m_active
+
+    def TurnPlugOn(self):
+        pass
 
     def Exit(self):
+        logging.debug("Closing socket")
+        self.m_sock.close()
         self.m_daemon.shutdown()
 
 def main():
