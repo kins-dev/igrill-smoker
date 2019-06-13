@@ -4,10 +4,10 @@
 #                       See the LICENSE file
 
 import sys
-import Pyro4
+from Pyro5.api import Proxy
 from kasa_daemon import Kasa
 
-kasaObj = Pyro4.Proxy("PYRO:Kasa@localhost:9998")
+kasaObj = Proxy("PYRO:Kasa@localhost:9998")
 
 kasaObj.GetIP()
 kasaObj.GetActive()

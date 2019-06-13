@@ -9,7 +9,7 @@ import logging
 import argparse
 import configparser
 import sys
-import Pyro4
+from Pyro5.api import expose, behavior, Daemon
 import constant
 from struct import pack
 from locallogging import SetupLog
@@ -41,8 +41,8 @@ def Decrypt(string):
 def DecryptWithHeader(string):
     return Decrypt(string[constant.KASA_NET_HEADER_SIZE:])
 
-@Pyro4.expose
-@Pyro4.behavior(instance_mode="single")
+@expose
+@behavior(instance_mode="single")
 class Kasa(object):
     def __init__(self, daemon):
         self.m_daemon = daemon
@@ -138,7 +138,7 @@ class Kasa(object):
         self.m_daemon.shutdown()
 
 def main():
-    daemon = Pyro4.Daemon(port=9998, host="localhost")
+    daemon = Daemon(port=9998, host="localhost")
     kasaObj = Kasa(daemon)
     uri = daemon.register(kasaObj, objectId='Kasa')
     print(uri)
