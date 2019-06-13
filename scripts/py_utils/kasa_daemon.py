@@ -108,7 +108,7 @@ class Kasa(object):
         logging.debug("Connecting")
         self.m_sock.connect((self.m_ip, constant.KASA_NET_PORT))
     
-    def SendCommand(self, ip, command):
+    def SendCommand(self, command):
         logging.debug("Sending to \"{}\" \"{}\"".format(ip, command))
         self.m_sock.send(EncryptWithHeader(command))
         logging.debug("Reading result")
@@ -147,7 +147,18 @@ class Kasa(object):
         return self.m_active
 
     def TurnPlugOn(self):
-        pass
+        if self.m_active
+            SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE_AND_RUN)
+        else:
+            SendCommand(constant.KASA_JSON_PLUG_ON)
+        self.m_active = True        
+
+    def TurnPlugOff(self):
+        if self.m_active
+            SendCommand(constant.KASA_JSON_PLUG_OFF)
+        else:
+            SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE)
+        self.m_active = False
 
     def Exit(self):
         logging.debug("Closing socket")
