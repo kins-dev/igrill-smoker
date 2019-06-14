@@ -9,5 +9,6 @@ from kasa_daemon import Kasa
 
 kasaObj = Proxy("PYRO:Kasa@localhost:9998")
 
-kasaObj.GetIP()
-kasaObj.GetActive()
+#print(kasaObj.GetIP())
+#print(kasaObj.GetActive())
+kasaObj.TurnPlugOn()

@@ -8,6 +8,7 @@ import time
 import logging
 import argparse
 import configparser
+import time
 import sys
 from Pyro5.api import expose, behavior, Daemon
 import constant
@@ -52,7 +53,7 @@ class Kasa(object):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
         config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        loglevel = config.get("Logging", "LogLevel", fallback="INFO")
+        loglevel = config.get("Logging", "LogLevel", fallback="Error")
         logfile = config.get("Logging", "LogFile", fallback="")
         kasa_alias = config.get("Kasa", "Name", fallback="iGrill-smoker")
 
@@ -86,34 +87,38 @@ class Kasa(object):
 
         SetupLog(options.log_level, options.log_destination)
         self.name = kasa_alias
-        self.FindAndCreateSocket()
-        self.exitCode = 0
+        self.m_findTime = 0
+        self.FindDevice()
+        self.m_exitCode = 0
 
     def ExitCode(self):
-        return self.exitCode
+        return self.m_exitCode
 
-    def FindAndCreateSocket(self):
+    def FindDevice(self):
         state = -1
         cnt = 0
-        # Try to discover up to 5 times
-        while (state == -1) and (cnt < 5):
-            self.m_ip, state = self.Discover(self.name)
-            cnt += 1
-        if (state == -1):
-            self.exitCode = 1
-            self.Exit()
-        self.m_active = (state == 1)
+        if (10 < (int(time.time()) - self.m_findTime)):
+            # Try to discover up to 5 times
+            while ((state == -1) and (cnt < 5)):
+                self.m_ip, state = self.Discover(self.name)
+                cnt += 1
+            if (state == -1):
+                self.m_exitCode = 1
+                self.Exit()
+            self.m_active = (state == 1)
+            self.m_findTime = int(time.time())
+    
+    def SendCommand(self, command):
         logging.debug("Setting up socket")
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         logging.debug("Connecting")
         self.m_sock.connect((self.m_ip, constant.KASA_NET_PORT))
-    
-    def SendCommand(self, command):
-        logging.debug("Sending to \"{}\" \"{}\"".format(ip, command))
+        logging.debug("Sending to \"{}\" \"{}\"".format(self.m_ip, command))
         self.m_sock.send(EncryptWithHeader(command))
-        logging.debug("Reading result")
-        result = DecryptWithHeader(self.m_sock.recv(constant.KASA_NET_BUFFER_SIZE))
-        logging.debug("Result: {}".format(result))
+        #logging.debug("Reading result")
+        #result = DecryptWithHeader(self.m_sock.recv(constant.KASA_NET_BUFFER_SIZE))
+        #logging.debug("Result: {}".format(result))
+        self.m_sock.close()
 
     def Discover(self, alias):
         logging.debug("Attempting to discover \"{}\"".format(alias))
@@ -125,7 +130,7 @@ class Kasa(object):
         sock.settimeout(2)
         sock.sendto(Encrypt(constant.KASA_JSON_DISCOVER),(constant.KASA_NET_DISCOVER_IP, constant.KASA_NET_PORT))
         try:
-            while True:
+            while (True):
                 data, addr = sock.recvfrom(constant.KASA_NET_BUFFER_SIZE)
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
@@ -141,23 +146,27 @@ class Kasa(object):
             return ("", -1)
 
     def GetIP(self):
+        self.FindDevice()
         return self.m_ip
     
     def GetActive(self):
+        self.FindDevice()
         return self.m_active
 
     def TurnPlugOn(self):
-        if self.m_active
-            SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE_AND_RUN)
+        self.FindDevice()
+        if (self.m_active):
+            self.SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE_AND_RUN)
         else:
-            SendCommand(constant.KASA_JSON_PLUG_ON)
+            self.SendCommand(constant.KASA_JSON_PLUG_ON)
         self.m_active = True        
 
     def TurnPlugOff(self):
-        if self.m_active
-            SendCommand(constant.KASA_JSON_PLUG_OFF)
+        self.FindDevice()
+        if (self.m_active):
+            self.SendCommand(constant.KASA_JSON_PLUG_OFF)
         else:
-            SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE)
+            self.SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE)
         self.m_active = False
 
     def Exit(self):
@@ -166,6 +175,7 @@ class Kasa(object):
         self.m_daemon.shutdown()
 
 def main():
+    print(int(time.time()))
     daemon = Daemon(port=9998, host="localhost")
     kasaObj = Kasa(daemon)
     uri = daemon.register(kasaObj, objectId='Kasa')
