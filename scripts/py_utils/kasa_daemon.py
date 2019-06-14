@@ -97,6 +97,7 @@ class Kasa(object):
     def FindDevice(self):
         state = -1
         cnt = 0
+        # if it has been more than 10 seconds since the last scan, find the device again
         if (10 < (int(time.time()) - self.m_findTime)):
             # Try to discover up to 5 times
             while ((state == -1) and (cnt < 5)):
