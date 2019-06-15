@@ -45,6 +45,9 @@ if(0 < len(vars(options))):
     if(options.turn_off):
         kasaObj.TurnPlugOff()
     if(options.status):
-        print(kasaObj.GetActive())
+        if(kasaObj.GetActive()):
+            print("on")
+        else:
+            print("off")
     if(options.shutdown):
         kasaObj.Exit()

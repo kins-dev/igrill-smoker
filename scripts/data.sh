@@ -53,9 +53,11 @@ function Finish () {
     # Data for Highcharts
     # order must mach startup.sh
     #	echo "done"
-
-    if [ "0" == "${iGrill__Probes__FoodProbe}" ]
-    then
+    KASA_STATE="red"
+    if [ "on" == "$(python3 \"${IGRILL_PYU_DIR}/kasa_client.py\" --status)" ]; then
+        KASA_STATE="lightgreen"
+    fi
+    if [ "0" == "${iGrill__Probes__FoodProbe}" ]; then
         FD_TEMP=""
         INTERNAL_TEMP=""
     fi

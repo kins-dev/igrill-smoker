@@ -44,13 +44,10 @@ function SetKasaState() {
     # and another state update may come in
     case "$STATE" in
         "on")
-            # TODO: Move kasa state to something that can be queried at write time
-            KASA_STATE="lightgreen"
-            python3 "${IGRILL_SCR_DIR}/kasa.py" --on
+            python3 "${IGRILL_PYU_DIR}/kasa_client.py" --on
         ;;
         "off")
-            KASA_STATE="red"
-            python3 "${IGRILL_SCR_DIR}/kasa.py" --off
+            python3 "${IGRILL_PYU_DIR}/kasa_client.py" --on
         ;;
         *)
             echo "bad value for hotplate state sent to SetKasaState"
@@ -59,24 +56,4 @@ function SetKasaState() {
         ;;
     esac
     echo "$MSG"
-}
-
-function GetKasaIP() {
-    if ! [ "$#" -eq "1" ]; then
-        echo "Wrong number of arguments to GetKasaIp"
-        echo "Expected 1, got $#"
-        exit 1
-    fi
-    local NAME=$1
-    coproc stdbuf -oL tplink-smarthome-api search
-    while read -r LINE; do
-
-        # when we find the iGrill_V2 setup that information
-        if [[ "${LINE}" = *"${NAME}" ]]; then
-            TP_LINK_IP="$(echo "${LINE}" | cut -d " " -f 4)"
-            break
-        fi
-    done <&"${COPROC[0]}"
-    kill "${COPROC_PID}"
-    export TP_LINK_IP
 }

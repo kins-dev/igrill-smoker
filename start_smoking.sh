@@ -10,11 +10,15 @@ set -$-ue${DEBUG+xv}
 
 function finish  () {
     LEDsReset
+    
     # Cleanup on exit
     rm -f "${IGRILL_RUN_DIR}/igrill.json"
     rm -f "${IGRILL_RUN_DIR}/last_temp.sh"
     rm -f "${IGRILL_RUN_DIR}/stage.sh"
     rm -f "${IGRILL_RUN_DIR}/limits.ini"
+
+    # Start the kasa daemon
+    python3 "${IGRILL_PYU_DIR}/kasa_client.py" --exit
 }
 
 VALUE=${IGRILL_BAS_DIR:-}
@@ -87,6 +91,9 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     WriteLimits
     
     LEDsReset
+    
+    # Start the kasa daemon
+    python3 "${IGRILL_PYU_DIR}/kasa_daemon.py" --log-level Error & disown
 
     # deal with unexpected wireless issues
     while true; do

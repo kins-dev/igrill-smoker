@@ -162,7 +162,6 @@ class Kasa(object):
 
     def Exit(self):
         logging.debug("Closing socket")
-        self.m_sock.close()
         self.m_daemon.shutdown()
 
 def main():
