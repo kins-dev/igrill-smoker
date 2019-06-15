@@ -58,17 +58,7 @@ class Kasa(object):
         kasa_alias = config.get("Kasa", "Name", fallback="iGrill-smoker")
 
         parser = argparse.ArgumentParser(
-            description='Connects to iGrill device and calls a script to process results')
-        parser.add_argument(
-            '--on',
-            dest='turn_on',
-            help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
-            action='store_true')
-        parser.add_argument(
-            '--off',
-            dest='turn_off',
-            help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
-            action='store_true')
+            description='Connects to TP-Link Kasa hardware for power control')
         parser.add_argument(
             '-l',
             '--log-level',
