@@ -176,15 +176,14 @@ class Kasa(object):
         self.m_daemon.shutdown()
 
 def main():
-    print(int(time.time()))
     daemon = Daemon(port=9998, host="localhost")
     kasaObj = Kasa(daemon)
     uri = daemon.register(kasaObj, objectId='Kasa')
-    print(uri)
+    logging.debug(uri)
     daemon.requestLoop()
-    print('exited requestLoop')
+    logging.debug('exited requestLoop')
     daemon.close()
-    print('daemon closed')
+    logging.debug('daemon closed')
     sys.exit(kasaObj.ExitCode())
 
 if __name__=="__main__":
