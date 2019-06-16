@@ -13,7 +13,7 @@ import sys
 from Pyro5.api import expose, behavior, Daemon
 import constant
 from struct import pack
-from locallogging import SetupLog
+from local_logging import SetupLog
 
 def Encrypt(string):
     key = 171

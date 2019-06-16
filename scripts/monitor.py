@@ -11,7 +11,7 @@ import configparser
 import sys
 
 from py_utils.igrill import IGrillPeripheral, IGrillMiniPeripheral
-from py_utils.locallogging import SetupLog
+from py_utils.local_logging import SetupLog
 from py_config.mac_config import ADDRESS
 
 # TODO: make this a config variable

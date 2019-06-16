@@ -126,9 +126,13 @@ This is an attempt to document all the files in the project.  Relations between 
   * Performs handshake
   * Grabs temperature/battery data
   * Sets probe limits
-* **[igrill-smoker/scripts/py_utils/logging.py](../scripts/py_utils/logging.py)** - Sets up logging
+* **[igrill-smoker/scripts/py_utils/local_logging.py](../scripts/py_utils/local_logging.py)** - Sets up logging
   * Report specific log level
   * Redirects to file if specified
+* **[igrill-smoker/scripts/py_utils/kasa_daemon.py](../scripts/py_utils/kasa_daemon.py)** - Controls kasa hardware
+  * Find plug by name
+  * Return plug status
+  * Sets countdown timer for 5 minutes when turning the plug on
 * **igrill-smoker/scripts/py_config/mac_config.py**
 
 ### INI
