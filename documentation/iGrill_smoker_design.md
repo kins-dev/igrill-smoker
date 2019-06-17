@@ -61,8 +61,13 @@ This is an attempt to document all the files in the project.  Relations between 
   * Finds iGrill device if needed
   * Creates list of CSV files
   * Creates new CSV file and links it to current.csv
+  * Stats [scripts/py_utils/kasa_daemon.py](../scripts/py_utils/kasa_daemon.py) to control the plug state
   * Resets the BT device on the Raspberry Pi
   * Calls [scripts/monitor.py](../scripts/monitor.py) to capture data over bluetooth
+  * On Exit
+    * Uses [scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py) to stop [scripts/py_utils/kasa_daemon.py](../scripts/py_utils/kasa_daemon.py)
+    * Cleans up run files
+    * Resets the LEDs
 * **[igrill-smoker/scripts/config.sh](../scripts/config.sh)** - Loads configuration
   * Loads [read_ini.sh](../scripts/utils/read_ini.sh)
   * Loads [defaults.sh](../scripts/utils/defaults.sh)
@@ -79,6 +84,7 @@ This is an attempt to document all the files in the project.  Relations between 
   * Writes state.json
   * Writes last_temp.sh
   * Writes data to current.csv
+  * Calls to [scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py) to get the plug state
 * **[igrill-smoker/scripts/utils/bt.sh](../scripts/utils/bt.sh)** - Bluetooth functions
   * **BtReset** - Resets Bluetooth
 * **[igrill-smoker/scripts/utils/create_vars.sh](../scripts/utils/create_vars.sh)** - Setup default values
@@ -96,9 +102,8 @@ This is an attempt to document all the files in the project.  Relations between 
     * Scan is killed when iGrill is found
   * Writes mac_config.py
   * Calls BtReset
-* **[igrill-smoker/scripts/utils/kasa.sh](../scripts/utils/kasa.sh)** - P;ug control
-  * GetKasaIP - Locates the specified plug by name
-  * SetKasaState - Changes the plug state with a debug message.  Also sets a timer to turn the plug off after 5 minutes
+* **[igrill-smoker/scripts/utils/kasa.sh](../scripts/utils/kasa.sh)** - Plug control 
+  * SetKasaState - calls to [scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py) to turn the plug on or off
 * **[igrill-smoker/scripts/utils/leds.sh](../scripts/utils/leds.sh)** - Controls notification LEDs
   * LEDsReset - Turns LEDs off
   * LEDsSetState - Sets a LED to a particular state
@@ -133,6 +138,10 @@ This is an attempt to document all the files in the project.  Relations between 
   * Find plug by name
   * Return plug status
   * Sets countdown timer for 5 minutes when turning the plug on
+* **[igrill-smoker/scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py)** - Passes commands to the daemon
+  * Turn plug on and off
+  * Return plug status
+  * Tells the daemon to exit
 * **igrill-smoker/scripts/py_config/mac_config.py**
 
 ### INI
