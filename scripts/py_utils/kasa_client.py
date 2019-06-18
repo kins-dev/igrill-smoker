@@ -7,6 +7,7 @@ import sys
 import argparse
 from Pyro5.api import Proxy
 from kasa_daemon import Kasa
+import constant
 
 
 parser = argparse.ArgumentParser(
@@ -38,8 +39,10 @@ if(0 < len(vars(options))):
         print("Cannot turn on and off at the same time")
         sys.exit(1)
 
-    # TODO: Move URI parts to ini file
-    kasaObj = Proxy("PYRO:Kasa@localhost:9998")
+    kasaObj = Proxy(("PYRO:{}@{}:{}").format(
+        constant.KASA_DAEMON_PYRO_OBJECT_ID,
+        constant.KASA_DAEMON_PYRO_HOST,
+        constant.KASA_DAEMON_PYRO_PORT))
     if(options.turn_on):
         kasaObj.TurnPlugOn()
     if(options.turn_off):

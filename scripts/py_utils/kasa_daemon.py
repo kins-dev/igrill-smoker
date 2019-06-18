@@ -40,7 +40,7 @@ def Decrypt(string):
     return result
 
 def DecryptWithHeader(string):
-    return Decrypt(string[constant.KASA_NET_HEADER_SIZE:])
+    return Decrypt(string[constant.KASA_DAEMON_NET_HEADER_SIZE:])
 
 @expose
 @behavior(instance_mode="single")
@@ -103,12 +103,12 @@ class Kasa(object):
         logging.debug("Setting up socket")
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         logging.debug("Connecting")
-        self.m_sock.connect((self.m_ip, constant.KASA_NET_PORT))
+        self.m_sock.connect((self.m_ip, constant.KASA_DAEMON_NET_PORT))
         logging.debug("Sending to \"{}\" \"{}\"".format(self.m_ip, command))
         self.m_sock.send(EncryptWithHeader(command))
-        #logging.debug("Reading result")
-        #result = DecryptWithHeader(self.m_sock.recv(constant.KASA_NET_BUFFER_SIZE))
-        #logging.debug("Result: {}".format(result))
+        logging.debug("Reading result")
+        result = DecryptWithHeader(self.m_sock.recv(constant.KASA_DAEMON_NET_BUFFER_SIZE))
+        logging.debug("Result: {}".format(result))
         self.m_sock.close()
 
     def Discover(self, alias):
@@ -119,10 +119,10 @@ class Kasa(object):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Sending broadcast")
         sock.settimeout(2)
-        sock.sendto(Encrypt(constant.KASA_JSON_DISCOVER),(constant.KASA_NET_DISCOVER_IP, constant.KASA_NET_PORT))
+        sock.sendto(Encrypt(constant.KASA_DAEMON_JSON_DISCOVER),(constant.KASA_DAEMON_NET_DISCOVER_IP, constant.KASA_DAEMON_NET_PORT))
         try:
             while (True):
-                data, addr = sock.recvfrom(constant.KASA_NET_BUFFER_SIZE)
+                data, addr = sock.recvfrom(constant.KASA_DAEMON_NET_BUFFER_SIZE)
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
                 logging.debug("Received: {}".format(Decrypt(data)))
@@ -147,17 +147,17 @@ class Kasa(object):
     def TurnPlugOn(self):
         self.FindDevice()
         if (self.m_active):
-            self.SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE_AND_RUN)
+            self.SendCommand(constant.KASA_DAEMON_JSON_COUNTDOWN_DELETE_AND_RUN)
         else:
-            self.SendCommand(constant.KASA_JSON_PLUG_ON)
+            self.SendCommand(constant.KASA_DAEMON_JSON_PLUG_ON)
         self.m_active = True        
 
     def TurnPlugOff(self):
         self.FindDevice()
         if (self.m_active):
-            self.SendCommand(constant.KASA_JSON_PLUG_OFF)
+            self.SendCommand(constant.KASA_DAEMON_JSON_PLUG_OFF)
         else:
-            self.SendCommand(constant.KASA_JSON_COUNTDOWN_DELETE)
+            self.SendCommand(constant.KASA_DAEMON_JSON_COUNTDOWN_DELETE)
         self.m_active = False
 
     def Exit(self):
@@ -165,9 +165,9 @@ class Kasa(object):
         self.m_daemon.shutdown()
 
 def main():
-    daemon = Daemon(port=9998, host="localhost")
+    daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
     kasaObj = Kasa(daemon)
-    uri = daemon.register(kasaObj, objectId='Kasa')
+    uri = daemon.register(kasaObj, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')
