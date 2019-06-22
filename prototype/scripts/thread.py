@@ -4,6 +4,23 @@ import threading
 
 import time
 
+# So I started to build this test script woth the plan to
+# cycle the power plug more often to keep at a particular
+# temperature.  The problem is the relay is only rated for
+# 100,000 cycles.  If I average 1 cycle every 10 seconds,
+# that means it is good for only 1,000,000 seconds, or
+# 16,666 minutes, or 277 hours, or 11 days.
+#
+# This is obviously not ideal.
+#
+# Option 1: Ignore it
+# Option 2: Replace the relay
+# Option 3: Build a board
+
+# My current plan is to commit what I have for 1.3, 
+# test it and start 2.0 with a control board
+
+
 class ThreadRunner:
     def __init__(self):
         self.m_lastUpdate = 0
