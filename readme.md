@@ -3,21 +3,27 @@
 <!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
 <!-- markdownlint-enable MD033 -->
+<!-- markdownlint-disable MD039 -->
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-* [Problem Statement](#problem-statement)
-* [Design](#design)
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Setup](#setup)
-* [Using iGrill Mini](#using-igrill-mini)
-* [Running](#running)
-* [Lighttpd Setup](#lighttpd-setup)
+- [ Problem Statement](#problem-statement)
+- [ Design](#design)
+- [ Equipment](#equipment)
+- [ Requirements](#requirements)
+- [ Installation](#installation)
+- [ Software Setup](#software-setup)
+- [ Using iGrill Mini](#using-igrill-mini)
+- [ Grill Setup](#grill-setup)
+- [ Running](#running)
+- [ Lighttpd Setup](#lighttpd-setup)
+- [ Project Notes](#project-notes)
+  - [ iGrill Smoker Board Rev. *A](#igrill-smoker-board-rev-a)
 
 <!-- /code_chunk_output -->
 
+<!-- markdownlint-enable MD039 -->
 ## Problem Statement
 
 Create a low cost smoking unit that can be controlled/monitored via the internet.
@@ -30,27 +36,27 @@ See the [design document](documentation/iGrill_smoker_design.md).
 
 Prices as of June 10th, 2019.  Some items like the hotplates or skillet can be found at Goodwill instead.  Total cost (new) $287.96.  Every item can be used for more than one task.  Meat, wood chips, and extension cords not included.
 
-* [Weber Grill](https://www.amazon.com/Weber-741001-Original-22-Inch-Charcoal/dp/B00004RALU/ref=sr_1_3) - $109
-* [iGrill2](https://www.amazon.com/Weber-7203-iGrill-2-Thermometer/dp/B01MG2CNDL/ref=sr_1_3) - $64.99
-* [Hotplate](https://www.amazon.com/Cuisine-ESB-300X-Maxi-Matic-Single-Electric/dp/B0006A2ZTS/ref=sr_1_70) - 2x @ $12.96
-* [TP-Link Kasa](https://www.amazon.com/TP-Link-HS100-Required-Google-Assistant/dp/B0178IC734/ref=sr_1_4) - $14.69
-* [Raspberry Pi](https://www.target.com/p/raspberry-pi-3-model-b-project-board/-/A-53349740) - $34.49
-* [SD Card](https://www.amazon.com/Kingston-Digital-microSDHC-SDC4-8GBSP/dp/B0027CA7UW/ref=sr_1_11) - $3.99
-* [Skillets](https://www.amazon.com/dp/B073Q8P6C8/ref=psdc_289821_t1_B00008GKDN) - 2x @ $10.93
-* [8 inch rings](https://www.amazon.com/Ateco-14408-8-Inch-Stainless-Cutter/dp/B002A5BU5M/ref=pd_sbs_79_5/140-6446357-6003018) - 2x @ $6.51
+- [Weber Grill](https://www.amazon.com/Weber-741001-Original-22-Inch-Charcoal/dp/B00004RALU/ref=sr_1_3) - $109
+- [iGrill2](https://www.amazon.com/Weber-7203-iGrill-2-Thermometer/dp/B01MG2CNDL/ref=sr_1_3) - $64.99
+- [Hotplate](https://www.amazon.com/Cuisine-ESB-300X-Maxi-Matic-Single-Electric/dp/B0006A2ZTS/ref=sr_1_70) - 2x @ $12.96
+- [TP-Link Kasa](https://www.amazon.com/TP-Link-HS100-Required-Google-Assistant/dp/B0178IC734/ref=sr_1_4) - $14.69
+- [Raspberry Pi](https://www.target.com/p/raspberry-pi-3-model-b-project-board/-/A-53349740) - $34.49
+- [SD Card](https://www.amazon.com/Kingston-Digital-microSDHC-SDC4-8GBSP/dp/B0027CA7UW/ref=sr_1_11) - $3.99
+- [Skillets](https://www.amazon.com/dp/B073Q8P6C8/ref=psdc_289821_t1_B00008GKDN) - 2x @ $10.93
+- [8 inch rings](https://www.amazon.com/Ateco-14408-8-Inch-Stainless-Cutter/dp/B002A5BU5M/ref=pd_sbs_79_5/140-6446357-6003018) - 2x @ $6.51
 
 ## Requirements
 
 You must have:
 
-* Raspberry Pi 3
-* TP-Link Kasa
-* iGrill2 or iGrill3 (iGrill mini coming soon for time based smoking)
+- Raspberry Pi 3
+- TP-Link Kasa
+- iGrill2 or iGrill3 (iGrill mini coming soon for time based smoking)
 
 Optional items:
 
-* LEDs with current limiting resistors
-* Speaker with 3.5 mm stereo jack input
+- LEDs with current limiting resistors
+- Speaker with 3.5 mm stereo jack input
 
 *Note: This has been tested using a Raspberry Pi B 3 with Raspian Stretch.  Your milage may vary.*
 
@@ -254,3 +260,9 @@ $HTTP["url"] =~ "/.*\.(json|csv)$" {
 This is necessary because the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay will be used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
 
 The TP-Link Kasa plug will still be used as a failsafe device in the system.
+
+### iGrill Smoker Board Rev. *A
+
+![Board Rev. *A](assets/igrill-smoker-board-sA.png)
+
+This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs hanging off the edge of the board.
