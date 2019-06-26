@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name iGrillRPiSSRCtl-revSB-rescue)(type Legacy)(uri ${KIPRJMOD}/iGrillRPiSSRCtl-revSB-rescue.lib)(options "")(descr ""))
+)
