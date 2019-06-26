@@ -247,8 +247,8 @@ $HTTP["url"] =~ "/.*\.(json|csv)$" {
 }
 ```
 
-## Project Notes:
+## Project Notes
 
 1.3 Uses TP-Link Kasa for power control.  1.4 will include a brand new power control board that plugs into the Raspberry Pi which will allow much more fine grain control of the smoker temperature.
 
-This is nesscary becuase the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay will be used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
+This is necessary because the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay will be used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
