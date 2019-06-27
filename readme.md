@@ -19,7 +19,7 @@
 - [ Running](#running)
 - [ Lighttpd Setup](#lighttpd-setup)
 - [ Project Notes](#project-notes)
-  - [ iGrill Smoker Board Rev. *A](#igrill-smoker-board-rev-a)
+  - [ iGrill Smoker Board Rev. *C](#igrill-smoker-board-rev-c)
   - [ Parts](#parts)
 
 <!-- /code_chunk_output -->
