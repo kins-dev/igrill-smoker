@@ -262,9 +262,9 @@ This is necessary because the relay in the TP-Link won't handle the number of on
 
 The TP-Link Kasa plug will still be used as a failsafe device in the system.
 
-### iGrill Smoker Board Rev. *A
+### iGrill Smoker Board Rev. *C
 
-![Board Rev. *A](assets/igrill-smoker-board-sA.png)
+![Board Rev. *C](assets/igrill-smoker-board-sC.png)
 
 This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs hanging off the edge of the board.
 
@@ -272,8 +272,8 @@ This board has a buzzer, two LEDs and connection points for the solid state rela
 
 You don't have to use these parts, but have a reference of the price you should pay is good.
 
-- Header (2x20): [Digikey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
-- LED (Green): [Digikey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
-- LED (Red): [Digikey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
-- Resistors (100 ohm x2): [Digikey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
-- Buzzer: [Digikey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+- Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
+- LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
+- LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
+- Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
