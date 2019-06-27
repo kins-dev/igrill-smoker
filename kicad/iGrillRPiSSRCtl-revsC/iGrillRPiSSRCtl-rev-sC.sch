@@ -43,7 +43,7 @@ F 3 "" H 3000 3150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3000 1300 3000 1700
+	3000 1300 3000 1400
 Wire Wire Line
 	3000 2700 2900 2700
 Wire Wire Line
@@ -204,7 +204,7 @@ $EndComp
 Text Notes 3000 7050 0    50   ~ 0
 Mounting Holes
 $Comp
-L Connector_Generic:Conn_02x20_Odd_Even P1
+L Connector_RPi:Conn_02x20_Odd_Even P1
 U 1 1 59AD464A
 P 2600 2000
 F 0 "P1" H 2650 3117 50  0000 C CNN
@@ -217,13 +217,11 @@ $EndComp
 Text Label 3950 3000 2    50   ~ 0
 GPIO21(SPI1_SCK)
 Wire Wire Line
-	3100 1100 3100 1150
-Wire Wire Line
 	3000 2700 3000 3150
 Wire Wire Line
 	3000 2500 3000 2700
 Wire Wire Line
-	3000 2000 3000 2500
+	3000 2000 3000 2100
 Wire Wire Line
 	2300 3000 2300 3150
 Wire Wire Line
@@ -231,7 +229,7 @@ Wire Wire Line
 Wire Wire Line
 	2300 2300 2300 3000
 Wire Wire Line
-	3000 1700 3000 2000
+	3000 1700 3000 1800
 NoConn ~ 4050 2400
 NoConn ~ 1150 2400
 Wire Wire Line
@@ -247,17 +245,6 @@ Wire Wire Line
 Wire Wire Line
 	2900 3000 4150 3000
 Connection ~ 4150 2900
-Wire Wire Line
-	4150 2100 4150 2200
-Wire Wire Line
-	2900 2300 4150 2300
-Wire Wire Line
-	2900 2100 4150 2100
-Wire Wire Line
-	2900 2200 4150 2200
-Connection ~ 4150 2200
-Wire Wire Line
-	4150 2200 4150 2300
 $Comp
 L power:+5V #PWR0101
 U 1 1 5D1449BC
@@ -272,38 +259,6 @@ $EndComp
 Connection ~ 4150 2800
 Wire Wire Line
 	2900 2800 4150 2800
-$Comp
-L power:GND #PWR0102
-U 1 1 5D145865
-P 4150 2300
-F 0 "#PWR0102" H 4150 2050 50  0001 C CNN
-F 1 "GND" H 4150 2150 50  0000 C CNN
-F 2 "" H 4150 2300 50  0000 C CNN
-F 3 "" H 4150 2300 50  0000 C CNN
-	1    4150 2300
-	1    0    0    -1  
-$EndComp
-Connection ~ 4150 2300
-Wire Wire Line
-	2900 1900 4150 1900
-Wire Wire Line
-	2900 1400 4150 1400
-Wire Wire Line
-	2900 1800 4150 1800
-Connection ~ 4150 1800
-Wire Wire Line
-	4150 1800 4150 1900
-Wire Wire Line
-	2900 1600 4150 1600
-Wire Wire Line
-	4150 1600 4150 1800
-Wire Wire Line
-	4150 1900 4150 2100
-Connection ~ 4150 1900
-Connection ~ 4150 2100
-Connection ~ 3100 1150
-Wire Wire Line
-	3100 1150 3100 1200
 $Comp
 L Device:R R1
 U 1 1 5D14E11D
@@ -394,7 +349,6 @@ Wire Wire Line
 Wire Wire Line
 	550  2700 650  2700
 Connection ~ 550  1250
-Connection ~ 4150 3000
 $Comp
 L Device:Buzzer BZ1
 U 1 1 5D165E77
@@ -443,35 +397,98 @@ Wire Wire Line
 	1150 2100 2400 2100
 Wire Wire Line
 	1150 2200 2400 2200
-Wire Wire Line
-	4150 3000 5550 3000
 $Comp
 L Switch:SW_DPDT_x2 SW1
-U 1 1 5D19CE23
-P 4500 2600
-F 0 "SW1" H 4500 2885 50  0000 C CNN
-F 1 "SW_DPDT_x2" H 4500 2794 50  0000 C CNN
-F 2 "Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight" H 4500 2600 50  0001 C CNN
-F 3 "~" H 4500 2600 50  0001 C CNN
-	1    4500 2600
-	1    0    0    -1  
+U 2 1 5D19CE23
+P 4500 2700
+F 0 "SW1" H 4500 2985 50  0000 C CNN
+F 1 "SW_DPDT_x2" H 4500 2894 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_CuK_JS202011CQN_DPDT_Straight" H 4500 2700 50  0001 C CNN
+F 3 "~" H 4500 2700 50  0001 C CNN
+	2    4500 2700
+	-1   0    0    -1  
 $EndComp
 Wire Wire Line
 	4700 2700 4850 2700
 Wire Wire Line
 	5050 2700 5550 2700
 Wire Wire Line
-	5550 2700 5550 3000
-Wire Wire Line
-	4700 2500 5550 2500
-NoConn ~ 5550 2500
-Wire Wire Line
-	4500 1500 4500 1150
-Wire Wire Line
 	2900 1500 4500 1500
+$Comp
+L power:+5V #PWR0102
+U 1 1 5D15CC6F
+P 5550 2700
+F 0 "#PWR0102" H 5550 2550 50  0001 C CNN
+F 1 "+5V" H 5550 2840 50  0000 C CNN
+F 2 "" H 5550 2700 50  0000 C CNN
+F 3 "" H 5550 2700 50  0000 C CNN
+	1    5550 2700
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	3100 1150 4500 1150
+	2900 2300 3000 2300
+Connection ~ 3000 2300
 Wire Wire Line
-	4150 1400 4150 1600
-Connection ~ 4150 1600
+	3000 2300 3000 2500
+Wire Wire Line
+	3000 2300 4150 2300
+Wire Wire Line
+	2900 2200 3000 2200
+Connection ~ 3000 2200
+Wire Wire Line
+	3000 2200 3000 2300
+Wire Wire Line
+	3000 2200 4150 2200
+Wire Wire Line
+	2900 2100 3000 2100
+Connection ~ 3000 2100
+Wire Wire Line
+	3000 2100 3000 2200
+Wire Wire Line
+	3000 2100 4150 2100
+Wire Wire Line
+	2900 1900 3000 1900
+Connection ~ 3000 1900
+Wire Wire Line
+	3000 1900 3000 2000
+Wire Wire Line
+	3000 1900 4150 1900
+Wire Wire Line
+	2900 1800 3000 1800
+Connection ~ 3000 1800
+Wire Wire Line
+	3000 1800 3000 1900
+Wire Wire Line
+	3000 1800 4150 1800
+Wire Wire Line
+	2900 1600 3000 1600
+Connection ~ 3000 1600
+Wire Wire Line
+	3000 1600 3000 1700
+Wire Wire Line
+	3000 1600 4150 1600
+Wire Wire Line
+	2900 1400 3000 1400
+Connection ~ 3000 1400
+Wire Wire Line
+	3000 1400 3000 1600
+Wire Wire Line
+	3000 1400 4150 1400
+Wire Wire Line
+	3100 1100 3100 1200
+$Comp
+L power:+5V #PWR0104
+U 1 1 5D16B874
+P 4500 1300
+F 0 "#PWR0104" H 4500 1150 50  0001 C CNN
+F 1 "+5V" H 4500 1440 50  0000 C CNN
+F 2 "" H 4500 1300 50  0000 C CNN
+F 3 "" H 4500 1300 50  0000 C CNN
+	1    4500 1300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4500 1500 4500 1300
+Wire Wire Line
+	4150 2800 4300 2800
 $EndSCHEMATC
