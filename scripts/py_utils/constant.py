@@ -16,3 +16,43 @@ KASA_DAEMON_JSON_COUNTDOWN_DELETE_AND_RUN   = b'{"count_down":{"delete_all_rules
 KASA_DAEMON_JSON_PLUG_ON                    = b'{"system":{"set_relay_state":{"state":1}},"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":300,"act":0,"name":"fail safe"}}}'
 KASA_DAEMON_JSON_PLUG_OFF                   = b'{"count_down":{"delete_all_rules":null},"system":{"set_relay_state":{"state":0}}}'
 KASA_DAEMON_JSON_COUNTDOWN_DELETE           = b'{"count_down":{"delete_all_rules":null}}'
+SSR_CONTROL_BOARD_REV_ss                    = "**"
+SSR_CONTROL_BOARD_REV_sA                    = "*A"
+SSR_CONTROL_BOARD_REV_sB                    = "*B"
+SSR_CONTROL_BOARD_REV_sC                    = "*C"
+SSR_CONTROL_BOARD_DISABLED                  = "None"
+SSR_CONTROL_BOARD_DETECT_REV                = "Auto"
+SSR_CONTROL_BOARD_PINS                      = {
+    "LED":{
+        "red":{
+            SSR_CONTROL_BOARD_REV_ss:23,
+            SSR_CONTROL_BOARD_REV_sA:23,
+            SSR_CONTROL_BOARD_REV_sB:2,
+            SSR_CONTROL_BOARD_REV_sC:2
+        },
+        "green":{
+            SSR_CONTROL_BOARD_REV_ss:22,
+            SSR_CONTROL_BOARD_REV_sA:22,
+            SSR_CONTROL_BOARD_REV_sB:3,
+            SSR_CONTROL_BOARD_REV_sC:3
+        }
+    },
+    "Buzzer":{
+        SSR_CONTROL_BOARD_REV_ss:13,
+        SSR_CONTROL_BOARD_REV_sA:13,
+        SSR_CONTROL_BOARD_REV_sB:12,
+        SSR_CONTROL_BOARD_REV_sC:12
+    },
+    "Relay":{
+        SSR_CONTROL_BOARD_REV_ss:12,
+        SSR_CONTROL_BOARD_REV_sA:12,
+        SSR_CONTROL_BOARD_REV_sB:13,
+        SSR_CONTROL_BOARD_REV_sC:13
+    },
+    "Switch":{
+        SSR_CONTROL_BOARD_REV_ss:-1,
+        SSR_CONTROL_BOARD_REV_sA:-1,
+        SSR_CONTROL_BOARD_REV_sB:-1,
+        SSR_CONTROL_BOARD_REV_sC:6
+    }
+}

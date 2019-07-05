@@ -50,6 +50,12 @@ source "${IGRILL_UTL_DIR}/leds.sh"
 # shellcheck source=scripts/utils/limits.sh
 source "${IGRILL_UTL_DIR}/limits.sh"
 
+# Check for pigpiod run file, if it is missing start the service
+# needed for hardware PWM
+if ! [ -f "/var/run/pigpio.pid" ]; then
+    sudo pigpiod
+fi
+
 if ! [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
     echo "Error: $IGRILL_CFG_DIR/iGrill_config.ini mot found"
     echo "Please setup the ini file based on the example"
