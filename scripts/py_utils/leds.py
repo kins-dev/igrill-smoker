@@ -14,10 +14,20 @@ from argparse import ArgumentParser
 import constant
 from local_logging import SetupLog
 
-def SetPin(board, color, value):
+def SetLED(board, color, desiredValue):
     pi = pigpio.pi()
-    pin = SSR_CONTROL_BOARD_PINS["LED"][color][board]
-    pi.write()
+    pin = constant.SSR_CONTROL_BOARD_PINS["LED"][color][board]
+    value = desiredValue
+    state = constant.SSR_CONTROL_BOARD_VALUES["LED"][color][board]
+    if ( constant.SSR_CONTROL_BOARD_VALUES_UNSUPPORTED == state) :
+        return
+    if ( constant.SSR_CONTROL_BOARD_VALUES_INVERTED == state) :
+        value = not desiredValue
+    writeVal = 0
+    if (value) :
+        writeVal = 1
+    pi.write(pin, writeVal)
+    return
 
 def main():
     config = configparser.ConfigParser()
@@ -62,6 +72,9 @@ def main():
     pi.set_pad_strength(0,16)
     pi.set_mode(22, pigpio.OUTPUT)
     pi.set_mode(23, pigpio.OUTPUT)
+
+    SetLED(board, "green", options.done)
+    SetLED(board, "red", options.low_battery)
 
 if __name__ == '__main__':
     main()
