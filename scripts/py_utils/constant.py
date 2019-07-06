@@ -25,13 +25,13 @@ SSR_CONTROL_BOARD_DETECT_REV                = "Auto"
 SSR_CONTROL_BOARD_PINS                      = {
     "LED":{
         "red":{
-            SSR_CONTROL_BOARD_REV_ss:23,
+            SSR_CONTROL_BOARD_REV_ss:22,
             SSR_CONTROL_BOARD_REV_sA:23,
             SSR_CONTROL_BOARD_REV_sB:2,
             SSR_CONTROL_BOARD_REV_sC:2
         },
         "green":{
-            SSR_CONTROL_BOARD_REV_ss:22,
+            SSR_CONTROL_BOARD_REV_ss:23,
             SSR_CONTROL_BOARD_REV_sA:22,
             SSR_CONTROL_BOARD_REV_sB:3,
             SSR_CONTROL_BOARD_REV_sC:3
