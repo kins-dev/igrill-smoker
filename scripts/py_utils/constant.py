@@ -59,6 +59,7 @@ SSR_CONTROL_BOARD_PINS                      = {
 SSR_CONTROL_BOARD_VALUES_STANDARD           = 1
 SSR_CONTROL_BOARD_VALUES_INVERTED           = 0
 SSR_CONTROL_BOARD_VALUES_UNSUPPORTED        = -1
+SSR_CONTROL_BOARD_REV_PINS                  = [14, 15, 18, 23, 24, 25, 8, 7, 16, 20, 21]
 SSR_CONTROL_BOARD_VALUES                    = {
     "LED":{
         "red":{
