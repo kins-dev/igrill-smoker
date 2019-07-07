@@ -16,6 +16,7 @@ import constant
 
 def DetectBoard(board):
     if (constant.SSR_CONTROL_BOARD_DETECT_REV == board):
+        pi = pigpio.pi()
         i = 0
         val = 0
         for p in constant.SSR_CONTROL_BOARD_REV_PINS:
@@ -27,7 +28,7 @@ def DetectBoard(board):
             val = val + (tmp << i)
             i = i + 1
         logging.debug("Val = \"{}\"".format(val))
-    else
+    else:
         return board
 
 def main():
