@@ -15,7 +15,9 @@ from local_logging import SetupLog
 import constant
 
 def DetectBoard(board):
-    if (constant.SSR_CONTROL_BOARD_DETECT_REV == board):
+    if (constant.SSR_CONTROL_BOARD_DETECT_REV != board):
+        return board
+    else:
         pi = pigpio.pi()
         i = 0
         val = 0
@@ -28,8 +30,9 @@ def DetectBoard(board):
             val = val + (tmp << i)
             i = i + 1
         logging.debug("Val = \"{}\"".format(val))
-    else:
-        return board
+        if (val in constant.SSR_CONTROL_BOARD_REV_MAP):
+            return constant.SSR_CONTROL_BOARD_REV_MAP[val]
+        return constant.SSR_CONTROL_BOARD_DISABLED
 
 def main():
     config = configparser.ConfigParser()
