@@ -12,6 +12,7 @@ import sys
 # Line to make pylint work
 from argparse import ArgumentParser
 import constant
+import board
 from local_logging import SetupLog
 
 def SetLED(board, color, desiredValue):
@@ -67,6 +68,9 @@ def main():
 
     SetupLog(options.log_level, options.log_destination)
 
+    board = board.DetectBoard(board)
+    if (constant.SSR_CONTROL_BOARD_DISABLED == board):
+        sys.exit(1)
 
     pi = pigpio.pi()
     pi.set_pad_strength(0,16)
