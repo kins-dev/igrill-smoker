@@ -9,10 +9,11 @@ import argparse
 import configparser
 import time
 import sys
-# Line to make pylint work
-from argparse import ArgumentParser
-import constant
+from Pyro5.api import Proxy
 from local_logging import SetupLog
+from kasa_daemon import Kasa
+import constant
+import board
 
 
 config = configparser.ConfigParser()
@@ -22,8 +23,36 @@ loglevel = config.get("Logging", "LogLevel", fallback="Error")
 logfile = config.get("Logging", "LogFile", fallback="")
 board = config.get("SSR", "Board")
 
+
 parser = argparse.ArgumentParser(
-    description='Sets the leds on the SSR control board')
+    description='Connects to TP-Link Kasa daemon for power control')
+parser.add_argument(
+    '--on',
+    dest='turn_on',
+    help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
+    action='store_true')
+
+parser.add_argument(
+    '--off',
+    dest='turn_off',
+    help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
+    action='store_true')
+    # need target temp, current temp and last temp
+    # if need to get warmer and getting warmer - do nothing
+    # if need to get colder and getting colder - do nothing
+    # if need to stay the same and staying the same - do nothing
+    # if need to get warmer and staying the same - up PWM
+    
+parser.add_argument(
+    '--exit',
+    dest='shutdown',
+    help='Tells the daemon to shutdown',
+    action='store_true')
+parser.add_argument(
+    '--status',
+    dest='status',
+    help='Gets the plug state',
+    action='store_true')
 parser.add_argument(
     '-l',
     '--log-level',
@@ -38,16 +67,29 @@ parser.add_argument(
     dest='log_destination',
     default=logfile,
     help='Set log destination (file), default: \'' + logfile + '\'')
-parser.add_argument(
-    '--low_battery',
-    action='store_true',
-    dest='low_battery',
-    help='Turns on the low battery led')
-parser.add_argument(
-    '--done',
-    action='store_true',
-    dest='done',
-    help='Turns on the low battery led')
 options = parser.parse_args()
 
 SetupLog(options.log_level, options.log_destination)
+
+board = board.DetectBoard(board)
+
+if(0 < len(vars(options))):
+    if(options.turn_on and options.turn_off):
+        print("Cannot turn on and off at the same time")
+        sys.exit(1)
+
+    kasaObj = Proxy(("PYRO:{}@{}:{}").format(
+        constant.KASA_DAEMON_PYRO_OBJECT_ID,
+        constant.KASA_DAEMON_PYRO_HOST,
+        constant.KASA_DAEMON_PYRO_PORT))
+    if(options.turn_on):
+        kasaObj.TurnPlugOn()
+    if(options.turn_off):
+        kasaObj.TurnPlugOff()
+    if(options.status):
+        if(kasaObj.GetActive()):
+            print("on")
+        else:
+            print("off")
+    if(options.shutdown):
+        kasaObj.Exit()
