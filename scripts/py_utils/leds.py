@@ -15,11 +15,11 @@ import constant
 import board
 from local_logging import SetupLog
 
-def SetLED(board, color, desiredValue):
+def SetLED(boardVal, color, desiredValue):
     pi = pigpio.pi()
-    pin = constant.SSR_CONTROL_BOARD_PINS["LED"][color][board]
+    pin = constant.SSR_CONTROL_BOARD_PINS["LED"][color][boardVal]
     value = desiredValue
-    state = constant.SSR_CONTROL_BOARD_VALUES["LED"][color][board]
+    state = constant.SSR_CONTROL_BOARD_VALUES["LED"][color][boardVal]
     if ( constant.SSR_CONTROL_BOARD_VALUES_UNSUPPORTED == state) :
         return
     if ( constant.SSR_CONTROL_BOARD_VALUES_INVERTED == state) :
@@ -36,7 +36,7 @@ def main():
     config.read(sys.path[0]+'/../../config/iGrill_config.ini')
     loglevel = config.get("Logging", "LogLevel", fallback="Error")
     logfile = config.get("Logging", "LogFile", fallback="")
-    board = config.get("SSR", "Board")
+    boardVal = config.get("SSR", "Board")
 
     parser = argparse.ArgumentParser(
         description='Sets the LEDs on the SSR control board')
@@ -68,8 +68,8 @@ def main():
 
     SetupLog(options.log_level, options.log_destination)
 
-    board = board.DetectBoard(board)
-    if (constant.SSR_CONTROL_BOARD_DISABLED == board):
+    boardVal = board.DetectBoard(boardVal)
+    if (constant.SSR_CONTROL_BOARD_DISABLED == boardVal):
         sys.exit(1)
 
     pi = pigpio.pi()
