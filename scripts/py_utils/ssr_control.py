@@ -38,11 +38,21 @@ parser.add_argument(
     help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
     action='store_true')
     # need target temp, current temp and last temp
-    # if need to get warmer and getting warmer - do nothing
-    # if need to get colder and getting colder - do nothing
-    # if need to stay the same and staying the same - do nothing
-    # if need to get warmer and staying the same - up PWM
+    # in band:
+        # if need to get warmer and getting warmer - do nothing
+        # if need to get colder and getting colder - do nothing
+        # if need to stay the same and staying the same - do nothing
+        # if need to get warmer and staying the same - up small amount(1%)
+        # if need to get warmer and getting colder - up large amount (10%)
+        # if need to get colder and getting warmer - down large amount (10%)
+        # if need to get colder and staying the same - down small amount (1%)
+    # out of band:
+        # if need to get warmer - PWM to 100%
+        # if need to get colder - PWM to 0%
+    # out of band to in band
+        # use previous value or pwm is set to 50%
     
+    # need to save and restore PWM value for target temp
 parser.add_argument(
     '--exit',
     dest='shutdown',
