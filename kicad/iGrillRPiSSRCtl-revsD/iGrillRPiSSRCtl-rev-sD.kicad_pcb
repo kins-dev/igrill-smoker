@@ -13,7 +13,7 @@
   (title_block
     (title "iGrill Smoker SSR Control")
     (date 2019-07-08)
-    (rev *C)
+    (rev *D)
     (company "Redbud Farms")
     (comment 1 https://creativecommons.org/licenses/by-nc-sa/4.0/)
     (comment 2 "License: Creative Commons BY-NC-SA")
@@ -292,7 +292,7 @@
     )
   )
 
-  (module iGrillRPiSSRCtl-rev-sC:qr-code-12x12 (layer B.Cu) (tedit 5D13C357) (tstamp 5D1DDE25)
+  (module iGrillRPiSSRCtl-rev-sD:qr-code-12x12 (layer B.Cu) (tedit 5D13C357) (tstamp 5D1DDE25)
     (at 62 55.512 180)
     (fp_text reference G*** (at 0 7.62) (layer B.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3)) (justify mirror))
@@ -466,7 +466,7 @@
       (xy -4.910667 -2.878666) (xy -4.910667 -2.54) (xy -2.54 -2.54) (xy -2.54 -4.910666)) (layer B.SilkS) (width 0.01))
   )
 
-  (module iGrillRPiSSRCtl-rev-sC:qr-code-12x12 (layer F.Cu) (tedit 5D13C357) (tstamp 5D1DDD97)
+  (module iGrillRPiSSRCtl-rev-sD:qr-code-12x12 (layer F.Cu) (tedit 5D13C357) (tstamp 5D1DDD97)
     (at 71.222 63.132)
     (fp_text reference G*** (at 0 -7.62) (layer F.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3)))
@@ -1552,7 +1552,7 @@
     (fp_line (start 28.00096 -0.59944) (end 27.89936 -0.50038) (layer B.Cu) (width 0.381))
   )
 
-  (module iGrillRPiSSRCtl-rev-sC:WiFiThem_18x12 (layer B.Cu) (tedit 5D1D17CD) (tstamp 5D1D7298)
+  (module iGrillRPiSSRCtl-rev-sD:WiFiThem_18x12 (layer B.Cu) (tedit 5D1D17CD) (tstamp 5D1D7298)
     (at 74.27 63.386 180)
     (fp_text reference G*** (at 1.27 -11.43) (layer B.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3)) (justify mirror))
@@ -1674,7 +1674,7 @@
       (xy 3.097088 8.995796)) (layer B.Cu) (width 0.01))
   )
 
-  (module iGrillRPiSSRCtl-rev-sC:WiFiThem_18x12 (layer F.Cu) (tedit 5D1D17CD) (tstamp 5D1D7187)
+  (module iGrillRPiSSRCtl-rev-sD:WiFiThem_18x12 (layer F.Cu) (tedit 5D1D17CD) (tstamp 5D1D7187)
     (at 24.74 63.386)
     (fp_text reference G*** (at 1.27 11.43) (layer F.SilkS) hide
       (effects (font (size 1.524 1.524) (thickness 0.3)))
@@ -2395,10 +2395,10 @@
   (gr_text "Board ID:" (at 59.157 62.878) (layer B.SilkS)
     (effects (font (size 1 1) (thickness 0.15)) (justify right mirror))
   )
-  (gr_text "Rev. *C" (at 78.12 54.8) (layer B.Cu) (tstamp 5D141EF1)
+  (gr_text "Rev. *D" (at 78.12 54.8) (layer B.Cu) (tstamp 5D141EF1)
     (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
   )
-  (gr_text "Rev. *C" (at 21.0316 54.5468) (layer F.Cu)
+  (gr_text "Rev. *D" (at 21.0316 54.5468) (layer F.Cu)
     (effects (font (size 1 1) (thickness 0.15)))
   )
   (gr_poly (pts (xy 31.12 63.767) (xy 31.12 71.8) (xy 66.12 71.8) (xy 66.12 63.767)) (layer B.SilkS) (width 0.1) (tstamp 5D148E11))

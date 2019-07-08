@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:iGrillRPiSSRCtl-rev-sC-cache
+LIBS:iGrillRPiSSRCtl-rev-sD-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 1 1
 Title "iGrill Smoker SSR Control Board"
 Date "2019-07-08"
-Rev "*C"
+Rev "*D"
 Comp "Redbud Farms"
 Comment1 "https://creativecommons.org/licenses/by-nc-sa/4.0/"
 Comment2 "License: Creative Commons BY-NC-SA"
@@ -155,7 +155,7 @@ Connection ~ 6650 3350
 Text Notes 650  7600 0    50   ~ 0
 ID_SD and ID_SC PINS:\nThese pins are reserved for HAT ID EEPROM.\n\nAt boot time this I2C interface will be\ninterrogated to look for an EEPROM\nthat identifes the attached board and\nallows automagic setup of the GPIOs\n(and optionally, Linux drivers).\n\nDO NOT USE these pins for anything other\nthan attaching an I2C ID EEPROM. Leave\nunconnected if ID EEPROM not required.
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK1
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK1
 U 1 1 5834FB2E
 P 3000 7200
 F 0 "MK1" H 3100 7246 50  0000 L CNN
@@ -166,7 +166,7 @@ F 3 "" H 3000 7200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK3
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK3
 U 1 1 5834FBEF
 P 3450 7200
 F 0 "MK3" H 3550 7246 50  0000 L CNN
@@ -177,7 +177,7 @@ F 3 "" H 3450 7200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK2
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK2
 U 1 1 5834FC19
 P 3000 7400
 F 0 "MK2" H 3100 7446 50  0000 L CNN
@@ -188,7 +188,7 @@ F 3 "" H 3000 7400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK4
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK4
 U 1 1 5834FC4F
 P 3450 7400
 F 0 "MK4" H 3550 7446 50  0000 L CNN
