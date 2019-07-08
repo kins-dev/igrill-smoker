@@ -77,8 +77,8 @@ def main():
     pi.set_mode(22, pigpio.OUTPUT)
     pi.set_mode(23, pigpio.OUTPUT)
 
-    SetLED(board, "green", options.done)
-    SetLED(board, "red", options.low_battery)
+    SetLED(boardVal, "green", options.done)
+    SetLED(boardVal, "red", options.low_battery)
 
 if __name__ == '__main__':
     main()
