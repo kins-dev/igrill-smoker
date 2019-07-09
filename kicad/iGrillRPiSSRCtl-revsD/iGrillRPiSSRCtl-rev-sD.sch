@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-LIBS:iGrillRPiSSRCtl-rev-sC-cache
+LIBS:iGrillRPiSSRCtl-rev-sD-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -7,7 +7,7 @@ encoding utf-8
 Sheet 1 1
 Title "iGrill Smoker SSR Control Board"
 Date "2019-07-08"
-Rev "*C"
+Rev "*D"
 Comp "Redbud Farms"
 Comment1 "https://creativecommons.org/licenses/by-nc-sa/4.0/"
 Comment2 "License: Creative Commons BY-NC-SA"
@@ -43,6 +43,8 @@ F 3 "" H 6650 4800 50  0000 C CNN
 	1    6650 4800
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6650 2950 6650 3050
 Wire Wire Line
 	6650 4350 6550 4350
 Wire Wire Line
@@ -153,7 +155,7 @@ Connection ~ 6650 3350
 Text Notes 650  7600 0    50   ~ 0
 ID_SD and ID_SC PINS:\nThese pins are reserved for HAT ID EEPROM.\n\nAt boot time this I2C interface will be\ninterrogated to look for an EEPROM\nthat identifes the attached board and\nallows automagic setup of the GPIOs\n(and optionally, Linux drivers).\n\nDO NOT USE these pins for anything other\nthan attaching an I2C ID EEPROM. Leave\nunconnected if ID EEPROM not required.
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK1
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK1
 U 1 1 5834FB2E
 P 3000 7200
 F 0 "MK1" H 3100 7246 50  0000 L CNN
@@ -164,7 +166,7 @@ F 3 "" H 3000 7200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK3
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK3
 U 1 1 5834FBEF
 P 3450 7200
 F 0 "MK3" H 3550 7246 50  0000 L CNN
@@ -175,7 +177,7 @@ F 3 "" H 3450 7200 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK2
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK2
 U 1 1 5834FC19
 P 3000 7400
 F 0 "MK2" H 3100 7446 50  0000 L CNN
@@ -186,7 +188,7 @@ F 3 "" H 3000 7400 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L iGrillRPiSSRCtl-rev-sC-rescue:Mounting_Hole-Mechanical MK4
+L iGrillRPiSSRCtl-rev-sD-rescue:Mounting_Hole-Mechanical MK4
 U 1 1 5834FC4F
 P 3450 7400
 F 0 "MK4" H 3550 7446 50  0000 L CNN
@@ -260,7 +262,7 @@ U 1 1 5D14E11D
 P 3150 2650
 F 0 "R1" V 3250 2650 50  0000 C CNN
 F 1 "100Ω" V 3150 2650 50  0000 C CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 3080 2650 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 3080 2650 50  0001 C CNN
 F 3 "~" H 3150 2650 50  0001 C CNN
 	1    3150 2650
 	0    1    1    0   
@@ -271,7 +273,7 @@ U 1 1 5D14F1BC
 P 3150 3400
 F 0 "R2" V 3250 3400 50  0000 C CNN
 F 1 "100Ω" V 3150 3400 50  0000 C CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 3080 3400 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 3080 3400 50  0001 C CNN
 F 3 "~" H 3150 3400 50  0001 C CNN
 	1    3150 3400
 	0    1    1    0   
@@ -282,10 +284,10 @@ U 1 1 5D14FA39
 P 3750 2650
 F 0 "D1" H 3743 2395 50  0000 C CNN
 F 1 "Low Battery" H 3743 2486 50  0000 C CNN
-F 2 "LED_SMD:LED_0402_1005Metric" H 3750 2650 50  0001 C CNN
+F 2 "LED_THT:LED_D5.0mm" H 3750 2650 50  0001 C CNN
 F 3 "~" H 3750 2650 50  0001 C CNN
 	1    3750 2650
-	1    0    0    1   
+	-1   0    0    1   
 $EndComp
 $Comp
 L Device:LED_ALT D2
@@ -293,10 +295,21 @@ U 1 1 5D150925
 P 3750 3400
 F 0 "D2" H 3750 3600 50  0000 C CNN
 F 1 "Smoking Complete" H 3750 3500 50  0000 C CNN
-F 2 "LED_SMD:LED_0402_1005Metric" H 3750 3400 50  0001 C CNN
+F 2 "LED_THT:LED_D5.0mm_Clear" H 3750 3400 50  0001 C CNN
 F 3 "~" H 3750 3400 50  0001 C CNN
 	1    3750 3400
-	1    0    0    1   
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+5V #PWR0103
+U 1 1 5D15862C
+P 2950 2200
+F 0 "#PWR0103" H 2950 2050 50  0001 C CNN
+F 1 "+5V" H 2950 2340 50  0000 C CNN
+F 2 "" H 2950 2200 50  0000 C CNN
+F 3 "" H 2950 2200 50  0000 C CNN
+	1    2950 2200
+	1    0    0    -1  
 $EndComp
 $Comp
 L Device:Buzzer BZ1
@@ -410,6 +423,11 @@ Wire Wire Line
 	6650 3250 7800 3250
 Wire Wire Line
 	6550 3050 6650 3050
+Connection ~ 6650 3050
+Wire Wire Line
+	6650 3050 6650 3250
+Wire Wire Line
+	6650 3050 7800 3050
 Wire Wire Line
 	6750 2750 6750 2850
 $Comp
@@ -424,7 +442,7 @@ F 3 "" H 8150 2950 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8150 3150 8150 3050
+	8150 3150 8150 2950
 $Comp
 L Switch:SW_DPDT_x2 SW1
 U 2 1 5D23056E
@@ -497,7 +515,7 @@ U 1 1 5D1D8BF1
 P 8750 4350
 F 0 "R3" V 8650 4350 50  0000 C CNN
 F 1 "100Ω" V 8750 4350 50  0000 C CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 8680 4350 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 8680 4350 50  0001 C CNN
 F 3 "~" H 8750 4350 50  0001 C CNN
 	1    8750 4350
 	0    1    1    0   
@@ -508,7 +526,7 @@ U 1 1 5D1D9F32
 P 9500 4150
 F 0 "R4" V 9400 4150 50  0000 C CNN
 F 1 "1kΩ" V 9500 4150 50  0000 C CNN
-F 2 "Resistor_SMD:R_0402_1005Metric" V 9430 4150 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 9430 4150 50  0001 C CNN
 F 3 "~" H 9500 4150 50  0001 C CNN
 	1    9500 4150
 	0    1    1    0   
@@ -544,7 +562,7 @@ U 1 1 5D1E8600
 P 9200 4650
 F 0 "Q1" H 9391 4696 50  0000 L CNN
 F 1 "Q_NPN_ECB" H 9391 4605 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-323_SC-70" H 9400 4750 50  0001 C CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 9400 4750 50  0001 C CNN
 F 3 "~" H 9200 4650 50  0001 C CNN
 	1    9200 4650
 	1    0    0    -1  
@@ -559,36 +577,50 @@ Wire Wire Line
 	8950 4650 9000 4650
 Wire Wire Line
 	9300 4850 9300 4950
+$Comp
+L Device:Q_PNP_EBC Q3
+U 1 1 5D1FE4C2
+P 2850 3200
+F 0 "Q3" H 3041 3246 50  0000 L CNN
+F 1 "Q_PNP_EBC" H 3041 3155 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 3050 3300 50  0001 C CNN
+F 3 "~" H 2850 3200 50  0001 C CNN
+	1    2850 3200
+	1    0    0    1   
+$EndComp
 Wire Wire Line
 	6050 2850 4900 2850
 $Comp
 L power:+5V #PWR0105
 U 1 1 5D241237
-P 4350 2600
-F 0 "#PWR0105" H 4350 2450 50  0001 C CNN
-F 1 "+5V" H 4350 2750 50  0000 C CNN
-F 2 "" H 4350 2600 50  0000 C CNN
-F 3 "" H 4350 2600 50  0000 C CNN
-	1    4350 2600
+P 2950 2950
+F 0 "#PWR0105" H 2950 2800 50  0001 C CNN
+F 1 "+5V" H 2950 3090 50  0000 C CNN
+F 2 "" H 2950 2950 50  0000 C CNN
+F 3 "" H 2950 2950 50  0000 C CNN
+	1    2950 2950
 	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR0108
 U 1 1 5D25CE00
-P 2950 3850
-F 0 "#PWR0108" H 2950 3600 50  0001 C CNN
-F 1 "GND" H 2950 3700 50  0000 C CNN
-F 2 "" H 2950 3850 50  0000 C CNN
-F 3 "" H 2950 3850 50  0000 C CNN
-	1    2950 3850
+P 4350 3500
+F 0 "#PWR0108" H 4350 3250 50  0001 C CNN
+F 1 "GND" H 4350 3350 50  0000 C CNN
+F 2 "" H 4350 3500 50  0000 C CNN
+F 3 "" H 4350 3500 50  0000 C CNN
+	1    4350 3500
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	3900 3400 4350 3400
 Wire Wire Line
+	4350 3400 4350 3500
+Wire Wire Line
 	3900 2650 4350 2650
 Wire Wire Line
 	4350 2650 4350 3400
+Connection ~ 4350 3400
 Wire Wire Line
 	3300 2650 3600 2650
 Wire Wire Line
@@ -600,11 +632,28 @@ Wire Wire Line
 Wire Wire Line
 	3000 2650 2950 2650
 Wire Wire Line
-	4350 2600 4350 2650
+	2950 2200 2950 2250
+$Comp
+L Device:Q_PNP_EBC Q2
+U 1 1 5D285884
+P 2850 2450
+F 0 "Q2" H 3041 2496 50  0000 L CNN
+F 1 "Q_PNP_EBC" H 3041 2405 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 3050 2550 50  0001 C CNN
+F 3 "~" H 2850 2450 50  0001 C CNN
+	1    2850 2450
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	2650 2450 2650 1850
 Wire Wire Line
 	2650 1850 4900 1850
 Wire Wire Line
 	4900 1850 4900 2850
+Wire Wire Line
+	2650 3200 2650 3750
+Wire Wire Line
+	2650 3750 4650 3750
 Wire Wire Line
 	4650 3750 4650 2950
 Wire Wire Line
@@ -617,52 +666,4 @@ Wire Wire Line
 	6050 4350 4400 4350
 Wire Wire Line
 	4400 4350 4400 4700
-$Comp
-L Device:Q_NPN_EBC Q2
-U 1 1 5D24A1F1
-P 2850 2850
-F 0 "Q2" H 3041 2896 50  0000 L CNN
-F 1 "Q_NPN_ECB" H 3041 2805 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 3050 2950 50  0001 C CNN
-F 3 "~" H 2850 2850 50  0001 C CNN
-	1    2850 2850
-	1    0    0    -1  
-$EndComp
-Connection ~ 4350 2650
-Wire Wire Line
-	2650 1850 2650 2850
-$Comp
-L power:GND #PWR06
-U 1 1 5D25430C
-P 2950 3100
-F 0 "#PWR06" H 2950 2850 50  0001 C CNN
-F 1 "GND" H 2950 2950 50  0000 C CNN
-F 2 "" H 2950 3100 50  0000 C CNN
-F 3 "" H 2950 3100 50  0000 C CNN
-	1    2950 3100
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:Q_NPN_EBC Q3
-U 1 1 5D254764
-P 2850 3600
-F 0 "Q3" H 3041 3646 50  0000 L CNN
-F 1 "Q_NPN_ECB" H 3041 3555 50  0000 L CNN
-F 2 "Package_TO_SOT_THT:TO-92_Inline_Wide" H 3050 3700 50  0001 C CNN
-F 3 "~" H 2850 3600 50  0001 C CNN
-	1    2850 3600
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2950 3050 2950 3100
-Wire Wire Line
-	2650 4050 3350 4050
-Wire Wire Line
-	3350 4050 3350 3750
-Wire Wire Line
-	3350 3750 4650 3750
-Wire Wire Line
-	2650 3600 2650 4050
-Wire Wire Line
-	2950 3800 2950 3850
 $EndSCHEMATC

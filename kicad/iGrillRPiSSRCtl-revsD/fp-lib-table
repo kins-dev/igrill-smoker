@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name iGrillRPiSSRCtl-rev-sD)(type KiCad)(uri ${KIPRJMOD}/iGrillRPiSSRCtl-rev-sD.pretty)(options "")(descr ""))
+)
