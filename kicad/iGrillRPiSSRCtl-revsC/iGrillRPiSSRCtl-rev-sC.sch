@@ -660,14 +660,12 @@ Wire Wire Line
 Wire Wire Line
 	2950 3800 2950 3850
 Wire Wire Line
-	8150 2950 8150 3150
-Wire Wire Line
-	6550 3050 6650 3050
-Wire Wire Line
 	6650 2950 6650 3050
 Connection ~ 6650 3050
 Wire Wire Line
-	6650 3050 7600 3050
-Wire Wire Line
 	6650 3050 6650 3250
+Wire Wire Line
+	8150 2950 8150 3150
+Wire Wire Line
+	7600 3050 6650 3050
 $EndSCHEMATC
