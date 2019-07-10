@@ -423,8 +423,6 @@ F 3 "" H 8150 2950 50  0000 C CNN
 	1    8150 2950
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	8150 3150 8150 3050
 $Comp
 L Switch:SW_DPDT_x2 SW1
 U 2 1 5D23056E
@@ -663,4 +661,13 @@ Wire Wire Line
 	2650 3600 2650 4050
 Wire Wire Line
 	2950 3800 2950 3850
+Wire Wire Line
+	6650 2950 6650 3050
+Connection ~ 6650 3050
+Wire Wire Line
+	6650 3050 6650 3250
+Wire Wire Line
+	8150 2950 8150 3150
+Wire Wire Line
+	7600 3050 6650 3050
 $EndSCHEMATC
