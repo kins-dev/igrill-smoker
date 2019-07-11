@@ -7,6 +7,7 @@ graph TD
         paths[paths.sh]
         leds[leds.sh]
         kasa[kasa.sh]
+        kasa_client[kasa_client.py]
         sounds[sounds.sh]
         current[current.csv]
         stage[stage.sh]
@@ -25,5 +26,8 @@ graph TD
     data -.- state
     limits --- paths
     data --- paths
+    kasa --- paths
+    kasa --- kasa_client
+    data --- kasa_client
     click data "#scriptsdatash" "data.sh"
     click config "#scriptsconfigsh" "config.sh"

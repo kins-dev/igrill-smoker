@@ -1,9 +1,9 @@
 # Makefile for building SVG files from mmd files
 
-all: monitor.svg data.svg start_smoking.svg config.svg
+all: $(patsubst %.mmd,%.svg,$(wildcard *.mmd))
 
 %.svg: %.mmd
 	mmdc -i $^ -o $@
 
 clean:
-	$(RM) $(TARGET).svg
+	$(RM) $(patsubst %.mmd,%.svg,$(wildcard *.mmd))

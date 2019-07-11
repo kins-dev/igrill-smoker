@@ -8,6 +8,24 @@ true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
 
+VALUE=${IGRILL_BAS_DIR:-}
+if [ -z "${VALUE}" ]; then
+    # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
+    SOURCE="${BASH_SOURCE[0]}"
+    while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    done
+    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+    IGRILL_BAS_DIR="$(readlink -f "${DIR}/../..")"
+    export IGRILL_BAS_DIR
+fi
+
+# shellcheck source=paths.sh
+source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
+
+
 function SetKasaState() {
     local STATE
     local MSG
@@ -21,21 +39,15 @@ function SetKasaState() {
         exit 1
     fi
     STATE="$1"
-    tplink-smarthome-api send "$TP_LINK_IP" '{"count_down":{"delete_all_rules":{}}}}'
     
     # NOTE: api commands must be blocking as they take a second or two
     # and another state update may come in
     case "$STATE" in
         "on")
-            # TODO: Move kasa state to something that can be queried at write time
-            KASA_STATE="lightgreen"
-            tplink-smarthome-api setPowerState "$TP_LINK_IP" true
-            # Force off after 5 minutes if there's no commands
-            tplink-smarthome-api send "$TP_LINK_IP" '{"count_down":{"add_rule":{"enable":1,"delay":300,"act":0,"name":"turn off"}}}'
+            python3 "${IGRILL_PYU_DIR}/kasa_client.py" --on
         ;;
         "off")
-            KASA_STATE="red"
-            tplink-smarthome-api setPowerState "$TP_LINK_IP" false
+            python3 "${IGRILL_PYU_DIR}/kasa_client.py" --on
         ;;
         *)
             echo "bad value for hotplate state sent to SetKasaState"
@@ -44,24 +56,4 @@ function SetKasaState() {
         ;;
     esac
     echo "$MSG"
-}
-
-function GetKasaIP() {
-    if ! [ "$#" -eq "1" ]; then
-        echo "Wrong number of arguments to GetKasaIp"
-        echo "Expected 1, got $#"
-        exit 1
-    fi
-    local NAME=$1
-    coproc stdbuf -oL tplink-smarthome-api search
-    while read -r LINE; do
-
-        # when we find the iGrill_V2 setup that information
-        if [[ "${LINE}" = *"${NAME}" ]]; then
-            TP_LINK_IP="$(echo "${LINE}" | cut -d " " -f 4)"
-            break
-        fi
-    done <&"${COPROC[0]}"
-    kill "${COPROC_PID}"
-    export TP_LINK_IP
 }
