@@ -1,4 +1,4 @@
-update=7/7/2019 8:13:24 PM
+update=7/10/2019 10:28:58 AM
 version=1
 last_client=kicad
 [cvpcb]
@@ -235,9 +235,9 @@ Enabled=1
 [pcbnew/Layer.F.CrtYd]
 Enabled=1
 [pcbnew/Layer.B.Fab]
-Enabled=0
+Enabled=1
 [pcbnew/Layer.F.Fab]
-Enabled=0
+Enabled=1
 [pcbnew/Layer.Rescue]
 Enabled=0
 [pcbnew/Netclasses]
