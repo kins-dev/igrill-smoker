@@ -15,11 +15,11 @@ import constant
 import board
 from local_logging import SetupLog
 
-def SetLED(boardVal, color, desiredValue):
+def SetLED(boardVal, function, desiredValue):
     pi = pigpio.pi()
-    pin = constant.SSR_CONTROL_BOARD_PINS["LED"][color][boardVal]
+    pin = constant.SSR_CONTROL_BOARD_PINS["LED"][function][boardVal]
     value = desiredValue
-    state = constant.SSR_CONTROL_BOARD_VALUES["LED"][color][boardVal]
+    state = constant.SSR_CONTROL_BOARD_VALUES["LED"][function][boardVal]
     if ( constant.SSR_CONTROL_BOARD_VALUES_UNSUPPORTED == state) :
         return
     if ( constant.SSR_CONTROL_BOARD_VALUES_INVERTED == state) :
@@ -27,6 +27,7 @@ def SetLED(boardVal, color, desiredValue):
     writeVal = 0
     if (value) :
         writeVal = 1
+    pi.set_mode(pin, pigpio.OUTPUT)
     pi.write(pin, writeVal)
     return
 
@@ -58,12 +59,37 @@ def main():
         '--low_battery',
         action='store_true',
         dest='low_battery',
-        help='Turns on the low battery led')
+        help='Turns on the low battery LED')
     parser.add_argument(
         '--done',
         action='store_true',
         dest='done',
-        help='Turns on the low battery led')
+        help='Turns on the smoking complete LED')
+    parser.add_argument(
+        '--cold',
+        action='store_true',
+        dest='cold',
+        help='Turns on the cold LED')
+    parser.add_argument(
+        '--cool',
+        action='store_true',
+        dest='cool',
+        help='Turns on the cool LED')
+    parser.add_argument(
+        '--perfect',
+        action='store_true',
+        dest='perfect',
+        help='Turns on the perfect LED')
+    parser.add_argument(
+        '--warm',
+        action='store_true',
+        dest='warm',
+        help='Turns on the warm LED')
+    parser.add_argument(
+        '--hot',
+        action='store_true',
+        dest='hot',
+        help='Turns on the hot LED')
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
@@ -72,13 +98,8 @@ def main():
     if (constant.SSR_CONTROL_BOARD_DISABLED == boardVal):
         sys.exit(1)
 
-    pi = pigpio.pi()
-    pi.set_pad_strength(0,16)
-    pi.set_mode(22, pigpio.OUTPUT)
-    pi.set_mode(23, pigpio.OUTPUT)
-
-    SetLED(boardVal, "green", options.done)
-    SetLED(boardVal, "red", options.low_battery)
+    SetLED(boardVal, "smoking complete", options.done)
+    SetLED(boardVal, "low battery", options.low_battery)
 
 if __name__ == '__main__':
     main()
