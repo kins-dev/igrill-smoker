@@ -8,19 +8,19 @@
 
 <!-- code_chunk_output -->
 
-- [ Problem Statement](#problem-statement)
-- [ Design](#design)
-- [ Equipment](#equipment)
-- [ Requirements](#requirements)
-- [ Installation](#installation)
-- [ Software Setup](#software-setup)
-- [ Using iGrill Mini](#using-igrill-mini)
-- [ Grill Setup](#grill-setup)
-- [ Running](#running)
-- [ Lighttpd Setup](#lighttpd-setup)
-- [ Project Notes](#project-notes)
-  - [ iGrill Smoker Board Rev. *C](#igrill-smoker-board-rev-c)
-  - [ Parts](#parts)
+- [Problem Statement](#problem-statement)
+- [Design](#design)
+- [Equipment](#equipment)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Software Setup](#software-setup)
+- [Using iGrill Mini](#using-igrill-mini)
+- [Grill Setup](#grill-setup)
+- [Running](#running)
+- [Lighttpd Setup](#lighttpd-setup)
+- [Project Notes](#project-notes)
+  - [iGrill Smoker Board Rev. *D](#igrill-smoker-board-rev-d)
+  - [Parts *B](#parts-b)
 
 <!-- /code_chunk_output -->
 
@@ -262,13 +262,13 @@ This is necessary because the relay in the TP-Link won't handle the number of on
 
 The TP-Link Kasa plug will still be used as a failsafe device in the system.
 
-### iGrill Smoker Board Rev. *C
+### iGrill Smoker Board Rev. *D
 
-![Board Rev. *C](assets/igrill-smoker-board-sC.png)
+![Board Rev. *D](assets/igrill-smoker-board-sD.png)
 
-This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs hanging off the edge of the board.
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
 
-### Parts
+### Parts *B
 
 You don't have to use these parts, but have a reference of the price you should pay is good.
 
