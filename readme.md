@@ -19,8 +19,21 @@
 - [Running](#running)
 - [Lighttpd Setup](#lighttpd-setup)
 - [Project Notes](#project-notes)
-  - [iGrill Smoker Board Rev. *D](#igrill-smoker-board-rev-d)
-  - [Parts *B](#parts-b)
+- [iGrill Smoker Board Rev. *A](#igrill-smoker-board-rev-a)
+  - [*A Board](#a-board)
+  - [*A Notes](#a-notes)
+  - [*A Parts](#a-parts)
+- [iGrill Smoker Board Rev. *B](#igrill-smoker-board-rev-b)
+  - [*B Board](#b-board)
+  - [*B Notes](#b-notes)
+  - [*B Parts](#b-parts)
+- [iGrill Smoker Board Rev. *C](#igrill-smoker-board-rev-c)
+  - [*C Board](#c-board)
+  - [*C Notes](#c-notes)
+  - [*C Parts](#c-parts)
+- [iGrill Smoker Board Rev. *D](#igrill-smoker-board-rev-d)
+  - [*D Notes](#d-notes)
+  - [*D Parts](#d-parts)
 
 <!-- /code_chunk_output -->
 
@@ -256,19 +269,39 @@ $HTTP["url"] =~ "/.*\.(json|csv)$" {
 
 ## Project Notes
 
-1.3 Uses TP-Link Kasa for power control.  1.4 will include a brand new power control board that plugs into the Raspberry Pi which will allow much more fine grain control of the smoker temperature.
+1.3 Uses TP-Link Kasa for power control.  1.4 includes a brand new power control board that plugs into the Raspberry Pi which will allow much more fine grain control of the smoker temperature.
 
-This is necessary because the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay will be used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
+This is necessary because the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay is used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
 
 The TP-Link Kasa plug will still be used as a failsafe device in the system.
 
-### iGrill Smoker Board Rev. *D
+## iGrill Smoker Board Rev. *A
 
-![Board Rev. *D](assets/igrill-smoker-board-sD.png)
+### *A Board
 
-This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+![Board Rev. *A](assets/igrill-smoker-board-sA.png)
 
-### Parts *B
+This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits off the edge of the Raspberry Pi GPIOs.
+
+### *A Notes
+
+This board should not be used.
+
+Features
+
+- Two LEDs
+- Buzzer
+- Small design
+
+Defects
+
+- The spacing for the resistors is off
+- Hard to hand solder
+- Hangs off the board the wrong way
+- Red LED stays on due to leakage current
+- Leakage current to the SSR
+
+### *A Parts
 
 You don't have to use these parts, but have a reference of the price you should pay is good.
 
@@ -277,3 +310,97 @@ You don't have to use these parts, but have a reference of the price you should 
 - LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
 - Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
 - Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+
+## iGrill Smoker Board Rev. *B
+
+### *B Board
+
+![Board Rev. *B](assets/igrill-smoker-board-sB.png)
+
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+
+### *B Notes
+
+This board should not be used.
+
+New Features
+
+- Sits over the Pi with mounting holes
+- Board auto detect works
+- Buzzer switch
+
+Defects
+
+- The spacing for the resistors is off
+- The QR code doesn't always read correctly
+- The solder mask makes it hard to read the @ symbol
+- Red LED stays on due to leakage current
+- Buzzer makes a sound when it shouldn't
+- Leakage current to the SSR
+
+### *B Parts
+
+You don't have to use these parts, but have a reference of the price you should pay is good.
+
+TODO: Update part list
+
+- Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
+- LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
+- LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
+- Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+
+## iGrill Smoker Board Rev. *C
+
+### *C Board
+
+![Board Rev. *C](assets/igrill-smoker-board-sC.png)
+
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+
+### *C Notes
+
+This board is currently in production and has not been tested.
+
+New Features
+
+- NPN transistors to remove leakage
+
+Defects
+
+- Leakage current to the SSR
+
+### *C Parts
+
+You don't have to use these parts, but have a reference of the price you should pay is good.
+
+TODO: Update part list
+
+- Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
+- LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
+- LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
+- Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+
+## iGrill Smoker Board Rev. *D
+
+![Board Rev. *D](assets/igrill-smoker-board-sD.png)
+
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+
+### *D Notes
+
+This board is currently in production and has not been tested.
+
+New Features
+
+- Surface mount devices
+- Tranistor to prevent SSR leakage
+
+Defects
+
+- Silk screen issue
+
+### *D Parts
+
+TODO: Add part list
