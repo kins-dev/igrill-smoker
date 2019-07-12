@@ -369,6 +369,7 @@ New Features
 Defects
 
 - Leakage current to the SSR
+- Missing resistors on NPN transistor base (good design practice)
 
 ### *C Parts
 
@@ -394,8 +395,10 @@ This board is currently in production and has not been tested.
 
 New Features
 
-- Surface mount devices
-- Tranistor to prevent SSR leakage
+- Surface mount parts
+- Mosfet transistors so a resistor is no longer needed
+- Transistor to prevent SSR leakage
+- Cheaper parts
 
 Defects
 
