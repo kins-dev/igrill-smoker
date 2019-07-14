@@ -303,8 +303,6 @@ Defects
 
 ### *A Parts
 
-You don't have to use these parts, but have a reference of the price you should pay is good.
-
 - Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
 - LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
 - LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
@@ -317,7 +315,7 @@ You don't have to use these parts, but have a reference of the price you should 
 
 ![Board Rev. *B](assets/igrill-smoker-board-sB.png)
 
-This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
 
 ### *B Notes
 
@@ -340,15 +338,12 @@ Defects
 
 ### *B Parts
 
-You don't have to use these parts, but have a reference of the price you should pay is good.
-
-TODO: Update part list
-
 - Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
 - LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
 - LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
 - Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
 - Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+- Switch: [DigiKey](https://www.digikey.com/product-detail/en/c-k-components/JS202011CQN/401-2001-ND/1640097) $0.43
 
 ## iGrill Smoker Board Rev. *C
 
@@ -356,7 +351,7 @@ TODO: Update part list
 
 ![Board Rev. *C](assets/igrill-smoker-board-sC.png)
 
-This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+This board has a buzzer, two LEDs and a terminal block for the solid state relay.  It sits on the Raspberry Pi GPIOs.
 
 ### *C Notes
 
@@ -366,6 +361,13 @@ New Features
 
 - NPN transistors to remove leakage
 
+Fixes
+
+- QR Code
+- Resistor spacing
+- Solder mask changed to silk screen for fine pitch
+- Using suggested design for the buzzer
+
 Defects
 
 - Leakage current to the SSR
@@ -373,15 +375,13 @@ Defects
 
 ### *C Parts
 
-You don't have to use these parts, but have a reference of the price you should pay is good.
-
-TODO: Update part list
-
 - Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
 - LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
 - LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
-- Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Resistors (100 ohm x3): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
 - Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+- Switch: [DigiKey](https://www.digikey.com/product-detail/en/c-k-components/JS202011CQN/401-2001-ND/1640097) $0.43
+- Transistors (NPN x3): [DigiKey](https://www.digikey.com/product-detail/en/micro-commercial-co/2N3904-AP/2N3904-APCT-ND/950591) $0.19
 
 ## iGrill Smoker Board Rev. *D
 
@@ -395,6 +395,7 @@ This board is currently in production and has not been tested.
 
 New Features
 
+- Five new LEDs for temperature monitoring
 - Surface mount parts
 - Mosfet transistors so a resistor is no longer needed
 - Transistor to prevent SSR leakage
