@@ -100,6 +100,11 @@ def main():
 
     SetLED(boardVal, "smoking complete", options.done)
     SetLED(boardVal, "low battery", options.low_battery)
+    SetLED(boardVal, "cold", options.cold)
+    SetLED(boardVal, "cool", options.cool)
+    SetLED(boardVal, "perfect", options.perfect)
+    SetLED(boardVal, "warm", options.warm)
+    SetLED(boardVal, "hot", options.hot)
 
 if __name__ == '__main__':
     main()
