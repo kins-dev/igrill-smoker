@@ -11,7 +11,7 @@ import configparser
 import time
 import sys
 from Pyro5.api import expose, behavior, Daemon
-import constant
+from . import constant
 from struct import pack
 from local_logging import SetupLog
 

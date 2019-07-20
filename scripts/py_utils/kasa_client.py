@@ -7,7 +7,7 @@ import sys
 import argparse
 from Pyro5.api import Proxy
 from kasa_daemon import Kasa
-import constant
+from . import constant
 
 
 parser = argparse.ArgumentParser(

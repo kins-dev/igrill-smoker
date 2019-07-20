@@ -11,24 +11,23 @@ import time
 import sys
 # Line to make pylint work
 from argparse import ArgumentParser
-import constant
-import board
+from . import constant
+from . import board
 from local_logging import SetupLog
 
 def SetLED(boardVal, function, desiredValue):
     pi = pigpio.pi()
-    pin = constant.SSR_CONTROL_BOARD_PINS["LED"][function][boardVal]
+    item = constant.SSR_CONTROL_BOARD_ITEMS["LED"][function][boardVal]
     value = desiredValue
-    state = constant.SSR_CONTROL_BOARD_VALUES["LED"][function][boardVal]
-    if ( constant.SSR_CONTROL_BOARD_VALUES_UNSUPPORTED == state) :
+    if ( constant.SSR_CONTROL_BOARD_ITEM_INVALID == item) :
         return
-    if ( constant.SSR_CONTROL_BOARD_VALUES_INVERTED == state) :
+    if ( constant.SSR_CONTROL_BOARD_VALUES_INVERTED == item[constant.SSR_CONTROL_BOARD_ITEM_VALUE]) :
         value = not desiredValue
     writeVal = 0
     if (value) :
         writeVal = 1
-    pi.set_mode(pin, pigpio.OUTPUT)
-    pi.write(pin, writeVal)
+    pi.set_mode(item[constant.SSR_CONTROL_BOARD_ITEM_IO], pigpio.OUTPUT)
+    pi.write(item[constant.SSR_CONTROL_BOARD_ITEM_IO], writeVal)
     return
 
 def main():
@@ -104,7 +103,7 @@ def main():
     SetLED(boardVal, "Cool", options.cool)
     SetLED(boardVal, "Perfect", options.perfect)
     SetLED(boardVal, "Warm", options.warm)
-    SetLED(boardVal, "hot", options.hot)
+    SetLED(boardVal, "Hot", options.hot)
 
 if __name__ == '__main__':
     main()

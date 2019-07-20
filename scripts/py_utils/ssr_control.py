@@ -12,8 +12,8 @@ import sys
 from Pyro5.api import Proxy
 from local_logging import SetupLog
 from kasa_daemon import Kasa
-import constant
-import board
+from . import constant
+from . import board
 
 
 config = configparser.ConfigParser()
