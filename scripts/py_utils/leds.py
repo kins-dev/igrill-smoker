@@ -98,12 +98,12 @@ def main():
     if (constant.SSR_CONTROL_BOARD_DISABLED == boardVal):
         sys.exit(1)
 
-    SetLED(boardVal, "smoking complete", options.done)
-    SetLED(boardVal, "low battery", options.low_battery)
-    SetLED(boardVal, "cold", options.cold)
-    SetLED(boardVal, "cool", options.cool)
-    SetLED(boardVal, "perfect", options.perfect)
-    SetLED(boardVal, "warm", options.warm)
+    SetLED(boardVal, "Smoking complete", options.done)
+    SetLED(boardVal, "Low battery", options.low_battery)
+    SetLED(boardVal, "Cold", options.cold)
+    SetLED(boardVal, "Cool", options.cool)
+    SetLED(boardVal, "Perfect", options.perfect)
+    SetLED(boardVal, "Warm", options.warm)
     SetLED(boardVal, "hot", options.hot)
 
 if __name__ == '__main__':
