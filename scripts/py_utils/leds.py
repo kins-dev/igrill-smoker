@@ -11,8 +11,8 @@ import time
 import sys
 # Line to make pylint work
 from argparse import ArgumentParser
-from . import constant
-from . import board
+import constant
+import board
 from local_logging import SetupLog
 
 def SetLED(boardVal, function, desiredValue):

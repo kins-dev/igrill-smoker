@@ -12,7 +12,7 @@ import sys
 # Line to make pylint work
 from argparse import ArgumentParser
 from local_logging import SetupLog
-from . import constant
+import constant
 
 def DetectBoard(board):
     if (constant.SSR_CONTROL_BOARD_DETECT_REV != board):
