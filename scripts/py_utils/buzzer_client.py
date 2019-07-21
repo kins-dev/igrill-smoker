@@ -65,6 +65,11 @@ def main():
         action='store_true',
         dest='done',
         help='Turns on the smoking complete LED')
+    parser.add_argument(
+        '--exit',
+        dest='shutdown',
+        help='Tells the daemon to shutdown',
+        action='store_true')
  
     options = parser.parse_args()
 
