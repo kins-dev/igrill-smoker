@@ -52,6 +52,8 @@ class Buzzer(object):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
+        self.m_lowBattery = False
+        self.m_done = False
         self.m_active = True
         self.m_lock = threading.Lock()
         self.m_thread = threading.Thread(target=self.StartThread, args=())
