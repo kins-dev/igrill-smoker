@@ -7,9 +7,13 @@ KASA_DAEMON_NET_HEADER_SIZE                 = 4
 KASA_DAEMON_NET_DISCOVER_IP                 = "255.255.255.255"
 KASA_DAEMON_NET_PORT                        = 9999
 
-KASA_DAEMON_PYRO_HOST                       ="localhost"
-KASA_DAEMON_PYRO_PORT                       = 9998
+KASA_DAEMON_PYRO_HOST                       = "localhost"
+KASA_DAEMON_PYRO_PORT                       = KASA_DAEMON_NET_PORT + 1
 KASA_DAEMON_PYRO_OBJECT_ID                  = "Kasa"
+
+BUZZ_DAEMON_PYRO_HOST                       = KASA_DAEMON_PYRO_HOST
+BUZZ_DAEMON_PYRO_PORT                       = KASA_DAEMON_PYRO_PORT + 1
+BUZZ_DAEMON_PYRO_OBJECT_ID                  = "iGrillBuzzer"
 
 KASA_DAEMON_JSON_DISCOVER                   = b'{"system":{"get_sysinfo":{}}}'
 KASA_DAEMON_JSON_COUNTDOWN_DELETE_AND_RUN   = b'{"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":300,"act":0,"name":"fail safe"}}}'

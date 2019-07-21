@@ -8,7 +8,6 @@ import time
 import logging
 import argparse
 import configparser
-import time
 import sys
 from Pyro5.api import expose, behavior, Daemon
 from . import constant
