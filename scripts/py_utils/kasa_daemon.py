@@ -10,9 +10,10 @@ import argparse
 import configparser
 import sys
 from Pyro5.api import expose, behavior, Daemon
-from . import constant
 from struct import pack
-from local_logging import SetupLog
+import scripts.py_utils
+from scripts.py_utils import constant
+from scripts.py_utils.local_logging import SetupLog
 
 def Encrypt(string):
     key = 171
