@@ -32,30 +32,7 @@ class Buzzer(object):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
         config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        loglevel = config.get("Logging", "LogLevel", fallback="Error")
-        logfile = config.get("Logging", "LogFile", fallback="")
-        boardVal = config.get("SSR", "Board")
-
-        parser = argparse.ArgumentParser(
-            description='Runs a thread to control the buzzer')
-        parser.add_argument(
-            '-l',
-            '--log-level',
-            action='store',
-            dest='log_level',
-            default=loglevel,
-            help='Set log level, default: \'' + loglevel + '\'')
-        parser.add_argument(
-            '-d',
-            '--log-destination',
-            action='store',
-            dest='log_destination',
-            default=logfile,
-            help='Set log destination (file), default: \'' + logfile + '\'')
-        options = parser.parse_args()
-
-        SetupLog(options.log_level, options.log_destination)
-        boardVal = board.DetectBoard(boardVal)
+        boardVal = board.DetectBoard(config.get("SSR", "Board"))
         if (constant.SSR_CONTROL_BOARD_DISABLED == boardVal):
             sys.exit(1)
         self.m_boardVal = boardVal
@@ -81,26 +58,24 @@ class Buzzer(object):
                 done = self.m_done
                 active = self.m_active
             if not active:
-                pi.hardware_PWM(pin,2000,offVal)
+                pi.hardware_PWM(pin, 2000, offVal)
                 break
             if lowBattery:
                 logging.debug("Low battery")
-                pi.hardware_PWM(pin,2000,500000)
+                pi.hardware_PWM(pin, 2000, 500000)
                 time.sleep(0.5)
-                pi.hardware_PWM(pin,3000,500000)
+                pi.hardware_PWM(pin, 3000, 500000)
                 time.sleep(0.5)
             elif done:
                 logging.debug("Done")
-                pi.hardware_PWM(pin,2500,500000)
+                pi.hardware_PWM(pin, 2500, 500000)
                 time.sleep(0.5)
-                pi.hardware_PWM(pin,2000,offVal)
+                pi.hardware_PWM(pin, 2000, offVal)
                 time.sleep(0.5)
             else:
                 logging.debug("Quiet")
-                pi.hardware_PWM(pin,2000,offVal)
+                pi.hardware_PWM(pin, 2000, offVal)
                 time.sleep(0.5)
-                
-        # run the thread
 
     def Done(self):
         logging.debug("Starting done buzzer")
@@ -126,10 +101,38 @@ class Buzzer(object):
         logging.debug("Closing socket")
         self.m_daemon.shutdown()
 
+
 def main():
-    daemon = Daemon(host=constant.BUZZ_DAEMON_PYRO_HOST, port=constant.BUZZ_DAEMON_PYRO_PORT)
+    config = configparser.ConfigParser()
+    # does not throw an error, just returns the empty set if the file doesn't exist
+    config.read(sys.path[0]+'/../../config/iGrill_config.ini')
+    loglevel = config.get("Logging", "LogLevel", fallback="Error")
+    logfile = config.get("Logging", "LogFile", fallback="")
+
+    parser = argparse.ArgumentParser(
+        description='Runs a thread to control the buzzer')
+    parser.add_argument(
+        '-l',
+        '--log-level',
+        action='store',
+        dest='log_level',
+        default=loglevel,
+        help='Set log level, default: \'' + loglevel + '\'')
+    parser.add_argument(
+        '-d',
+        '--log-destination',
+        action='store',
+        dest='log_destination',
+        default=logfile,
+        help='Set log destination (file), default: \'' + logfile + '\'')
+    options = parser.parse_args()
+
+    SetupLog(options.log_level, options.log_destination)
+    daemon = Daemon(host=constant.BUZZ_DAEMON_PYRO_HOST,
+                    port=constant.BUZZ_DAEMON_PYRO_PORT)
     buzzObj = Buzzer(daemon)
-    uri = daemon.register(buzzObj, objectId=constant.BUZZ_DAEMON_PYRO_OBJECT_ID)
+    uri = daemon.register(
+        buzzObj, objectId=constant.BUZZ_DAEMON_PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')
@@ -137,5 +140,6 @@ def main():
     logging.debug('daemon closed')
     sys.exit(buzzObj.ExitCode())
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

@@ -20,8 +20,9 @@ import sys
 from Pyro5.api import expose, behavior, Daemon
 from struct import pack
 import scripts.py_utils
-from scripts.py_utils import constant
-from scripts.py_utils.local_logging import SetupLog
+import constant
+from local_logging import SetupLog
+
 
 def Encrypt(string):
     key = 171
@@ -31,6 +32,7 @@ def Encrypt(string):
         key = a
         result.append(a)
     return result
+
 
 def EncryptWithHeader(string):
     result = bytearray(pack('>I', len(string)))
@@ -47,8 +49,10 @@ def Decrypt(string):
         result += chr(a)
     return result
 
+
 def DecryptWithHeader(string):
     return Decrypt(string[constant.KASA_DAEMON_NET_HEADER_SIZE:])
+
 
 @expose
 @behavior(instance_mode="single")
@@ -85,7 +89,7 @@ class Kasa(object):
                 self.Exit()
             self.m_active = (state == 1)
             self.m_findTime = int(time.time())
-    
+
     def SendCommand(self, command):
         logging.debug("Setting up socket")
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -94,7 +98,8 @@ class Kasa(object):
         logging.debug("Sending to \"{}\" \"{}\"".format(self.m_ip, command))
         self.m_sock.send(EncryptWithHeader(command))
         logging.debug("Reading result")
-        result = DecryptWithHeader(self.m_sock.recv(constant.KASA_DAEMON_NET_BUFFER_SIZE))
+        result = DecryptWithHeader(self.m_sock.recv(
+            constant.KASA_DAEMON_NET_BUFFER_SIZE))
         logging.debug("Result: {}".format(result))
         self.m_sock.close()
 
@@ -106,10 +111,12 @@ class Kasa(object):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Sending broadcast")
         sock.settimeout(2)
-        sock.sendto(Encrypt(constant.KASA_DAEMON_JSON_DISCOVER),(constant.KASA_DAEMON_NET_DISCOVER_IP, constant.KASA_DAEMON_NET_PORT))
+        sock.sendto(Encrypt(constant.KASA_DAEMON_JSON_DISCOVER),
+                    (constant.KASA_DAEMON_NET_DISCOVER_IP, constant.KASA_DAEMON_NET_PORT))
         try:
             while (True):
-                data, addr = sock.recvfrom(constant.KASA_DAEMON_NET_BUFFER_SIZE)
+                data, addr = sock.recvfrom(
+                    constant.KASA_DAEMON_NET_BUFFER_SIZE)
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
                 logging.debug("Received: {}".format(Decrypt(data)))
@@ -126,7 +133,7 @@ class Kasa(object):
     def GetIP(self):
         self.FindDevice()
         return self.m_ip
-    
+
     def GetActive(self):
         self.FindDevice()
         return self.m_active
@@ -134,10 +141,11 @@ class Kasa(object):
     def TurnPlugOn(self):
         self.FindDevice()
         if (self.m_active):
-            self.SendCommand(constant.KASA_DAEMON_JSON_COUNTDOWN_DELETE_AND_RUN)
+            self.SendCommand(
+                constant.KASA_DAEMON_JSON_COUNTDOWN_DELETE_AND_RUN)
         else:
             self.SendCommand(constant.KASA_DAEMON_JSON_PLUG_ON)
-        self.m_active = True        
+        self.m_active = True
 
     def TurnPlugOff(self):
         self.FindDevice()
@@ -150,6 +158,7 @@ class Kasa(object):
     def Exit(self):
         logging.debug("Closing socket")
         self.m_daemon.shutdown()
+
 
 def main():
     config = configparser.ConfigParser()
@@ -177,9 +186,11 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
+    daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST,
+                    port=constant.KASA_DAEMON_PYRO_PORT)
     kasaObj = Kasa(daemon)
-    uri = daemon.register(kasaObj, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
+    uri = daemon.register(
+        kasaObj, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')
@@ -187,5 +198,6 @@ def main():
     logging.debug('daemon closed')
     sys.exit(kasaObj.ExitCode())
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
