@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+"""
+  Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+                        (https://git.kins.dev/igrill-smoker)
+  License:              MIT License
+                        See the LICENSE file
+"""
+
+__author__ = "Scott Atkins"
+__version__ = "1.4.0"
+__license__ = "MIT"
+
 from Pyro5.api import expose, behavior, Daemon
 import scripts.py_utils
 from scripts.py_utils import kasa_daemon
@@ -10,13 +22,13 @@ class Test_TestKasaDaemon(unittest.TestCase):
         daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
         kasaDaemon = kasa_daemon.Kasa(daemon)
         kasaDaemon.TurnPlugOff()
-        self.assertEqual(kasaDaemon.GetActive, False)
+        self.assertEqual(kasaDaemon.GetActive(), False)
 
         kasaDaemon.TurnPlugOn()
-        self.assertEqual(kasaDaemon.GetActive, True)
+        self.assertEqual(kasaDaemon.GetActive(), True)
         
         kasaDaemon.TurnPlugOff()
-        self.assertEqual(kasaDaemon.GetActive, False)
+        self.assertEqual(kasaDaemon.GetActive(), False)
         daemon.shutdown()
         
 

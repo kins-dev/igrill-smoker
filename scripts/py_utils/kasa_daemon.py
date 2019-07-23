@@ -1,7 +1,15 @@
-# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
-#                       (https://git.kins.dev/igrill-smoker)
-# License:              MIT License
-#                       See the LICENSE file
+#!/usr/bin/env python3
+"""
+  Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+                        (https://git.kins.dev/igrill-smoker)
+  License:              MIT License
+                        See the LICENSE file
+"""
+
+__author__ = "Scott Atkins"
+__version__ = "1.4.0"
+__license__ = "MIT"
+
 import socket
 import json
 import time
@@ -53,29 +61,8 @@ class Kasa(object):
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
         config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        loglevel = config.get("Logging", "LogLevel", fallback="Error")
-        logfile = config.get("Logging", "LogFile", fallback="")
         kasa_alias = config.get("Kasa", "Name", fallback="iGrill-smoker")
 
-        parser = argparse.ArgumentParser(
-            description='Connects to TP-Link Kasa hardware for power control')
-        parser.add_argument(
-            '-l',
-            '--log-level',
-            action='store',
-            dest='log_level',
-            default=loglevel,
-            help='Set log level, default: \'' + loglevel + '\'')
-        parser.add_argument(
-            '-d',
-            '--log-destination',
-            action='store',
-            dest='log_destination',
-            default=logfile,
-            help='Set log destination (file), default: \'' + logfile + '\'')
-        options = parser.parse_args()
-
-        SetupLog(options.log_level, options.log_destination)
         self.name = kasa_alias
         self.m_findTime = 0
         self.FindDevice()
@@ -165,6 +152,31 @@ class Kasa(object):
         self.m_daemon.shutdown()
 
 def main():
+    config = configparser.ConfigParser()
+    # does not throw an error, just returns the empty set if the file doesn't exist
+    config.read(sys.path[0]+'/../../config/iGrill_config.ini')
+    loglevel = config.get("Logging", "LogLevel", fallback="Error")
+    logfile = config.get("Logging", "LogFile", fallback="")
+
+    parser = argparse.ArgumentParser(
+        description='Connects to TP-Link Kasa hardware for power control')
+    parser.add_argument(
+        '-l',
+        '--log-level',
+        action='store',
+        dest='log_level',
+        default=loglevel,
+        help='Set log level, default: \'' + loglevel + '\'')
+    parser.add_argument(
+        '-d',
+        '--log-destination',
+        action='store',
+        dest='log_destination',
+        default=logfile,
+        help='Set log destination (file), default: \'' + logfile + '\'')
+    options = parser.parse_args()
+
+    SetupLog(options.log_level, options.log_destination)
     daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
     kasaObj = Kasa(daemon)
     uri = daemon.register(kasaObj, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)

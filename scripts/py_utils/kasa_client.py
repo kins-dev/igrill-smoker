@@ -1,13 +1,20 @@
-# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
-#                       (https://git.kins.dev/igrill-smoker)
-# License:              MIT License
-#                       See the LICENSE file
+#!/usr/bin/env python3
+"""
+  Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+                        (https://git.kins.dev/igrill-smoker)
+  License:              MIT License
+                        See the LICENSE file
+"""
+
+__author__ = "Scott Atkins"
+__version__ = "1.4.0"
+__license__ = "MIT"
 
 import sys
 import argparse
 from Pyro5.api import Proxy
 from kasa_daemon import Kasa
-from . import constant
+import constant
 
 
 parser = argparse.ArgumentParser(

@@ -1,7 +1,15 @@
-# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
-#                       (https://git.kins.dev/igrill-smoker)
-# License:              MIT License
-#                       See the LICENSE file
+#!/usr/bin/env python3
+"""
+  Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+                        (https://git.kins.dev/igrill-smoker)
+  License:              MIT License
+                        See the LICENSE file
+"""
+
+__author__ = "Scott Atkins"
+__version__ = "1.4.0"
+__license__ = "MIT"
+
 KASA_DAEMON_NET_BUFFER_SIZE                 = 2048
 KASA_DAEMON_NET_HEADER_SIZE                 = 4
 KASA_DAEMON_NET_DISCOVER_IP                 = "255.255.255.255"
