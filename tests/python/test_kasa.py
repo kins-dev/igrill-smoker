@@ -10,7 +10,7 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
-from Pyro5.api import expose, behavior, Daemon
+from Pyro5.api import Daemon
 import scripts.py_utils
 from scripts.py_utils import kasa_daemon
 from scripts.py_utils import constant
