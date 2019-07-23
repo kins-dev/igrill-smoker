@@ -17,10 +17,11 @@ from scripts.py_utils import constant
 import unittest
 
 class Test_TestKasaDaemon(unittest.TestCase):
-
+    
     def test_power(self):
         daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
         kasaDaemon = kasa_daemon.Kasa(daemon)
+        daemon.register(kasaDaemon, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
         kasaDaemon.TurnPlugOff()
         self.assertEqual(kasaDaemon.GetActive(), False)
 
@@ -29,14 +30,29 @@ class Test_TestKasaDaemon(unittest.TestCase):
         
         kasaDaemon.TurnPlugOff()
         self.assertEqual(kasaDaemon.GetActive(), False)
-        daemon.shutdown()
+        kasaDaemon.Exit()
+        daemon.close()
+        self.assertEqual(kasaDaemon.ExitCode(), 0)
+
         
 
     def test_IP(self):
         daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
         kasaDaemon = kasa_daemon.Kasa(daemon)
+        daemon.register(kasaDaemon, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
         self.assertEqual(kasaDaemon.GetIP(), "192.168.0.23")
-        daemon.shutdown()
+        kasaDaemon.Exit()
+        daemon.close()
+        self.assertEqual(kasaDaemon.ExitCode(), 0)
+
+    
+    def test_Exit(self):
+        daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST, port=constant.KASA_DAEMON_PYRO_PORT)
+        kasaDaemon = kasa_daemon.Kasa(daemon)
+        daemon.register(kasaDaemon, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
+        kasaDaemon.Exit()
+        daemon.close()
+        self.assertEqual(kasaDaemon.ExitCode(), 0)
 
 if __name__ == '__main__':
     unittest.main()
