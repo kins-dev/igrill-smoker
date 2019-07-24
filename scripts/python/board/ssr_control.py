@@ -25,10 +25,10 @@ from . import board
 
 config = configparser.ConfigParser()
 # does not throw an error, just returns the empty set if the file doesn't exist
-config.read(sys.path[0]+'/../../config/iGrill_config.ini')
+config.read(sys.path[0]+'../config/iGrill_config.ini')
 loglevel = config.get("Logging", "LogLevel", fallback="Error")
 logfile = config.get("Logging", "LogFile", fallback="")
-board = config.get("SSR", "Board")
+board = config.get("SSR", "Board", fallback="Auto")
 
 
 parser = argparse.ArgumentParser(

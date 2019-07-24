@@ -31,8 +31,9 @@ class Buzzer(object):
         self.m_daemon = daemon
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        boardVal = board.DetectBoard(config.get("SSR", "Board"))
+        config.read(sys.path[0]+'../config/iGrill_config.ini')
+        boardVal = board.DetectBoard(
+            config.get("SSR", "Board", fallback="Auto"))
         if (constant.SSR_CONTROL_BOARD_DISABLED == boardVal):
             sys.exit(1)
         self.m_boardVal = boardVal
