@@ -19,8 +19,8 @@ import configparser
 import sys
 from Pyro5.api import expose, behavior, Daemon
 from struct import pack
-from . import constant
-from .local_logging import SetupLog
+from ..common import constant
+from ..common.local_logging import SetupLog
 
 
 def Encrypt(string):

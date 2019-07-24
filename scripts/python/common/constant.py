@@ -1,0 +1,211 @@
+#!/usr/bin/env python3
+"""
+  Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+                        (https://git.kins.dev/igrill-smoker)
+  License:              MIT License
+                        See the LICENSE file
+"""
+
+__author__ = "Scott Atkins"
+__version__ = "1.4.0"
+__license__ = "MIT"
+
+KASA_DAEMON_NET_BUFFER_SIZE                 = 2048
+KASA_DAEMON_NET_HEADER_SIZE                 = 4
+KASA_DAEMON_NET_DISCOVER_IP                 = "255.255.255.255"
+KASA_DAEMON_NET_PORT                        = 9999
+
+KASA_DAEMON_PYRO_HOST                       = "localhost"
+KASA_DAEMON_PYRO_PORT                       = KASA_DAEMON_NET_PORT + 1
+KASA_DAEMON_PYRO_OBJECT_ID                  = "Kasa"
+
+BUZZ_DAEMON_PYRO_HOST                       = KASA_DAEMON_PYRO_HOST
+BUZZ_DAEMON_PYRO_PORT                       = KASA_DAEMON_PYRO_PORT + 1
+BUZZ_DAEMON_PYRO_OBJECT_ID                  = "iGrillBuzzer"
+
+KASA_DAEMON_JSON_DISCOVER                   = b'{"system":{"get_sysinfo":{}}}'
+KASA_DAEMON_JSON_COUNTDOWN_DELETE_AND_RUN   = b'{"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":300,"act":0,"name":"fail safe"}}}'
+KASA_DAEMON_JSON_PLUG_ON                    = b'{"system":{"set_relay_state":{"state":1}},"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":300,"act":0,"name":"fail safe"}}}'
+KASA_DAEMON_JSON_PLUG_OFF                   = b'{"count_down":{"delete_all_rules":null},"system":{"set_relay_state":{"state":0}}}'
+KASA_DAEMON_JSON_COUNTDOWN_DELETE           = b'{"count_down":{"delete_all_rules":null}}'
+SSR_CONTROL_BOARD_REV_ss                    = "**"
+SSR_CONTROL_BOARD_REV_sA                    = "*A"
+SSR_CONTROL_BOARD_REV_sB                    = "*B"
+SSR_CONTROL_BOARD_REV_sC                    = "*C"
+SSR_CONTROL_BOARD_REV_sD                    = "*D"
+SSR_CONTROL_BOARD_DISABLED                  = "None"
+SSR_CONTROL_BOARD_DETECT_REV                = "Auto"
+
+SSR_CONTROL_BOARD_VALUES_STANDARD           = 1
+SSR_CONTROL_BOARD_VALUES_INVERTED           = 0
+SSR_CONTROL_BOARD_VALUES_UNSUPPORTED        = -1
+
+SSR_CONTROL_BOARD_REV_PINS                  = [14, 15, 18, 23, 24, 25, 8, 7, 16, 20, 21]
+
+SSR_CONTROL_BOARD_REV_MAP                   = {
+    1793: SSR_CONTROL_BOARD_REV_sB,
+    1794: SSR_CONTROL_BOARD_REV_sC,
+    1795: SSR_CONTROL_BOARD_REV_sD
+}
+
+SSR_CONTROL_BOARD_ITEM_IO                  = "Pin"
+SSR_CONTROL_BOARD_ITEM_VALUE               = "Value"
+SSR_CONTROL_BOARD_ITEM_INVALID             = {
+    SSR_CONTROL_BOARD_ITEM_IO:SSR_CONTROL_BOARD_VALUES_UNSUPPORTED,
+    SSR_CONTROL_BOARD_ITEM_IO:SSR_CONTROL_BOARD_VALUES_UNSUPPORTED
+}
+SSR_CONTROL_BOARD_ITEMS                    = {
+    "LED":{
+        "Low battery":{
+            SSR_CONTROL_BOARD_REV_ss:{
+                SSR_CONTROL_BOARD_ITEM_IO:22,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+            },
+            SSR_CONTROL_BOARD_REV_sA:{
+                SSR_CONTROL_BOARD_ITEM_IO:23,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+            },
+            SSR_CONTROL_BOARD_REV_sB:{
+                SSR_CONTROL_BOARD_ITEM_IO:2,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+            },
+            SSR_CONTROL_BOARD_REV_sC:{
+                SSR_CONTROL_BOARD_ITEM_IO:2,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            },
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:10,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+        "Smoking complete":{
+            SSR_CONTROL_BOARD_REV_ss:{
+                SSR_CONTROL_BOARD_ITEM_IO:23,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+            },
+            SSR_CONTROL_BOARD_REV_sA:{
+                SSR_CONTROL_BOARD_ITEM_IO:22,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+            },
+            SSR_CONTROL_BOARD_REV_sB:{
+                SSR_CONTROL_BOARD_ITEM_IO:3,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+            },
+            SSR_CONTROL_BOARD_REV_sC:{
+                SSR_CONTROL_BOARD_ITEM_IO:3,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            },
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:22,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+        "Cold":{
+            SSR_CONTROL_BOARD_REV_ss:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sA:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sB:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sC:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:2,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+        "Cool":{
+            SSR_CONTROL_BOARD_REV_ss:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sA:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sB:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sC:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:3,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+        "Perfect":{
+            SSR_CONTROL_BOARD_REV_ss:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sA:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sB:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sC:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:4,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+        "Warm":{
+            SSR_CONTROL_BOARD_REV_ss:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sA:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sB:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sC:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:17,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+        "Hot":{
+            SSR_CONTROL_BOARD_REV_ss:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sA:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sB:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sC:SSR_CONTROL_BOARD_ITEM_INVALID,
+            SSR_CONTROL_BOARD_REV_sD:{
+                SSR_CONTROL_BOARD_ITEM_IO:27,
+                SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+            }
+        },
+    },
+    "Buzzer":{
+        SSR_CONTROL_BOARD_REV_ss:{
+            SSR_CONTROL_BOARD_ITEM_IO:13,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sA:{
+            SSR_CONTROL_BOARD_ITEM_IO:13,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sB:{
+            SSR_CONTROL_BOARD_ITEM_IO:12,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sC:{
+            SSR_CONTROL_BOARD_ITEM_IO:12,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sD:{
+            SSR_CONTROL_BOARD_ITEM_IO:12,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+        }
+    },
+    "Relay":{
+        SSR_CONTROL_BOARD_REV_ss:{
+            SSR_CONTROL_BOARD_ITEM_IO:12,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sA:{
+            SSR_CONTROL_BOARD_ITEM_IO:12,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sB:{
+            SSR_CONTROL_BOARD_ITEM_IO:13,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_INVERTED
+        },
+        SSR_CONTROL_BOARD_REV_sC:{
+            SSR_CONTROL_BOARD_ITEM_IO:13,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+        },
+        SSR_CONTROL_BOARD_REV_sD:{
+            SSR_CONTROL_BOARD_ITEM_IO:13,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+        }
+    },
+    "Switch":{
+        SSR_CONTROL_BOARD_REV_ss:SSR_CONTROL_BOARD_ITEM_INVALID,
+        SSR_CONTROL_BOARD_REV_sA:SSR_CONTROL_BOARD_ITEM_INVALID,
+        SSR_CONTROL_BOARD_REV_sB:SSR_CONTROL_BOARD_ITEM_INVALID,
+        SSR_CONTROL_BOARD_REV_sC:{
+            SSR_CONTROL_BOARD_ITEM_IO:6,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+        },
+        SSR_CONTROL_BOARD_REV_sD:{
+            SSR_CONTROL_BOARD_ITEM_IO:6,
+            SSR_CONTROL_BOARD_ITEM_VALUE:SSR_CONTROL_BOARD_VALUES_STANDARD
+        }
+    }
+}

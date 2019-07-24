@@ -10,11 +10,10 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
-from Pyro5.api import Daemon
-import scripts.py_utils
-import kasa_daemon
-import constant
 import unittest
+from Pyro5.api import Daemon
+from ..kasa import kasa_daemon
+from ..common import constant
 
 
 class Test_TestKasaDaemon(unittest.TestCase):
