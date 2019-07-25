@@ -18,9 +18,9 @@ if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
     SOURCE="${BASH_SOURCE[0]}"
     while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+        DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+        SOURCE="$(readlink "$SOURCE")"
+        [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
     IGRILL_BAS_DIR="$(readlink -f "${DIR}/..")"
@@ -55,7 +55,7 @@ function Finish () {
     #	echo "done"
     local KASA_STATE="red"
     local KASA_PLUG_STATE
-    KASA_PLUG_STATE=$(python3 "${IGRILL_PYU_DIR}/kasa_client.py" --status)
+    KASA_PLUG_STATE=$(PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m python.kasa.kasa_client --status)
     if [ "on" == "$KASA_PLUG_STATE" ]; then
         KASA_STATE="lightgreen"
     fi
@@ -99,7 +99,7 @@ EOL
     SetLimits "${iGrill__Probes__SmokeProbe}" "$SM_TEMP" "$SMOKE_MID" 20
     
     WriteLimits
-
+    
     # Reload the config file with the new stage.
     LoadConfig
 }
@@ -168,7 +168,7 @@ if [ "$FD_DONE" -eq "1" ]; then
     # Play a sound
     PlaySound "complete"
     
-elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
+    elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
     #done
     LEDsSetState "green" "on"
     
