@@ -25,22 +25,6 @@ from . import board
 from ..common.local_logging import SetupLog
 
 
-def SetLED(boardVal, function, desiredValue):
-    pi = pigpio.pi()
-    item = constant.SSR_CONTROL_BOARD_ITEMS["LED"][function][boardVal]
-    value = desiredValue
-    if (constant.SSR_CONTROL_BOARD_ITEM_INVALID == item):
-        return
-    if (constant.SSR_CONTROL_BOARD_VALUES_INVERTED == item[constant.SSR_CONTROL_BOARD_ITEM_VALUE]):
-        value = not desiredValue
-    writeVal = 0
-    if (value):
-        writeVal = 1
-    pi.set_mode(item[constant.SSR_CONTROL_BOARD_ITEM_IO], pigpio.OUTPUT)
-    pi.write(item[constant.SSR_CONTROL_BOARD_ITEM_IO], writeVal)
-    return
-
-
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist

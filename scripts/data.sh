@@ -30,14 +30,6 @@ fi
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 
-# pull in LED functions
-# shellcheck source=utils/leds.sh
-source "${IGRILL_UTL_DIR}/leds.sh"
-
-# pull in sound functions
-# shellcheck source=utils/sounds.sh
-source "${IGRILL_UTL_DIR}/sounds.sh"
-
 # pull in plug functions
 # shellcheck source=utils/kasa.sh
 source "${IGRILL_UTL_DIR}/kasa.sh"
@@ -161,26 +153,19 @@ if [ "$STAGE" -gt "0" ]; then
     fi
 fi
 
+SMOKING_COMPLETE=""
+LOW_BATTERY=""
 if [ "$FD_DONE" -eq "1" ]; then
     #done
-    LEDsSetState "green" "on"
-    
-    # Play a sound
-    PlaySound "complete"
+    SMOKING_COMPLETE="--done"
     
     elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
-    #done
-    LEDsSetState "green" "on"
-    
-    # Play a sound
-    PlaySound "complete"
+    SMOKING_COMPLETE="--done"
     
     if [ "$STAGE" -eq "0" ]; then
         # keep warm at target temp
         SMOKE_MID="$INTERNAL_TEMP"
     fi
-else
-    LEDsSetState "green" "off"
 fi
 
 
@@ -189,12 +174,12 @@ SMOKE_TEMP_LOW=$((SMOKE_MID - TEMP_SLOP))
 
 if [ "$BATTERY" -le "$MIN_BATTERY" ] ; then
     #low battery
-    LEDsSetState "red" "on"
-    PlaySound "low_battery"
-else
-    LEDsSetState "red" "off"
+    LOW_BATTERY="--low_battery"
 fi
 
+
+PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds ${SMOKING_COMPLETE} ${LOW_BATTERY}
+PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client ${SMOKING_COMPLETE} ${LOW_BATTERY}
 
 #echo "writing state"
 cat > "$STATE_FILE" <<EOL

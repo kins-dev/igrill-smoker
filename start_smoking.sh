@@ -9,7 +9,7 @@ set -$-ue${DEBUG+xv}
 
 
 function finish  () {
-    LEDsReset
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
     # Cleanup on exit
     rm -f "${IGRILL_RUN_DIR}/igrill.json"
@@ -17,8 +17,9 @@ function finish  () {
     rm -f "${IGRILL_RUN_DIR}/stage.sh"
     rm -f "${IGRILL_RUN_DIR}/limits.ini"
     
-    # Start the kasa daemon
+    # Stop the kasa/buzzer daemon
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --exit
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client --exit
 }
 
 VALUE=${IGRILL_BAS_DIR:-}
@@ -43,9 +44,6 @@ source "${IGRILL_SCR_DIR}/config.sh"
 
 # shellcheck source=scripts/utils/bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
-
-# shellcheck source=scripts/utils/leds.sh
-source "${IGRILL_UTL_DIR}/leds.sh"
 
 # shellcheck source=scripts/utils/limits.sh
 source "${IGRILL_UTL_DIR}/limits.sh"
@@ -96,10 +94,14 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     
     WriteLimits
     
-    LEDsReset
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
-    # Start the kasa daemon
+    # Start the kasa/buzzer daemon
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_daemon --log-level Error & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_daemon --log-level Error & disown
+    
+    # Silence buzzer
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client
     
     # deal with unexpected wireless issues
     while true; do
