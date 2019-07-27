@@ -77,3 +77,4 @@ target/
 .vscode/tags
 test.py
 kicad/*/Gerbers/
+.pytest_cache/

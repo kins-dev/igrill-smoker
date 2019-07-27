@@ -35,16 +35,19 @@ def IoSideEffect(*args, **kwargs):
 
 class Test_TestBoard(unittest.TestCase):
 
-    @mock.patch("pygrill.board.board.pigpio.pi")
-    def test_boardDetect(self, mock_pigpio):
-        mock_pigpio.read.return_value = 0
-        #mock_pigpio.read.side_effect = IoSideEffect
-        print(mock_pigpio.read(15))
-        board = Board()
-        self.assertEqual(board.DetectBoard("Auto"),
-                         constant.SSR_CONTROL_BOARD_REV_sD)
-        self.assertEqual(board.DetectBoard("*D"),
-                         constant.SSR_CONTROL_BOARD_REV_sD)
+    def test_boardDetect(self):
+        #mock_pigpio.read.return_value = 0
+        mock_pigpio = mock.Mock()
+        mock_pigoio_inst = 0
+        mock_pigoio_inst = mock_pigpio.return_value
+        mock_pigoio_inst.read.side_effect = IoSideEffect
+        with mock.patch('pygrill.board.board.pigpio.pi', mock_pigpio):
+            # print(mock_pigpio.read(15))
+            board = Board()
+            self.assertEqual(board.DetectBoard("Auto"),
+                             constant.SSR_CONTROL_BOARD_REV_sC)
+            self.assertEqual(board.DetectBoard("*D"),
+                             constant.SSR_CONTROL_BOARD_REV_sD)
 
 
 if __name__ == '__main__':

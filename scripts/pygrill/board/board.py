@@ -36,7 +36,6 @@ class Board(object):
 
                 pi.set_pull_up_down(p, pigpio.PUD_DOWN)
                 tmp = pi.read(p)
-                print("Pin \"{}\" : \"{}\"".format(p, tmp))
                 logging.debug("Pin \"{}\" : \"{}\"".format(p, tmp))
                 val = val + (tmp << i)
                 i = i + 1
