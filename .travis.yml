@@ -3,4 +3,4 @@ language: python
 python:
   - "3.7"
 script:
-  - python3 -m unittest discover -v -p test_*.py -s scripts -t scripts/pygrill
+  - python3 -m unittest discover -v -p test_*.py -s scripts/pygrill -t scripts
