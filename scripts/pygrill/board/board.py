@@ -23,26 +23,25 @@ from ..common.local_logging import SetupLog
 from ..common import constant
 
 
-class Board(object):
-    def DetectBoard(self, board):
-        if (constant.SSR_CONTROL_BOARD_DETECT_REV != board):
-            return board
-        else:
-            pi = pigpio.pi()
-            i = 0
-            val = 0
-            for p in constant.SSR_CONTROL_BOARD_REV_PINS:
-                pi.set_mode(p, pigpio.INPUT)
+def DetectBoard(board):
+    if (constant.SSR_CONTROL_BOARD_DETECT_REV != board):
+        return board
+    else:
+        pi = pigpio.pi()
+        i = 0
+        val = 0
+        for p in constant.SSR_CONTROL_BOARD_REV_PINS:
+            pi.set_mode(p, pigpio.INPUT)
 
-                pi.set_pull_up_down(p, pigpio.PUD_DOWN)
-                tmp = pi.read(p)
-                logging.debug("Pin \"{}\" : \"{}\"".format(p, tmp))
-                val = val + (tmp << i)
-                i = i + 1
-            logging.debug("Val = \"{}\"".format(val))
-            if (val in constant.SSR_CONTROL_BOARD_REV_MAP):
-                return constant.SSR_CONTROL_BOARD_REV_MAP[val]
-            return constant.SSR_CONTROL_BOARD_DISABLED
+            pi.set_pull_up_down(p, pigpio.PUD_DOWN)
+            tmp = pi.read(p)
+            logging.debug("Pin \"{}\" : \"{}\"".format(p, tmp))
+            val = val + (tmp << i)
+            i = i + 1
+        logging.debug("Val = \"{}\"".format(val))
+        if (val in constant.SSR_CONTROL_BOARD_REV_MAP):
+            return constant.SSR_CONTROL_BOARD_REV_MAP[val]
+        return constant.SSR_CONTROL_BOARD_DISABLED
 
 
 def main():
@@ -82,8 +81,7 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    board = Board()
-    board.DetectBoard(board)
+    DetectBoard(board)
 
 
 if __name__ == '__main__':
