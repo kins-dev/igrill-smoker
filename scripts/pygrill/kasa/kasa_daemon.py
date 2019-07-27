@@ -57,6 +57,7 @@ def DecryptWithHeader(string):
 @behavior(instance_mode="single")
 class Kasa(object):
     def __init__(self, daemon):
+        #SetupLog("Debug", "")
         self.m_daemon = daemon
         self.m_tcpSocket = socket.socket()
         self.m_ip = ""
@@ -94,7 +95,8 @@ class Kasa(object):
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         logging.debug("Connecting")
         self.m_sock.connect((self.m_ip, constant.KASA_DAEMON_NET_PORT))
-        logging.debug("Sending to \"{}\" \"{}\"".format(self.m_ip, command))
+        logging.debug("Sending to \"{}:{}\" \"{}\"".format(
+            self.m_ip, constant.KASA_DAEMON_NET_PORT, command))
         self.m_sock.send(EncryptWithHeader(command))
         logging.debug("Reading result")
         result = DecryptWithHeader(self.m_sock.recv(
@@ -110,6 +112,9 @@ class Kasa(object):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Sending broadcast")
         sock.settimeout(2)
+        logging.debug("Msg: {}".format(constant.KASA_DAEMON_JSON_DISCOVER))
+        logging.debug("To:  {}:{}".format(
+            constant.KASA_DAEMON_NET_DISCOVER_IP, constant.KASA_DAEMON_NET_PORT))
         sock.sendto(Encrypt(constant.KASA_DAEMON_JSON_DISCOVER),
                     (constant.KASA_DAEMON_NET_DISCOVER_IP, constant.KASA_DAEMON_NET_PORT))
         try:
