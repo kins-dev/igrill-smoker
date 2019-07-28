@@ -51,6 +51,7 @@ PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
 read
 echo "Starting buzzer daemon"
 PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_daemon --log-level Error & disown
+sleep 1s
 echo "Check buzzer turns on and off and hit enter"
 PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client --done
 read
