@@ -61,7 +61,7 @@ class Buzzer(object):
                     "frequency": 2000,
                     "compare": onVal
                 },
-                2: {
+                0: {
                     "frequency": 3000,
                     "compare": onVal
                 }
@@ -71,7 +71,7 @@ class Buzzer(object):
                     "frequency": 2500,
                     "compare": onVal
                 },
-                2: {
+                0: {
                     "frequency": 3000,
                     "compare": offVal
                 }
@@ -81,7 +81,7 @@ class Buzzer(object):
                     "frequency": 2000,
                     "compare": offVal
                 },
-                2: {
+                0: {
                     "frequency": 3000,
                     "compare": offVal
                 }
