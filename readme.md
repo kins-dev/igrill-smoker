@@ -1,4 +1,4 @@
-# Starting with Raspberry Pi Stretch
+# Starting with Raspberry Pi Stretch [![Build Status](https://travis-ci.org/kins-dev/igrill-smoker.svg?branch=1.4)](https://travis-ci.org/kins-dev/igrill-smoker)
 
 <!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
