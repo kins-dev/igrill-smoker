@@ -50,7 +50,7 @@ class Buzzer(object):
         pi = pigpio.pi()
         item = constant.SSR_CONTROL_BOARD_ITEMS["Buzzer"][self.m_boardVal]
         offVal = 1000000
-        onVal = offVal / 2
+        onVal = offVal // 2
         if item[constant.SSR_CONTROL_BOARD_ITEM_VALUE] == constant.SSR_CONTROL_BOARD_VALUES_STANDARD:
             offVal = 0
         pin = item[constant.SSR_CONTROL_BOARD_ITEM_IO]
