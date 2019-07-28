@@ -50,10 +50,47 @@ class Buzzer(object):
         pi = pigpio.pi()
         item = constant.SSR_CONTROL_BOARD_ITEMS["Buzzer"][self.m_boardVal]
         offVal = 1000000
+        onVal = offVal / 2
         if item[constant.SSR_CONTROL_BOARD_ITEM_VALUE] == constant.SSR_CONTROL_BOARD_VALUES_STANDARD:
             offVal = 0
         pin = item[constant.SSR_CONTROL_BOARD_ITEM_IO]
+        loop_cnt = 0
+        loop_val = {
+            "low battery": {
+                1: {
+                    "frequency": 2000,
+                    "compare": onVal
+                },
+                2: {
+                    "frequency": 3000,
+                    "compare": onVal
+                }
+            },
+            "done": {
+                1: {
+                    "frequency": 2500,
+                    "compare": onVal
+                },
+                2: {
+                    "frequency": 3000,
+                    "compare": offVal
+                }
+            },
+            "quiet": {
+                1: {
+                    "frequency": 2000,
+                    "compare": offVal
+                },
+                2: {
+                    "frequency": 3000,
+                    "compare": offVal
+                }
+            }
+        }
         while True:
+            loop_cnt = loop_cnt + 1
+            loop_cnt = loop_cnt % 2
+            fun = "quiet"
             with self.m_lock:
                 lowBattery = self.m_lowBattery
                 done = self.m_done
@@ -63,20 +100,17 @@ class Buzzer(object):
                 break
             if lowBattery:
                 logging.debug("Low battery")
-                pi.hardware_PWM(pin, 2000, 500000)
-                time.sleep(0.5)
-                pi.hardware_PWM(pin, 3000, 500000)
-                time.sleep(0.5)
+                fun = "low battery"
             elif done:
                 logging.debug("Done")
-                pi.hardware_PWM(pin, 2500, 500000)
-                time.sleep(0.5)
-                pi.hardware_PWM(pin, 2000, offVal)
-                time.sleep(0.5)
+                fun = "done"
             else:
                 logging.debug("Quiet")
-                pi.hardware_PWM(pin, 2000, offVal)
-                time.sleep(0.5)
+                fun = "quiet"
+
+            pi.hardware_PWM(
+                pin, loop_val[fun][loop_cnt]["frequency"], loop_val[fun][loop_cnt]["compare"])
+            time.sleep(0.3)
 
     def Done(self):
         logging.debug("Starting done buzzer")
