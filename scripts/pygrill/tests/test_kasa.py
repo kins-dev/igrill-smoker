@@ -17,6 +17,8 @@ from ..common.local_logging import SetupLog
 from ..kasa import kasa_daemon
 from ..common import constant
 
+# TODO: Setup/Teardown and check the mock calls
+
 
 class Test_TestKasaDaemon(unittest.TestCase):
 
