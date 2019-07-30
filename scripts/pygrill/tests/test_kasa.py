@@ -72,15 +72,10 @@ class Test_KasaDaemon(unittest.TestCase):
                 kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_COUNTDOWN_DELETE))
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                TEST.KASA.DAEMON.OFF_NO_ERROR_RSP)
-            self.m_kasaDaemon.TurnPlugOff()
-            self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
-            mock_inst.send.assert_called_with(
-                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_PLUG_ON))
-            mock_inst.reset_mock()
-            mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
                 TEST.KASA.DAEMON.OFF_ERROR_RSP)
             self.m_kasaDaemon.TurnPlugOff()
+            mock_inst.send.assert_called_with(
+                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_COUNTDOWN_DELETE))
             resp = list()
             resp.append(kasa_daemon.Decrypt(
                 kasa_daemon.Encrypt(TEST.KASA.DAEMON.OFF_ERROR_RSP)))
