@@ -18,7 +18,7 @@ import configparser
 import threading
 import sys
 from Pyro5.api import expose, behavior, Daemon
-from ..common import constant
+from ..common.constant import SSR_CONTROL, BUZZ_DAEMON
 from . import board
 from struct import pack
 from ..common.local_logging import SetupLog
@@ -34,7 +34,7 @@ class Buzzer(object):
         config.read(sys.path[0]+'../config/iGrill_config.ini')
         boardVal = board.DetectBoard(
             config.get("SSR", "Board", fallback=boardIn))
-        if (constant.SSR_CONTROL_BOARD_DISABLED == boardVal):
+        if (SSR_CONTROL.BOARD_DISABLED == boardVal):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
@@ -48,12 +48,12 @@ class Buzzer(object):
     def StartThread(self):
         logging.debug("Starting thread")
         pi = pigpio.pi()
-        item = constant.SSR_CONTROL_BOARD_ITEMS["Buzzer"][self.m_boardVal]
+        item = SSR_CONTROL.BOARD_ITEMS["Buzzer"][self.m_boardVal]
         offVal = 1000000
         onVal = offVal // 2
-        if item[constant.SSR_CONTROL_BOARD_ITEM_VALUE] == constant.SSR_CONTROL_BOARD_VALUES_STANDARD:
+        if item[SSR_CONTROL.BOARD_ITEM_VALUE] == SSR_CONTROL.BOARD_VALUES_STANDARD:
             offVal = 0
-        pin = item[constant.SSR_CONTROL_BOARD_ITEM_IO]
+        pin = item[SSR_CONTROL.BOARD_ITEM_IO]
         loop_cnt = 0
         loop_val = {
             "low battery": {
@@ -163,11 +163,11 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    daemon = Daemon(host=constant.BUZZ_DAEMON_PYRO_HOST,
-                    port=constant.BUZZ_DAEMON_PYRO_PORT)
+    daemon = Daemon(host=BUZZ_DAEMON.PYRO_HOST,
+                    port=BUZZ_DAEMON.PYRO_PORT)
     buzzObj = Buzzer(daemon)
     uri = daemon.register(
-        buzzObj, objectId=constant.BUZZ_DAEMON_PYRO_OBJECT_ID)
+        buzzObj, objectId=BUZZ_DAEMON.PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')

@@ -16,19 +16,19 @@ import time
 from Pyro5.api import Daemon
 from ..common.local_logging import SetupLog
 from ..board import buzzer_daemon
-from ..common import constant
+from ..common.constant import SSR_CONTROL, BUZZ_DAEMON
 
 
 class Test_TestBuzzerDaemon(unittest.TestCase):
     def setUp(self):
-        self.m_daemon = Daemon(host=constant.BUZZ_DAEMON_PYRO_HOST,
-                               port=constant.BUZZ_DAEMON_PYRO_PORT)
+        self.m_daemon = Daemon(host=BUZZ_DAEMON.PYRO_HOST,
+                               port=BUZZ_DAEMON.PYRO_PORT)
         with mock.patch('pygrill.board.buzzer_daemon.pigpio.pi') as mockitem:
             self.m_mock_inst = mockitem.return_value
             self.m_buzzDaemon = buzzer_daemon.Buzzer(
-                self.m_daemon, boardIn=constant.SSR_CONTROL_BOARD_REV_sD)
+                self.m_daemon, boardIn=SSR_CONTROL.BOARD_REV_sD)
             self.m_daemon.register(
-                self.m_buzzDaemon, objectId=constant.BUZZ_DAEMON_PYRO_OBJECT_ID)
+                self.m_buzzDaemon, objectId=BUZZ_DAEMON.PYRO_OBJECT_ID)
 
     def tearDown(self):
         self.m_buzzDaemon.Exit()
@@ -38,8 +38,7 @@ class Test_TestBuzzerDaemon(unittest.TestCase):
     def test_buzzer(self):
         buzzDaemon = self.m_buzzDaemon
         mock_inst = self.m_mock_inst
-        pin = constant.SSR_CONTROL_BOARD_ITEMS["Buzzer"][
-            constant.SSR_CONTROL_BOARD_REV_sD][constant.SSR_CONTROL_BOARD_ITEM_IO]
+        pin = SSR_CONTROL.BOARD_ITEMS["Buzzer"][SSR_CONTROL.BOARD_REV_sD][SSR_CONTROL.BOARD_ITEM_IO]
         mock_inst.hardware_PWM.assert_called_with(pin, 2000, 0)
         buzzDaemon.Done()
         mock_inst.reset_mock()

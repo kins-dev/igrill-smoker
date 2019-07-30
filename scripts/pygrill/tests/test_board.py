@@ -13,7 +13,7 @@ __license__ = "MIT"
 import unittest
 import unittest.mock as mock
 from ..board import board
-from ..common import constant
+from ..common.constant import SSR_CONTROL
 
 
 def IoSideEffect_sB(*args, **kwargs):
@@ -76,9 +76,9 @@ class Test_TestBoard(unittest.TestCase):
         mock_pigpio_inst.read.side_effect = IoSideEffect_sB
         with mock.patch('pygrill.board.board.pigpio.pi', mock_pigpio):
             self.assertEqual(board.DetectBoard("Auto"),
-                             constant.SSR_CONTROL_BOARD_REV_sB)
+                             SSR_CONTROL.BOARD_REV_sB)
             self.assertEqual(board.DetectBoard("*B"),
-                             constant.SSR_CONTROL_BOARD_REV_sB)
+                             SSR_CONTROL.BOARD_REV_sB)
 
     def test_BoardDetect_sC(self):
         #mock_pigpio.read.return_value = 0
@@ -88,9 +88,9 @@ class Test_TestBoard(unittest.TestCase):
         with mock.patch('pygrill.board.board.pigpio.pi', mock_pigpio):
             # print(mock_pigpio.read(15))
             self.assertEqual(board.DetectBoard("Auto"),
-                             constant.SSR_CONTROL_BOARD_REV_sC)
+                             SSR_CONTROL.BOARD_REV_sC)
             self.assertEqual(board.DetectBoard("*C"),
-                             constant.SSR_CONTROL_BOARD_REV_sC)
+                             SSR_CONTROL.BOARD_REV_sC)
 
     def test_BoardDetect_sD(self):
         #mock_pigpio.read.return_value = 0
@@ -100,9 +100,9 @@ class Test_TestBoard(unittest.TestCase):
         with mock.patch('pygrill.board.board.pigpio.pi', mock_pigpio):
             # print(mock_pigpio.read(15))
             self.assertEqual(board.DetectBoard("Auto"),
-                             constant.SSR_CONTROL_BOARD_REV_sD)
+                             SSR_CONTROL.BOARD_REV_sD)
             self.assertEqual(board.DetectBoard("*D"),
-                             constant.SSR_CONTROL_BOARD_REV_sD)
+                             SSR_CONTROL.BOARD_REV_sD)
 
 
 if __name__ == '__main__':
