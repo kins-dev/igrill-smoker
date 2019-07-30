@@ -67,7 +67,7 @@ def IoSideEffect_sD(*args, **kwargs):
     return io_values[args[0]]
 
 
-class Test_TestBoard(unittest.TestCase):
+class Test_Board(unittest.TestCase):
 
     def test_BoardDetect_sB(self):
         #mock_pigpio.read.return_value = 0

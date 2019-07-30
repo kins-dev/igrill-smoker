@@ -10,74 +10,88 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
+import time
 import unittest
 import unittest.mock as mock
 from Pyro5.api import Daemon
 from ..common.local_logging import SetupLog
 from ..kasa import kasa_daemon
-from ..common.constant import KASA
-
-# TODO: Setup/Teardown and check the mock calls
+from ..common.constant import KASA, TEST
 
 
-class Test_TestKasaDaemon(unittest.TestCase):
+class Test_KasaDaemon(unittest.TestCase):
 
-    def test_power(self):
-        daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
-                        port=KASA.DAEMON.PYRO_PORT)
+    def setUp(self):
+        self.m_daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
+                               port=KASA.DAEMON.PYRO_PORT)
+        # This must be scoped oddly.  Daemon uses sockets so we don't want to mock the socket
+        # object untill the daemon is setup.
+        with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
+            self.m_mock_inst = mockitem.return_value
+            self.m_mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
+                TEST.KASA.DAEMON.DISCOVER_RSP), ['192.168.0.0', 9999]]
+            self.m_kasaDaemon = kasa_daemon.Kasa(self.m_daemon)
+            self.m_daemon.register(
+                self.m_kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
+
+    def tearDown(self):
+        self.m_kasaDaemon.Exit()
+        self.m_daemon.close()
+        self.assertEqual(self.m_kasaDaemon.ExitCode(), 0)
+
+    def test_Power(self):
+        # Since the above mock is out of scope, we must create a new mock here
         with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
             mock_inst = mockitem.return_value
-            mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
-                b'{"system":{"get_sysinfo":{"sw_ver":"0 Build 0 Rel.0","hw_ver":"0.0","type":"IOT.SMARTPLUGSWITCH","model":"00000(XX)","mac":"00:00:00:00:00:00","dev_name":"Wi-Fi Plug","alias":"iGrill-smoker","relay_state":0,"on_time":0,"active_mode":"none","feature":"TIM","updating":0,"icon_hash":"","rssi":-55,"led_off":0,"longitude_i":0,"latitude_i":0,"hwId":"0","fwId":"00000000000000000000000000000000","deviceId":"0","oemId":"0","err_code":0}}}'),
-                ['192.168.0.0', 9999]]
-            kasaDaemon = kasa_daemon.Kasa(daemon)
-            daemon.register(
-                kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
+            mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
+                TEST.KASA.DAEMON.ON_NO_ERROR_RSP)
+            self.m_kasaDaemon.TurnPlugOn()
+            self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
+            mock_inst.send.assert_called_with(
+                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_PLUG_ON))
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                b'{"system":{"set_relay_state":{"err_code":0}},"count_down":{"delete_all_rules":{"err_code":0},"add_rule":{"id":"D7F3ED1F8E813522BD9F673AD735E4C3","err_code":0}}}')
-            kasaDaemon.TurnPlugOn()
+                TEST.KASA.DAEMON.ON_NO_ERROR_RSP)
+            self.m_kasaDaemon.TurnPlugOn()
+            self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
+            mock_inst.send.assert_called_with(
+                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN))
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                b'{"count_down":{"delete_all_rules":{"err_code":0}},"system":{"set_relay_state":{"err_code":0}}}')
-            kasaDaemon.TurnPlugOff()
+                TEST.KASA.DAEMON.OFF_NO_ERROR_RSP)
+            self.m_kasaDaemon.TurnPlugOff()
+            self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
+            mock_inst.send.assert_called_with(
+                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_PLUG_OFF))
             mock_inst.reset_mock()
-            self.assertEqual(kasaDaemon.GetActive(), False)
+            mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
+                TEST.KASA.DAEMON.OFF_NO_ERROR_RSP)
+            self.m_kasaDaemon.TurnPlugOff()
+            self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
+            mock_inst.send.assert_called_with(
+                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_COUNTDOWN_DELETE))
+            mock_inst.reset_mock()
+            mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
+                TEST.KASA.DAEMON.OFF_NO_ERROR_RSP)
+            self.m_kasaDaemon.TurnPlugOff()
+            self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
+            mock_inst.send.assert_called_with(
+                kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_PLUG_ON))
+            mock_inst.reset_mock()
+            mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
+                TEST.KASA.DAEMON.OFF_ERROR_RSP)
+            self.m_kasaDaemon.TurnPlugOff()
+            resp = list()
+            resp.append(kasa_daemon.Decrypt(
+                kasa_daemon.Encrypt(TEST.KASA.DAEMON.OFF_ERROR_RSP)))
+            self.assertListEqual(self.m_kasaDaemon.GetErrors(), resp)
+            mock_inst.send.assert_called()
+            mock_inst.reset_mock()
 
-            kasaDaemon.Exit()
-            daemon.close()
-            self.assertEqual(kasaDaemon.ExitCode(), 0)
+            self.assertEqual(self.m_kasaDaemon.GetActive(), False)
 
     def test_IP(self):
-        daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
-                        port=KASA.DAEMON.PYRO_PORT)
-        with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
-            mock_inst = mockitem.return_value
-            mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
-                b'{"system":{"get_sysinfo":{"sw_ver":"0 Build 0 Rel.0","hw_ver":"0.0","type":"IOT.SMARTPLUGSWITCH","model":"00000(XX)","mac":"00:00:00:00:00:00","dev_name":"Wi-Fi Plug","alias":"iGrill-smoker","relay_state":0,"on_time":0,"active_mode":"none","feature":"TIM","updating":0,"icon_hash":"","rssi":-55,"led_off":0,"longitude_i":0,"latitude_i":0,"hwId":"0","fwId":"00000000000000000000000000000000","deviceId":"0","oemId":"0","err_code":0}}}'),
-                ['192.168.0.0', 9999]]
-            kasaDaemon = kasa_daemon.Kasa(daemon)
-            daemon.register(
-                kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
-            self.assertEqual(kasaDaemon.GetIP(), "192.168.0.0")
-            kasaDaemon.Exit()
-            daemon.close()
-            self.assertEqual(kasaDaemon.ExitCode(), 0)
-
-    def test_Exit(self):
-        daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
-                        port=KASA.DAEMON.PYRO_PORT)
-        with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
-            mock_inst = mockitem.return_value
-            mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
-                b'{"system":{"get_sysinfo":{"sw_ver":"0 Build 0 Rel.0","hw_ver":"0.0","type":"IOT.SMARTPLUGSWITCH","model":"00000(XX)","mac":"00:00:00:00:00:00","dev_name":"Wi-Fi Plug","alias":"iGrill-smoker","relay_state":0,"on_time":0,"active_mode":"none","feature":"TIM","updating":0,"icon_hash":"","rssi":-55,"led_off":0,"longitude_i":0,"latitude_i":0,"hwId":"0","fwId":"00000000000000000000000000000000","deviceId":"0","oemId":"0","err_code":0}}}'),
-                ['192.168.0.0', 9999]]
-            kasaDaemon = kasa_daemon.Kasa(daemon)
-            daemon.register(
-                kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
-            kasaDaemon.Exit()
-            daemon.close()
-            self.assertEqual(kasaDaemon.ExitCode(), 0)
+        self.assertEqual(self.m_kasaDaemon.GetIP(), "192.168.0.0")
 
 
 if __name__ == '__main__':

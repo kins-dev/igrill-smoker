@@ -71,6 +71,7 @@ class Kasa(object):
         self.m_findTime = 0
         self.FindDevice()
         self.m_exitCode = 0
+        self.m_errors = list()
 
     def ExitCode(self):
         return self.m_exitCode
@@ -90,6 +91,20 @@ class Kasa(object):
             self.m_active = (state == 1)
             self.m_findTime = int(time.time())
 
+    def CheckForErrors(self, result):
+        data = json.loads(result)
+        if(len(data) > 0):
+            for system in data:
+                if(len(data[system]) > 0):
+                    for command in data[system]:
+                        val = data[system][command].get('err_code', -1)
+                        if(0 != val):
+                            self.m_errors.append(result)
+                else:
+                    self.m_errors.append(result)
+        else:
+            self.m_errors.append(result)
+
     def SendCommand(self, command):
         logging.debug("Setting up socket")
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -99,8 +114,9 @@ class Kasa(object):
             self.m_ip, KASA.DAEMON.NET_PORT, command))
         self.m_sock.send(EncryptWithHeader(command))
         logging.debug("Reading result")
-        result = DecryptWithHeader(self.m_sock.recv(
-            KASA.DAEMON.NET_BUFFER_SIZE))
+        result = DecryptWithHeader(
+            self.m_sock.recv(KASA.DAEMON.NET_BUFFER_SIZE))
+        self.CheckForErrors(result)
         logging.debug("Result: {}".format(result))
         self.m_sock.close()
 
@@ -142,11 +158,16 @@ class Kasa(object):
         self.FindDevice()
         return self.m_active
 
+    def GetErrors(self):
+        return self.m_errors
+
+    def ClearErrors(self):
+        self.m_errors = list()
+
     def TurnPlugOn(self):
         self.FindDevice()
         if (self.m_active):
-            self.SendCommand(
-                KASA.DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN)
+            self.SendCommand(KASA.DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN)
         else:
             self.SendCommand(KASA.DAEMON.JSON_PLUG_ON)
         self.m_active = True

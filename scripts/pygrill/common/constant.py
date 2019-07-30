@@ -11,6 +11,15 @@ __version__ = "1.4.0"
 __license__ = "MIT"
 
 
+class TEST:
+    class KASA:
+        class DAEMON:
+            DISCOVER_RSP = b'{"system":{"get_sysinfo":{"sw_ver":"0 Build 0 Rel.0","hw_ver":"0.0","type":"IOT.SMARTPLUGSWITCH","model":"00000(XX)","mac":"00:00:00:00:00:00","dev_name":"Wi-Fi Plug","alias":"iGrill-smoker","relay_state":0,"on_time":0,"active_mode":"none","feature":"TIM","updating":0,"icon_hash":"","rssi":-55,"led_off":0,"longitude_i":0,"latitude_i":0,"hwId":"0","fwId":"00000000000000000000000000000000","deviceId":"0","oemId":"0","err_code":0}}}'
+            ON_NO_ERROR_RSP = b'{"system":{"set_relay_state":{"err_code":0}},"count_down":{"delete_all_rules":{"err_code":0},"add_rule":{"id":"D7F3ED1F8E813522BD9F673AD735E4C3","err_code":0}}}'
+            OFF_NO_ERROR_RSP = b'{"count_down":{"delete_all_rules":{"err_code":0}},"system":{"set_relay_state":{"err_code":0}}}'
+            OFF_ERROR_RSP = b'{"count_down":{"delete_all_rules":{"err_code":0}},"system":{"set_relay_state":{"err_code":1}}}'
+
+
 class KASA:
     class DAEMON:
         NET_BUFFER_SIZE = 2048

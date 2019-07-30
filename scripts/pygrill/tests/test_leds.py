@@ -16,7 +16,7 @@ from ..board import leds
 from ..common.constant import SSRC
 
 
-class Test_TestLEDs(unittest.TestCase):
+class Test_LEDs(unittest.TestCase):
 
     def test_Leds(self):
         with mock.patch('pygrill.board.leds.pigpio.pi') as mockitem:

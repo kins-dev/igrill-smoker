@@ -19,7 +19,7 @@ from ..board import buzzer_daemon
 from ..common.constant import SSRC, BUZZ
 
 
-class Test_TestBuzzerDaemon(unittest.TestCase):
+class Test_BuzzerDaemon(unittest.TestCase):
     def setUp(self):
         self.m_daemon = Daemon(host=BUZZ.DAEMON.PYRO_HOST,
                                port=BUZZ.DAEMON.PYRO_PORT)
