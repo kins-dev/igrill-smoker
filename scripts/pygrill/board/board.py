@@ -20,17 +20,17 @@ import sys
 # Line to make pylint work
 from argparse import ArgumentParser
 from ..common.local_logging import SetupLog
-from ..common.constant import SSR_CONTROL
+from ..common.constant import SSRC
 
 
 def DetectBoard(board):
-    if (SSR_CONTROL.BOARD_DETECT_REV != board):
+    if (SSRC.BOARD.DETECT_REV != board):
         return board
     else:
         pi = pigpio.pi()
         i = 0
         val = 0
-        for p in SSR_CONTROL.BOARD_REV_PINS:
+        for p in SSRC.BOARD.REV_PINS:
             pi.set_mode(p, pigpio.INPUT)
 
             pi.set_pull_up_down(p, pigpio.PUD_DOWN)
@@ -39,9 +39,9 @@ def DetectBoard(board):
             val = val + (tmp << i)
             i = i + 1
         logging.debug("Val = \"{}\"".format(val))
-        if (val in SSR_CONTROL.BOARD_REV_MAP):
-            return SSR_CONTROL.BOARD_REV_MAP[val]
-        return SSR_CONTROL.BOARD_DISABLED
+        if (val in SSRC.BOARD.REV_MAP):
+            return SSRC.BOARD.REV_MAP[val]
+        return SSRC.BOARD.DISABLED
 
 
 def main():

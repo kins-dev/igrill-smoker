@@ -14,7 +14,7 @@ import sys
 import argparse
 from Pyro5.api import Proxy
 from .kasa_daemon import Kasa
-from ..common.constant import KASA_DAEMON
+from ..common.constant import KASA
 
 
 parser = argparse.ArgumentParser(
@@ -47,9 +47,9 @@ if(0 < len(vars(options))):
         sys.exit(1)
 
     kasaObj = Proxy(("PYRO:{}@{}:{}").format(
-        KASA_DAEMON.PYRO_OBJECT_ID,
-        KASA_DAEMON.PYRO_HOST,
-        KASA_DAEMON.PYRO_PORT))
+        KASA.DAEMON.PYRO_OBJECT_ID,
+        KASA.DAEMON.PYRO_HOST,
+        KASA.DAEMON.PYRO_PORT))
     if(options.turn_on):
         kasaObj.TurnPlugOn()
     if(options.turn_off):

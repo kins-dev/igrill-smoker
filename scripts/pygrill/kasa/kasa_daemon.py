@@ -19,7 +19,7 @@ import configparser
 import sys
 from Pyro5.api import expose, behavior, Daemon
 from struct import pack
-from ..common.constant import KASA_DAEMON
+from ..common.constant import KASA
 from ..common.local_logging import SetupLog
 
 
@@ -50,7 +50,7 @@ def Decrypt(string):
 
 
 def DecryptWithHeader(string):
-    return Decrypt(string[KASA_DAEMON.NET_HEADER_SIZE:])
+    return Decrypt(string[KASA.DAEMON.NET_HEADER_SIZE:])
 
 
 @expose
@@ -94,13 +94,13 @@ class Kasa(object):
         logging.debug("Setting up socket")
         self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         logging.debug("Connecting")
-        self.m_sock.connect((self.m_ip, KASA_DAEMON.NET_PORT))
+        self.m_sock.connect((self.m_ip, KASA.DAEMON.NET_PORT))
         logging.debug("Sending to \"{}:{}\" \"{}\"".format(
-            self.m_ip, KASA_DAEMON.NET_PORT, command))
+            self.m_ip, KASA.DAEMON.NET_PORT, command))
         self.m_sock.send(EncryptWithHeader(command))
         logging.debug("Reading result")
         result = DecryptWithHeader(self.m_sock.recv(
-            KASA_DAEMON.NET_BUFFER_SIZE))
+            KASA.DAEMON.NET_BUFFER_SIZE))
         logging.debug("Result: {}".format(result))
         self.m_sock.close()
 
@@ -112,15 +112,15 @@ class Kasa(object):
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Sending broadcast")
         sock.settimeout(2)
-        logging.debug("Msg: {}".format(KASA_DAEMON.JSON_DISCOVER))
+        logging.debug("Msg: {}".format(KASA.DAEMON.JSON_DISCOVER))
         logging.debug("To:  {}:{}".format(
-            KASA_DAEMON.NET_DISCOVER_IP, KASA_DAEMON.NET_PORT))
-        sock.sendto(Encrypt(KASA_DAEMON.JSON_DISCOVER),
-                    (KASA_DAEMON.NET_DISCOVER_IP, KASA_DAEMON.NET_PORT))
+            KASA.DAEMON.NET_DISCOVER_IP, KASA.DAEMON.NET_PORT))
+        sock.sendto(Encrypt(KASA.DAEMON.JSON_DISCOVER),
+                    (KASA.DAEMON.NET_DISCOVER_IP, KASA.DAEMON.NET_PORT))
         try:
             while (True):
                 data, addr = sock.recvfrom(
-                    KASA_DAEMON.NET_BUFFER_SIZE)
+                    KASA.DAEMON.NET_BUFFER_SIZE)
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
                 logging.debug("Received: {}".format(Decrypt(data)))
@@ -146,17 +146,17 @@ class Kasa(object):
         self.FindDevice()
         if (self.m_active):
             self.SendCommand(
-                KASA_DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN)
+                KASA.DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN)
         else:
-            self.SendCommand(KASA_DAEMON.JSON_PLUG_ON)
+            self.SendCommand(KASA.DAEMON.JSON_PLUG_ON)
         self.m_active = True
 
     def TurnPlugOff(self):
         self.FindDevice()
         if (self.m_active):
-            self.SendCommand(KASA_DAEMON.JSON_PLUG_OFF)
+            self.SendCommand(KASA.DAEMON.JSON_PLUG_OFF)
         else:
-            self.SendCommand(KASA_DAEMON.JSON_COUNTDOWN_DELETE)
+            self.SendCommand(KASA.DAEMON.JSON_COUNTDOWN_DELETE)
         self.m_active = False
 
     def Exit(self):
@@ -190,11 +190,11 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    daemon = Daemon(host=KASA_DAEMON.PYRO_HOST,
-                    port=KASA_DAEMON.PYRO_PORT)
+    daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
+                    port=KASA.DAEMON.PYRO_PORT)
     kasaObj = Kasa(daemon)
     uri = daemon.register(
-        kasaObj, objectId=KASA_DAEMON.PYRO_OBJECT_ID)
+        kasaObj, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')

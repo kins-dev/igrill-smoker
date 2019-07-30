@@ -18,7 +18,7 @@ import configparser
 import threading
 import sys
 from Pyro5.api import expose, behavior, Daemon
-from ..common.constant import SSR_CONTROL, SSRC_DAEMON
+from ..common.constant import SSRC
 from . import board
 from struct import pack
 from ..common.local_logging import SetupLog
@@ -34,7 +34,7 @@ class SSR(object):
         config.read(sys.path[0]+'../config/iGrill_config.ini')
         boardVal = board.DetectBoard(
             config.get("SSR", "Board", fallback="Auto"))
-        if (SSR_CONTROL.BOARD_DISABLED == boardVal):
+        if (SSRC.BOARD.DISABLED == boardVal):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
@@ -48,12 +48,12 @@ class SSR(object):
     def StartThread(self):
         logging.debug("Starting thread")
         pi = pigpio.pi()
-        item = SSR_CONTROL.BOARD_ITEMS["SSR"][self.m_boardVal]
+        item = SSRC.BOARD.ITEMS["SSR"][self.m_boardVal]
         offVal = 1000000
         onVal = offVal // 2
-        if item[SSR_CONTROL.BOARD_ITEM_VALUE] == SSR_CONTROL.BOARD_VALUES_STANDARD:
+        if item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD:
             offVal = 0
-        pin = item[SSR_CONTROL.BOARD_ITEM_IO]
+        pin = item[SSRC.BOARD.ITEM_IO]
         loop_cnt = 0
         loop_val = {
             "low battery": {
@@ -163,11 +163,11 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    daemon = Daemon(host=SSRC_DAEMON.PYRO_HOST,
-                    port=SSRC_DAEMON.PYRO_PORT)
+    daemon = Daemon(host=SSRC.DAEMON.PYRO_HOST,
+                    port=SSRC.DAEMON.PYRO_PORT)
     ssrcObj = SSR(daemon)
     uri = daemon.register(
-        ssrcObj, objectId=SSRC_DAEMON.PYRO_OBJECT_ID)
+        ssrcObj, objectId=SSRC.DAEMON.PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')

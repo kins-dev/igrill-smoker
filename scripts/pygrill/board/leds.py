@@ -18,24 +18,24 @@ import time
 import sys
 # Line to make pylint work
 from argparse import ArgumentParser
-from ..common.constant import SSR_CONTROL
+from ..common.constant import SSRC
 from . import board
 from ..common.local_logging import SetupLog
 
 
 def SetLED(boardVal, function, desiredValue):
     pi = pigpio.pi()
-    item = SSR_CONTROL.BOARD_ITEMS["LED"][function][boardVal]
+    item = SSRC.BOARD.ITEMS["LED"][function][boardVal]
     value = desiredValue
-    if (SSR_CONTROL.BOARD_ITEM_INVALID == item):
+    if (SSRC.BOARD.ITEM_INVALID == item):
         return
-    if (SSR_CONTROL.BOARD_VALUES_INVERTED == item[SSR_CONTROL.BOARD_ITEM_VALUE]):
+    if (SSRC.BOARD.VALUES_INVERTED == item[SSRC.BOARD.ITEM_VALUE]):
         value = not desiredValue
     writeVal = 0
     if (value):
         writeVal = 1
-    pi.set_mode(item[SSR_CONTROL.BOARD_ITEM_IO], pigpio.OUTPUT)
-    pi.write(item[SSR_CONTROL.BOARD_ITEM_IO], writeVal)
+    pi.set_mode(item[SSRC.BOARD.ITEM_IO], pigpio.OUTPUT)
+    pi.write(item[SSRC.BOARD.ITEM_IO], writeVal)
     return
 
 
@@ -103,7 +103,7 @@ def main():
     SetupLog(options.log_level, options.log_destination)
 
     boardVal = board.DetectBoard(boardVal)
-    if (SSR_CONTROL.BOARD_DISABLED == boardVal):
+    if (SSRC.BOARD.DISABLED == boardVal):
         sys.exit(1)
 
     SetLED(boardVal, "Smoking complete", options.done)

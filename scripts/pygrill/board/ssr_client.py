@@ -19,7 +19,7 @@ import sys
 from Pyro5.api import Proxy
 from ..common.local_logging import SetupLog
 from ..kasa.kasa_daemon import Kasa
-from ..common.constant import C
+from ..common.constant import KASA
 from . import board
 
 
@@ -96,9 +96,9 @@ if(0 < len(vars(options))):
         sys.exit(1)
 
     kasaObj = Proxy(("PYRO:{}@{}:{}").format(
-        C.KASA_DAEMON_PYRO_OBJECT_ID,
-        C.KASA_DAEMON_PYRO_HOST,
-        C.KASA_DAEMON_PYRO_PORT))
+        KASA.DAEMON.PYRO_OBJECT_ID,
+        KASA.DAEMON.PYRO_HOST,
+        KASA.DAEMON.PYRO_PORT))
     if(options.turn_on):
         kasaObj.TurnPlugOn()
     if(options.turn_off):

@@ -20,7 +20,7 @@ import sys
 from argparse import ArgumentParser
 from Pyro5.api import Proxy
 from .buzzer_daemon import Buzzer
-from ..common.constant import BUZZ_DAEMON
+from ..common.constant import BUZZ
 from . import board
 from ..common.local_logging import SetupLog
 
@@ -69,9 +69,9 @@ def main():
     SetupLog(options.log_level, options.log_destination)
 
     buzzObj = Proxy(("PYRO:{}@{}:{}").format(
-        BUZZ_DAEMON.PYRO_OBJECT_ID,
-        BUZZ_DAEMON.PYRO_HOST,
-        BUZZ_DAEMON.PYRO_PORT))
+        BUZZ.DAEMON.PYRO_OBJECT_ID,
+        BUZZ.DAEMON.PYRO_HOST,
+        BUZZ.DAEMON.PYRO_PORT))
     if(options.done):
         buzzObj.Done()
     elif(options.low_battery):

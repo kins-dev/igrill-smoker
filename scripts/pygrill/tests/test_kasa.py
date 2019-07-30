@@ -15,7 +15,7 @@ import unittest.mock as mock
 from Pyro5.api import Daemon
 from ..common.local_logging import SetupLog
 from ..kasa import kasa_daemon
-from ..common.constant import KASA_DAEMON
+from ..common.constant import KASA
 
 # TODO: Setup/Teardown and check the mock calls
 
@@ -23,8 +23,8 @@ from ..common.constant import KASA_DAEMON
 class Test_TestKasaDaemon(unittest.TestCase):
 
     def test_power(self):
-        daemon = Daemon(host=KASA_DAEMON.PYRO_HOST,
-                        port=KASA_DAEMON.PYRO_PORT)
+        daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
+                        port=KASA.DAEMON.PYRO_PORT)
         with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
             mock_inst = mockitem.return_value
             mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
@@ -32,7 +32,7 @@ class Test_TestKasaDaemon(unittest.TestCase):
                 ['192.168.0.0', 9999]]
             kasaDaemon = kasa_daemon.Kasa(daemon)
             daemon.register(
-                kasaDaemon, objectId=KASA_DAEMON.PYRO_OBJECT_ID)
+                kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
                 b'{"system":{"set_relay_state":{"err_code":0}},"count_down":{"delete_all_rules":{"err_code":0},"add_rule":{"id":"D7F3ED1F8E813522BD9F673AD735E4C3","err_code":0}}}')
@@ -49,8 +49,8 @@ class Test_TestKasaDaemon(unittest.TestCase):
             self.assertEqual(kasaDaemon.ExitCode(), 0)
 
     def test_IP(self):
-        daemon = Daemon(host=KASA_DAEMON.PYRO_HOST,
-                        port=KASA_DAEMON.PYRO_PORT)
+        daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
+                        port=KASA.DAEMON.PYRO_PORT)
         with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
             mock_inst = mockitem.return_value
             mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
@@ -58,15 +58,15 @@ class Test_TestKasaDaemon(unittest.TestCase):
                 ['192.168.0.0', 9999]]
             kasaDaemon = kasa_daemon.Kasa(daemon)
             daemon.register(
-                kasaDaemon, objectId=KASA_DAEMON.PYRO_OBJECT_ID)
+                kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
             self.assertEqual(kasaDaemon.GetIP(), "192.168.0.0")
             kasaDaemon.Exit()
             daemon.close()
             self.assertEqual(kasaDaemon.ExitCode(), 0)
 
     def test_Exit(self):
-        daemon = Daemon(host=KASA_DAEMON.PYRO_HOST,
-                        port=KASA_DAEMON.PYRO_PORT)
+        daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
+                        port=KASA.DAEMON.PYRO_PORT)
         with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
             mock_inst = mockitem.return_value
             mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
@@ -74,7 +74,7 @@ class Test_TestKasaDaemon(unittest.TestCase):
                 ['192.168.0.0', 9999]]
             kasaDaemon = kasa_daemon.Kasa(daemon)
             daemon.register(
-                kasaDaemon, objectId=KASA_DAEMON.PYRO_OBJECT_ID)
+                kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
             kasaDaemon.Exit()
             daemon.close()
             self.assertEqual(kasaDaemon.ExitCode(), 0)
