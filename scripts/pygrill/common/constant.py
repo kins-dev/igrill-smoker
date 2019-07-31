@@ -184,7 +184,7 @@ class SSRC:
                 },
                 REV_sC: {
                     ITEM_IO: 12,
-                    ITEM_VALUE: VALUES_INVERTED
+                    ITEM_VALUE: VALUES_STANDARD
                 },
                 REV_sD: {
                     ITEM_IO: 12,
