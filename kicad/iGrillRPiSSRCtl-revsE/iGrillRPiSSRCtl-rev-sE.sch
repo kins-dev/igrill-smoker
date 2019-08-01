@@ -6,7 +6,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "iGrill Smoker SSR Control Board"
-Date "2019-07-19"
+Date "2019-08-01"
 Rev "*E"
 Comp "Redbud Farms"
 Comment1 "https://creativecommons.org/licenses/by-nc-sa/4.0/"
