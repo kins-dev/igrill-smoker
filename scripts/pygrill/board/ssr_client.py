@@ -14,6 +14,7 @@ import pigpio
 import logging
 import argparse
 import configparser
+import os
 import time
 import sys
 from Pyro5.api import Proxy
@@ -25,7 +26,10 @@ from . import board
 
 config = configparser.ConfigParser()
 # does not throw an error, just returns the empty set if the file doesn't exist
-config.read(sys.path[0]+'../config/iGrill_config.ini')
+if not 'IGRILL_CFG_DIR' in os.environ:
+    config.read(sys.path[0]+'/../../config/iGrill_config.ini')
+else:
+    config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
 loglevel = config.get("Logging", "LogLevel", fallback="Error")
 logfile = config.get("Logging", "LogFile", fallback="")
 board = config.get("SSR", "Board", fallback="Auto")
