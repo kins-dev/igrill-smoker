@@ -51,6 +51,7 @@ class SSRC:
         REV_sB = "*B"
         REV_sC = "*C"
         REV_sD = "*D"
+        REV_sD_Patched = "*D.1"
         DISABLED = "None"
         DETECT_REV = "Auto"
 
@@ -94,6 +95,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 10,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 10,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
                 "Smoking complete": {
@@ -116,6 +121,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 22,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 22,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
                 "Cold": {
@@ -126,6 +135,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 2,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 2,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
                 "Cool": {
@@ -136,6 +149,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 3,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 3,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
                 "Perfect": {
@@ -146,6 +163,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 4,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 4,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
                 "Warm": {
@@ -156,6 +177,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 17,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 17,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
                 "Hot": {
@@ -166,6 +191,10 @@ class SSRC:
                     REV_sD: {
                         ITEM_IO: 27,
                         ITEM_VALUE: VALUES_STANDARD
+                    },
+                    REV_sD_Patched: {
+                        ITEM_IO: 27,
+                        ITEM_VALUE: VALUES_INVERTED
                     }
                 },
             },
@@ -187,6 +216,10 @@ class SSRC:
                     ITEM_VALUE: VALUES_STANDARD
                 },
                 REV_sD: {
+                    ITEM_IO: 12,
+                    ITEM_VALUE: VALUES_STANDARD
+                },
+                REV_sD_Patched: {
                     ITEM_IO: 12,
                     ITEM_VALUE: VALUES_STANDARD
                 }
@@ -211,6 +244,10 @@ class SSRC:
                 REV_sD: {
                     ITEM_IO: 13,
                     ITEM_VALUE: VALUES_STANDARD
+                },
+                REV_sD_Patched: {
+                    ITEM_IO: 13,
+                    ITEM_VALUE: VALUES_INVERTED
                 }
             },
             "Switch": {
@@ -224,7 +261,8 @@ class SSRC:
                 REV_sD: {
                     ITEM_IO: 6,
                     ITEM_VALUE: VALUES_STANDARD
-                }
+                },
+                REV_sD_Patched: ITEM_INVALID
             }
         }
 
