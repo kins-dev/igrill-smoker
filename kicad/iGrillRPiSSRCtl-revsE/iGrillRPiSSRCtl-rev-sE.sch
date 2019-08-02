@@ -6,7 +6,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "iGrill Smoker SSR Control Board"
-Date "2019-08-01"
+Date "2019-08-02"
 Rev "*E"
 Comp "Redbud Farms"
 Comment1 "https://creativecommons.org/licenses/by-nc-sa/4.0/"
@@ -206,7 +206,7 @@ F 0 "P1" H 6300 4767 50  0000 C CNN
 F 1 "Conn_02x20_Odd_Even" H 6300 4676 50  0000 C CNN
 F 2 "Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical" H 1400 2700 50  0001 C CNN
 F 3 "" H 1400 2700 50  0001 C CNN
-F 4 "PF1-M220-SBB-G0-TR" H 6250 3650 50  0001 C CNN "Partnumber"
+F 4 "40 pin femal connector rectangular" H 6250 3650 50  0001 C CNN "Partnumber"
 	1    6250 3650
 	1    0    0    -1  
 $EndComp
@@ -263,7 +263,7 @@ F 0 "R1" V 950 1550 50  0000 C CNN
 F 1 "180Ω" V 850 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 780 1550 50  0001 C CNN
 F 3 "~" H 850 1550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 850 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 850 1550 50  0001 C CNN "Partnumber"
 	1    850  1550
 	1    0    0    -1  
 $EndComp
@@ -275,7 +275,7 @@ F 0 "R3" V 1700 1550 50  0000 C CNN
 F 1 "180Ω" V 1600 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1530 1550 50  0001 C CNN
 F 3 "~" H 1600 1550 50  0001 C CNN
-F 4 "RC0603JR-0782RL" H 1600 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 1600 1550 50  0001 C CNN "Partnumber"
 	1    1600 1550
 	1    0    0    -1  
 $EndComp
@@ -287,7 +287,7 @@ F 0 "D1" H 800 1050 50  0000 C CNN
 F 1 "Low Battery" H 750 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 850 950 50  0001 C CNN
 F 3 "~" H 850 950 50  0001 C CNN
-F 4 "19-217-R6C-AL1M2VY-3T" H 850 950 50  0001 C CNN "Partnumber"
+F 4 "Red LED" H 850 950 50  0001 C CNN "Partnumber"
 	1    850  950 
 	0    1    -1   0   
 $EndComp
@@ -299,7 +299,7 @@ F 0 "D2" H 1550 1050 50  0000 C CNN
 F 1 "Smoking Complete" H 1400 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 1600 950 50  0001 C CNN
 F 3 "~" H 1600 950 50  0001 C CNN
-F 4 "19-217-G7C-AN1P2-3T" H 1600 950 50  0001 C CNN "Partnumber"
+F 4 "Green LED" H 1600 950 50  0001 C CNN "Partnumber"
 	1    1600 950 
 	0    1    -1   0   
 $EndComp
@@ -447,7 +447,7 @@ F 0 "J1" V 3522 4962 50  0000 R CNN
 F 1 "Screw_Terminal_01x02" V 3750 5550 50  0000 R CNN
 F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 3650 5150 50  0001 C CNN
 F 3 "~" H 3650 5150 50  0001 C CNN
-F 4 "1715721" H 3650 5150 50  0001 C CNN "Partnumber"
+F 4 "Screw Terminal" H 3650 5150 50  0001 C CNN "Partnumber"
 	1    3650 5150
 	0    -1   1    0   
 $EndComp
@@ -459,7 +459,7 @@ F 0 "R17" V 9400 4150 50  0000 C CNN
 F 1 "1kΩ" V 9500 4150 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 9430 4150 50  0001 C CNN
 F 3 "~" H 9500 4150 50  0001 C CNN
-F 4 "RC0603JR-075K1L" H 9500 4150 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 9500 4150 50  0001 C CNN "Partnumber"
 	1    9500 4150
 	0    1    1    0   
 $EndComp
@@ -558,7 +558,7 @@ F 0 "R5" V 2450 1550 50  0000 C CNN
 F 1 "180Ω" V 2350 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2280 1550 50  0001 C CNN
 F 3 "~" H 2350 1550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 2350 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 2350 1550 50  0001 C CNN "Partnumber"
 	1    2350 1550
 	1    0    0    -1  
 $EndComp
@@ -567,10 +567,10 @@ L Device:LED_ALT D3
 U 1 1 5D2B59D9
 P 2350 950
 F 0 "D3" H 2300 1050 50  0000 C CNN
-F 1 "Hot" H 2150 800 50  0000 C CNN
+F 1 "Cold" H 2150 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 2350 950 50  0001 C CNN
 F 3 "~" H 2350 950 50  0001 C CNN
-F 4 "19-217-R6C-AL1M2VY-3T" H 2350 950 50  0001 C CNN "Partnumber"
+F 4 "Red LED" H 2350 950 50  0001 C CNN "Partnumber"
 	1    2350 950 
 	0    1    -1   0   
 $EndComp
@@ -603,7 +603,7 @@ F 0 "R7" V 3200 1550 50  0000 C CNN
 F 1 "180Ω" V 3100 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3030 1550 50  0001 C CNN
 F 3 "~" H 3100 1550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 3100 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 3100 1550 50  0001 C CNN "Partnumber"
 	1    3100 1550
 	1    0    0    -1  
 $EndComp
@@ -612,10 +612,10 @@ L Device:LED_ALT D4
 U 1 1 5D2BA7A3
 P 3100 950
 F 0 "D4" H 3050 1050 50  0000 C CNN
-F 1 "Warm" H 2900 800 50  0000 C CNN
+F 1 "Cool" H 2900 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 3100 950 50  0001 C CNN
 F 3 "~" H 3100 950 50  0001 C CNN
-F 4 "19-217-Y5C-AM1N1VY-3T" H 3100 950 50  0001 C CNN "Partnumber"
+F 4 "Yellow LED" H 3100 950 50  0001 C CNN "Partnumber"
 	1    3100 950 
 	0    1    -1   0   
 $EndComp
@@ -648,7 +648,7 @@ F 0 "R9" V 3950 1550 50  0000 C CNN
 F 1 "180Ω" V 3850 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3780 1550 50  0001 C CNN
 F 3 "~" H 3850 1550 50  0001 C CNN
-F 4 "RC0603JR-0782RL" H 3850 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 3850 1550 50  0001 C CNN "Partnumber"
 	1    3850 1550
 	1    0    0    -1  
 $EndComp
@@ -660,7 +660,7 @@ F 0 "D5" H 3800 1050 50  0000 C CNN
 F 1 "Perfect" H 3650 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 3850 950 50  0001 C CNN
 F 3 "~" H 3850 950 50  0001 C CNN
-F 4 "19-217-G7C-AN1P2-3T" H 3850 950 50  0001 C CNN "Partnumber"
+F 4 "Green LED" H 3850 950 50  0001 C CNN "Partnumber"
 	1    3850 950 
 	0    1    -1   0   
 $EndComp
@@ -693,7 +693,7 @@ F 0 "R12" V 4700 1550 50  0000 C CNN
 F 1 "180Ω" V 4600 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4530 1550 50  0001 C CNN
 F 3 "~" H 4600 1550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 4600 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 4600 1550 50  0001 C CNN "Partnumber"
 	1    4600 1550
 	1    0    0    -1  
 $EndComp
@@ -702,10 +702,10 @@ L Device:LED_ALT D6
 U 1 1 5D2C4D20
 P 4600 950
 F 0 "D6" H 4550 1050 50  0000 C CNN
-F 1 "Cool" H 4400 800 50  0000 C CNN
+F 1 "Warm" H 4400 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 4600 950 50  0001 C CNN
 F 3 "~" H 4600 950 50  0001 C CNN
-F 4 "19-217-Y5C-AM1N1VY-3T" H 4600 950 50  0001 C CNN "Partnumber"
+F 4 "Yellow LED" H 4600 950 50  0001 C CNN "Partnumber"
 	1    4600 950 
 	0    1    -1   0   
 $EndComp
@@ -738,7 +738,7 @@ F 0 "R14" V 5450 1550 50  0000 C CNN
 F 1 "180Ω" V 5350 1550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 5280 1550 50  0001 C CNN
 F 3 "~" H 5350 1550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 5350 1550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 5350 1550 50  0001 C CNN "Partnumber"
 	1    5350 1550
 	1    0    0    -1  
 $EndComp
@@ -747,10 +747,10 @@ L Device:LED_ALT D7
 U 1 1 5D2CAF04
 P 5350 950
 F 0 "D7" H 5300 1050 50  0000 C CNN
-F 1 "Cold" H 5150 800 50  0000 C CNN
+F 1 "Hot" H 5150 800 50  0000 C CNN
 F 2 "LED_SMD:LED_0603_1608Metric" H 5350 950 50  0001 C CNN
 F 3 "~" H 5350 950 50  0001 C CNN
-F 4 "19-217-R6C-AL1M2VY-3T" H 5350 950 50  0001 C CNN "Partnumber"
+F 4 "Red LED" H 5350 950 50  0001 C CNN "Partnumber"
 	1    5350 950 
 	0    1    -1   0   
 $EndComp
@@ -1021,7 +1021,7 @@ F 0 "R2" V 1150 2550 50  0000 C CNN
 F 1 "180Ω" V 1050 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 980 2550 50  0001 C CNN
 F 3 "~" H 1050 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 1050 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 1050 2550 50  0001 C CNN "Partnumber"
 	1    1050 2550
 	1    0    0    -1  
 $EndComp
@@ -1035,7 +1035,7 @@ F 0 "R4" V 1900 2550 50  0000 C CNN
 F 1 "180Ω" V 1800 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1730 2550 50  0001 C CNN
 F 3 "~" H 1800 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 1800 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 1800 2550 50  0001 C CNN "Partnumber"
 	1    1800 2550
 	1    0    0    -1  
 $EndComp
@@ -1049,7 +1049,7 @@ F 0 "R6" V 2650 2550 50  0000 C CNN
 F 1 "180Ω" V 2550 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2480 2550 50  0001 C CNN
 F 3 "~" H 2550 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 2550 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 2550 2550 50  0001 C CNN "Partnumber"
 	1    2550 2550
 	1    0    0    -1  
 $EndComp
@@ -1063,7 +1063,7 @@ F 0 "R8" V 3400 2550 50  0000 C CNN
 F 1 "180Ω" V 3300 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3230 2550 50  0001 C CNN
 F 3 "~" H 3300 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 3300 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 3300 2550 50  0001 C CNN "Partnumber"
 	1    3300 2550
 	1    0    0    -1  
 $EndComp
@@ -1077,7 +1077,7 @@ F 0 "R10" V 4150 2550 50  0000 C CNN
 F 1 "180Ω" V 4050 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3980 2550 50  0001 C CNN
 F 3 "~" H 4050 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 4050 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 4050 2550 50  0001 C CNN "Partnumber"
 	1    4050 2550
 	1    0    0    -1  
 $EndComp
@@ -1091,7 +1091,7 @@ F 0 "R13" V 4900 2550 50  0000 C CNN
 F 1 "180Ω" V 4800 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4730 2550 50  0001 C CNN
 F 3 "~" H 4800 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 4800 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 4800 2550 50  0001 C CNN "Partnumber"
 	1    4800 2550
 	1    0    0    -1  
 $EndComp
@@ -1105,7 +1105,7 @@ F 0 "R15" V 5650 2550 50  0000 C CNN
 F 1 "180Ω" V 5550 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 5480 2550 50  0001 C CNN
 F 3 "~" H 5550 2550 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 5550 2550 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 5550 2550 50  0001 C CNN "Partnumber"
 	1    5550 2550
 	1    0    0    -1  
 $EndComp
@@ -1119,7 +1119,7 @@ F 0 "R11" V 4500 4500 50  0000 C CNN
 F 1 "180Ω" V 4400 4500 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4330 4500 50  0001 C CNN
 F 3 "~" H 4400 4500 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 4400 4500 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 4400 4500 50  0001 C CNN "Partnumber"
 	1    4400 4500
 	1    0    0    -1  
 $EndComp
@@ -1131,7 +1131,7 @@ F 0 "R16" V 9050 4500 50  0000 C CNN
 F 1 "180Ω" V 8950 4500 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8880 4500 50  0001 C CNN
 F 3 "~" H 8950 4500 50  0001 C CNN
-F 4 "RC0603JR-07120RL" H 8950 4500 50  0001 C CNN "Partnumber"
+F 4 "180 ohm resistor" H 8950 4500 50  0001 C CNN "Partnumber"
 	1    8950 4500
 	1    0    0    -1  
 $EndComp
