@@ -408,7 +408,7 @@ Defects
 
 - Silk screen issue
 - QR Code issue (too small, inverted on back)
-- Transitors wired backwards
+- Transistors wired backwards
 
 ### *D Parts
 
@@ -429,7 +429,7 @@ This board is not yet in production and has not been tested.
 New Features
 
 - New QR code
-- Pull down resistors for all transitors
+- Pull down resistors for all transistors
 
 Defects
 
