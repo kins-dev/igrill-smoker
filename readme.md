@@ -34,6 +34,9 @@
 - [iGrill Smoker Board Rev. *D](#igrill-smoker-board-rev-d)
   - [*D Notes](#d-notes)
   - [*D Parts](#d-parts)
+- [iGrill Smoker Board Rev. *E](#igrill-smoker-board-rev-e)
+  - [*E Notes](#e-notes)
+  - [*E Parts](#e-parts)
 
 <!-- /code_chunk_output -->
 
@@ -391,7 +394,7 @@ This board has a buzzer, seven LEDs and connection points for the solid state re
 
 ### *D Notes
 
-This board is currently in production and has not been tested.
+The boards back from production are bad
 
 New Features
 
@@ -404,7 +407,34 @@ New Features
 Defects
 
 - Silk screen issue
+- QR Code issue (too small, inverted on back)
+- Transitors wired backwards
 
 ### *D Parts
+
+TODO: Add part list
+
+## iGrill Smoker Board Rev. *E
+
+![Board Rev. *E](assets/igrill-smoker-board-sE.png)
+
+![Board Rev. *E back](assets/igrill-smoker-board-sE-back.png)
+
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.  It also has jumpers for a board id number
+
+### *E Notes
+
+This board is not yet in production and has not been tested.
+
+New Features
+
+- New QR code
+- Pull down resistors for all transitors
+
+Defects
+
+- None found yet
+
+### *E Parts
 
 TODO: Add part list
