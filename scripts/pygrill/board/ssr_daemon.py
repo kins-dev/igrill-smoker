@@ -18,8 +18,9 @@ import configparser
 import threading
 import os
 import sys
-from Pyro5.api import expose, behavior, Daemon
-from ..common.constant import SSRC
+from ..kasa.kasa_daemon import Kasa
+from Pyro5.api import expose, behavior, Daemon, Proxy
+from ..common.constant import SSRC, KASA
 from . import board
 from struct import pack
 from ..common.local_logging import SetupLog
@@ -39,7 +40,7 @@ class Relay(object):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
-        self.m_currentCompare = SSRC.TemperatureLimits.MIN
+        self.m_currentCompare = SSRC.PWM.MIN
         self.m_active = True
         self.m_threadCondition = threading.Condition()
         self.m_lock = threading.Lock()
@@ -50,49 +51,65 @@ class Relay(object):
         logging.debug("Starting thread")
         pi = pigpio.pi()
         item = SSRC.BOARD.ITEMS["Relay"][self.m_boardVal]
-        offVal = 1000000
-        if item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD:
-            offVal = 0
+        if (item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD):
+            offVal = SSRC.PWM.MIN
+        else:
+            offVal = SSRC.PWM.MAX
         pin = item[SSRC.BOARD.ITEM_IO]
         self.m_threadCondition.acquire()
-        while True:
-            with self.m_lock:
+        while(True):
+            with(self.m_lock):
                 active = self.m_active
+                if(SSRC.PWM.MIN > self.m_currentCompare):
+                    self.m_currentCompare = SSRC.PWM.MIN
+                if(SSRC.PWM.MAX < self.m_currentCompare):
+                    self.m_currentCompare = SSRC.PWM.MAX
                 currentCompare = self.m_currentCompare
-            if not active:
-                pi.hardware_PWM(pin, 2000, offVal)
+            if(not active):
+                pi.hardware_PWM(pin, SSRC.PWM.PERIOD, offVal)
                 break
-
-            pi.hardware_PWM(pin, 101, currentCompare)
+            if(item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD):
+                pi.hardware_PWM(pin, SSRC.PWM.PERIOD, currentCompare)
+            else:
+                pi.hardware_PWM(
+                    pin, SSRC.PWM.PERIOD, SSRC.PWM.MAX - currentCompare)
             self.m_threadCondition.wait(120.0)
         self.m_threadCondition.release()
 
-    def Done(self):
-        logging.debug("Starting done buzzer")
-        self.m_done = True
-        self.m_lowBattery = False
-
-    def LowBattery(self):
-        logging.debug("Starting low battery buzzer")
-        self.m_done = False
-        self.m_lowBattery = True
-
-    def Stop(self):
-        logging.debug("Stopping buzzer")
-        self.m_done = False
-        self.m_lowBattery = False
+    def Adjust(self, state):
+        with(self.m_lock):
+            self.m_currentCompare + state
+            if(SSRC.PWM.MIN > self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.MIN
+            if(SSRC.PWM.MAX < self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.MAX
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
+        kasaObj = Proxy(("PYRO:{}@{}:{}").format(
+            KASA.DAEMON.PYRO_OBJECT_ID,
+            KASA.DAEMON.PYRO_HOST,
+            KASA.DAEMON.PYRO_PORT))
+        kasaObj.TurnPlugOn()
 
     def ExitCode(self):
         return self.m_exitCode
 
     def Exit(self):
-        self.m_active = False
+        with self.m_lock:
+            self.m_active = False
         self.m_threadCondition.acquire()
         self.m_threadCondition.notify()
         self.m_threadCondition.release()
         self.m_thread.join()
         logging.debug("Closing socket")
         self.m_daemon.shutdown()
+        kasaObj = Proxy(("PYRO:{}@{}:{}").format(
+            KASA.DAEMON.PYRO_OBJECT_ID,
+            KASA.DAEMON.PYRO_HOST,
+            KASA.DAEMON.PYRO_PORT))
+        kasaObj.TurnPlugOff()
+        kasaObj.Exit()
 
 
 def main():

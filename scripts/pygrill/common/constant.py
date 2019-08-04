@@ -10,8 +10,6 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
-from enum import Enum
-
 
 class TEST:
     class KASA:
@@ -45,18 +43,26 @@ class BUZZ:
         PYRO_PORT = KASA.DAEMON.PYRO_PORT + 1
         PYRO_OBJECT_ID = "PyGrillBuzzer"
 
-
-class SSRC:
-    class TemperatureState(Enum):
-        HOT = 200000  # 20%
-        WARM = 10000  # 1%
-        PERFECT = 0  # 0%
-        COOL = -10000  # -1%
-        COLD = -200000  # -20%
-
-    class TemperatureLimits:
+    class PWM:
         MAX = 1000000
         MIN = 0
+        FREQ1 = 2000
+        FREQ2 = 2500
+        FREQ3 = 3000
+
+
+class SSRC:
+    class PWM:
+        MAX = BUZZ.PWM.MAX
+        MIN = BUZZ.PWM.MIN
+        PERIOD = 101
+
+    class TemperatureState:
+        HOT = 1 * (SSRC.PWM.MAX // 5)  # 20%
+        WARM = 1 * (SSRC.PWM.MAX // 100)  # 1%
+        PERFECT = 0  # 0%
+        COOL = -1 * (SSRC.PWM.MAX // 100)  # -1%
+        COLD = -1 * (SSRC.PWM.MAX // 5)   # -20%
 
     class BOARD:
         REV_ss = "**"

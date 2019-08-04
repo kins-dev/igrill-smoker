@@ -51,40 +51,41 @@ class Buzzer(object):
         logging.debug("Starting thread")
         pi = pigpio.pi()
         item = SSRC.BOARD.ITEMS["Buzzer"][self.m_boardVal]
-        offVal = 1000000
-        onVal = offVal // 2
+        onVal = BUZZ.PWM.MAX // 2  # integer division
         if item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD:
-            offVal = 0
+            offVal = BUZZ.PWM.MIN
+        else:
+            offVal = BUZZ.PWM.MAX
         pin = item[SSRC.BOARD.ITEM_IO]
         loop_cnt = 0
         loop_val = {
             "low battery": {
                 1: {
-                    "frequency": 2000,
+                    "frequency": BUZZ.PWM.FREQ1,
                     "compare": onVal
                 },
                 0: {
-                    "frequency": 3000,
+                    "frequency": BUZZ.PWM.FREQ3,
                     "compare": onVal
                 }
             },
             "done": {
                 1: {
-                    "frequency": 2500,
+                    "frequency": BUZZ.PWM.FREQ2,
                     "compare": onVal
                 },
                 0: {
-                    "frequency": 2500,
+                    "frequency": BUZZ.PWM.FREQ2,
                     "compare": offVal
                 }
             },
             "quiet": {
                 1: {
-                    "frequency": 2000,
+                    "frequency": BUZZ.PWM.FREQ1,
                     "compare": offVal
                 },
                 0: {
-                    "frequency": 2000,
+                    "frequency": BUZZ.PWM.FREQ1,
                     "compare": offVal
                 }
             }
@@ -99,7 +100,7 @@ class Buzzer(object):
                 done = self.m_done
                 active = self.m_active
             if not active:
-                pi.hardware_PWM(pin, 2000, offVal)
+                pi.hardware_PWM(pin, BUZZ.PWM.FREQ1, offVal)
                 break
             if lowBattery:
                 logging.debug("Low battery")
