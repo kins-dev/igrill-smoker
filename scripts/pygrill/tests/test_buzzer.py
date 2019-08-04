@@ -42,51 +42,18 @@ class Test_BuzzerDaemon(unittest.TestCase):
         mock_inst.hardware_PWM.assert_called_with(pin, 2000, 0)
         buzzDaemon.Done()
         mock_inst.reset_mock()
-        time.sleep(0.7)
+        time.sleep(0.6)
         mock_inst.hardware_PWM.assert_any_call(pin, 2500, 500000)
         mock_inst.hardware_PWM.assert_any_call(pin, 2500, 0)
         buzzDaemon.LowBattery()
         mock_inst.reset_mock()
-        time.sleep(0.7)
+        time.sleep(0.6)
         mock_inst.hardware_PWM.assert_any_call(pin, 3000, 500000)
         mock_inst.hardware_PWM.assert_any_call(pin, 2000, 500000)
         buzzDaemon.Stop()
         mock_inst.reset_mock()
-        time.sleep(0.4)
+        time.sleep(0.1)
         mock_inst.hardware_PWM.assert_called_with(pin, 2000, 0)
-
-    """
-    def test_IP(self):
-        daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST,
-                        port=constant.KASA_DAEMON_PYRO_PORT)
-        with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
-            mock_inst = mockitem.return_value
-            mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
-                b'{"system":{"get_sysinfo":{"sw_ver":"0 Build 0 Rel.0","hw_ver":"0.0","type":"IOT.SMARTPLUGSWITCH","model":"00000(XX)","mac":"00:00:00:00:00:00","dev_name":"Wi-Fi Plug","alias":"iGrill-smoker","relay_state":0,"on_time":0,"active_mode":"none","feature":"TIM","updating":0,"icon_hash":"","rssi":-55,"led_off":0,"longitude_i":0,"latitude_i":0,"hwId":"0","fwId":"00000000000000000000000000000000","deviceId":"0","oemId":"0","err_code":0}}}'),
-                ['192.168.0.0', 9999]]
-            kasaDaemon = kasa_daemon.Kasa(daemon)
-            daemon.register(
-                kasaDaemon, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
-            self.assertEqual(kasaDaemon.GetIP(), "192.168.0.0")
-            kasaDaemon.Exit()
-            daemon.close()
-            self.assertEqual(kasaDaemon.ExitCode(), 0)
-
-    def test_Exit(self):
-        daemon = Daemon(host=constant.KASA_DAEMON_PYRO_HOST,
-                        port=constant.KASA_DAEMON_PYRO_PORT)
-        with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
-            mock_inst = mockitem.return_value
-            mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
-                b'{"system":{"get_sysinfo":{"sw_ver":"0 Build 0 Rel.0","hw_ver":"0.0","type":"IOT.SMARTPLUGSWITCH","model":"00000(XX)","mac":"00:00:00:00:00:00","dev_name":"Wi-Fi Plug","alias":"iGrill-smoker","relay_state":0,"on_time":0,"active_mode":"none","feature":"TIM","updating":0,"icon_hash":"","rssi":-55,"led_off":0,"longitude_i":0,"latitude_i":0,"hwId":"0","fwId":"00000000000000000000000000000000","deviceId":"0","oemId":"0","err_code":0}}}'),
-                ['192.168.0.0', 9999]]
-            kasaDaemon = kasa_daemon.Kasa(daemon)
-            daemon.register(
-                kasaDaemon, objectId=constant.KASA_DAEMON_PYRO_OBJECT_ID)
-            kasaDaemon.Exit()
-            daemon.close()
-            self.assertEqual(kasaDaemon.ExitCode(), 0)
-    """
 
 
 if __name__ == '__main__':

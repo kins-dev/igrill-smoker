@@ -27,24 +27,21 @@ from ..common.local_logging import SetupLog
 
 @expose
 @behavior(instance_mode="single")
-class SSR(object):
-    def __init__(self, daemon):
+class Relay(object):
+    def __init__(self, daemon, boardIn="Auto"):
         self.m_daemon = daemon
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        if not 'IGRILL_CFG_DIR' in os.environ:
-            config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        else:
-            config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+        config.read(sys.path[0]+'../config/iGrill_config.ini')
         boardVal = board.DetectBoard(
-            config.get("SSR", "Board", fallback="Auto"))
+            config.get("SSR", "Board", fallback=boardIn))
         if (SSRC.BOARD.DISABLED == boardVal):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
-        self.m_lowBattery = False
-        self.m_done = False
+        self.m_currentCompare = SSRC.TemperatureLimits.MIN
         self.m_active = True
+        self.m_threadCondition = threading.Condition()
         self.m_lock = threading.Lock()
         self.m_thread = threading.Thread(target=self.StartThread, args=())
         self.m_thread.start()
@@ -52,69 +49,23 @@ class SSR(object):
     def StartThread(self):
         logging.debug("Starting thread")
         pi = pigpio.pi()
-        item = SSRC.BOARD.ITEMS["SSR"][self.m_boardVal]
+        item = SSRC.BOARD.ITEMS["Relay"][self.m_boardVal]
         offVal = 1000000
-        onVal = offVal // 2
         if item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD:
             offVal = 0
         pin = item[SSRC.BOARD.ITEM_IO]
-        loop_cnt = 0
-        loop_val = {
-            "low battery": {
-                1: {
-                    "frequency": 2000,
-                    "compare": onVal
-                },
-                0: {
-                    "frequency": 3000,
-                    "compare": onVal
-                }
-            },
-            "done": {
-                1: {
-                    "frequency": 2500,
-                    "compare": onVal
-                },
-                0: {
-                    "frequency": 3000,
-                    "compare": offVal
-                }
-            },
-            "quiet": {
-                1: {
-                    "frequency": 2000,
-                    "compare": offVal
-                },
-                0: {
-                    "frequency": 3000,
-                    "compare": offVal
-                }
-            }
-        }
+        self.m_threadCondition.acquire()
         while True:
-            loop_cnt = loop_cnt + 1
-            loop_cnt = loop_cnt % 2
-            fun = "quiet"
             with self.m_lock:
-                lowBattery = self.m_lowBattery
-                done = self.m_done
                 active = self.m_active
+                currentCompare = self.m_currentCompare
             if not active:
                 pi.hardware_PWM(pin, 2000, offVal)
                 break
-            if lowBattery:
-                logging.debug("Low battery")
-                fun = "low battery"
-            elif done:
-                logging.debug("Done")
-                fun = "done"
-            else:
-                logging.debug("Quiet")
-                fun = "quiet"
 
-            pi.hardware_PWM(
-                pin, loop_val[fun][loop_cnt]["frequency"], loop_val[fun][loop_cnt]["compare"])
-            time.sleep(0.3)
+            pi.hardware_PWM(pin, 101, currentCompare)
+            self.m_threadCondition.wait(120.0)
+        self.m_threadCondition.release()
 
     def Done(self):
         logging.debug("Starting done buzzer")
@@ -136,6 +87,9 @@ class SSR(object):
 
     def Exit(self):
         self.m_active = False
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
         self.m_thread.join()
         logging.debug("Closing socket")
         self.m_daemon.shutdown()
@@ -144,7 +98,10 @@ class SSR(object):
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
-    config.read(sys.path[0]+'/../../config/iGrill_config.ini')
+    if not 'IGRILL_CFG_DIR' in os.environ:
+        config.read(sys.path[0]+'/../../config/iGrill_config.ini')
+    else:
+        config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
     loglevel = config.get("Logging", "LogLevel", fallback="Error")
     logfile = config.get("Logging", "LogFile", fallback="")
 
@@ -169,7 +126,7 @@ def main():
     SetupLog(options.log_level, options.log_destination)
     daemon = Daemon(host=SSRC.DAEMON.PYRO_HOST,
                     port=SSRC.DAEMON.PYRO_PORT)
-    ssrcObj = SSR(daemon)
+    ssrcObj = Relay(daemon)
     uri = daemon.register(
         ssrcObj, objectId=SSRC.DAEMON.PYRO_OBJECT_ID)
     logging.debug(uri)

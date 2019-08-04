@@ -42,6 +42,7 @@ class Buzzer(object):
         self.m_lowBattery = False
         self.m_done = False
         self.m_active = True
+        self.m_threadCondition = threading.Condition()
         self.m_lock = threading.Lock()
         self.m_thread = threading.Thread(target=self.StartThread, args=())
         self.m_thread.start()
@@ -88,6 +89,7 @@ class Buzzer(object):
                 }
             }
         }
+        self.m_threadCondition.acquire()
         while True:
             loop_cnt = loop_cnt + 1
             loop_cnt = loop_cnt % 2
@@ -111,28 +113,45 @@ class Buzzer(object):
 
             pi.hardware_PWM(
                 pin, loop_val[fun][loop_cnt]["frequency"], loop_val[fun][loop_cnt]["compare"])
-            time.sleep(0.3)
+            self.m_threadCondition.wait(0.5)
+        self.m_threadCondition.release()
 
     def Done(self):
         logging.debug("Starting done buzzer")
-        self.m_done = True
-        self.m_lowBattery = False
+        with self.m_lock:
+            self.m_done = True
+            self.m_lowBattery = False
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
 
     def LowBattery(self):
         logging.debug("Starting low battery buzzer")
-        self.m_done = False
-        self.m_lowBattery = True
+        with self.m_lock:
+            self.m_done = False
+            self.m_lowBattery = True
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
 
     def Stop(self):
         logging.debug("Stopping buzzer")
-        self.m_done = False
-        self.m_lowBattery = False
+        with self.m_lock:
+            self.m_done = False
+            self.m_lowBattery = False
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
 
     def ExitCode(self):
         return self.m_exitCode
 
     def Exit(self):
-        self.m_active = False
+        with self.m_lock:
+            self.m_active = False
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
         self.m_thread.join()
         logging.debug("Closing socket")
         self.m_daemon.shutdown()

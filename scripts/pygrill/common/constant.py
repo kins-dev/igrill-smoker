@@ -10,6 +10,8 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
+from enum import Enum
+
 
 class TEST:
     class KASA:
@@ -45,6 +47,17 @@ class BUZZ:
 
 
 class SSRC:
+    class TemperatureState(Enum):
+        HOT = 200000  # 20%
+        WARM = 10000  # 1%
+        PERFECT = 0  # 0%
+        COOL = -10000  # -1%
+        COLD = -200000  # -20%
+
+    class TemperatureLimits:
+        MAX = 1000000
+        MIN = 0
+
     class BOARD:
         REV_ss = "**"
         REV_sA = "*A"
