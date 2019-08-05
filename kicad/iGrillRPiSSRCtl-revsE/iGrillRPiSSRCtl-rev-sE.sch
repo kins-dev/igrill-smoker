@@ -6,7 +6,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "iGrill Smoker SSR Control Board"
-Date "2019-08-03"
+Date "2019-08-05"
 Rev "*E"
 Comp "Redbud Farms"
 Comment1 "https://creativecommons.org/licenses/by-nc-sa/4.0/"
@@ -979,7 +979,7 @@ F 0 "R2" V 1150 2550 50  0000 C CNN
 F 1 "1kΩ" V 1050 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 980 2550 50  0001 C CNN
 F 3 "~" H 1050 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 1050 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 1050 2550 50  0001 C CNN "Partnumber"
 	1    1050 2550
 	1    0    0    -1  
 $EndComp
@@ -993,7 +993,7 @@ F 0 "R4" V 1900 2550 50  0000 C CNN
 F 1 "1kΩ" V 1800 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1730 2550 50  0001 C CNN
 F 3 "~" H 1800 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 1800 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 1800 2550 50  0001 C CNN "Partnumber"
 	1    1800 2550
 	1    0    0    -1  
 $EndComp
@@ -1007,7 +1007,7 @@ F 0 "R6" V 2650 2550 50  0000 C CNN
 F 1 "1kΩ" V 2550 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2480 2550 50  0001 C CNN
 F 3 "~" H 2550 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 2550 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 2550 2550 50  0001 C CNN "Partnumber"
 	1    2550 2550
 	1    0    0    -1  
 $EndComp
@@ -1021,7 +1021,7 @@ F 0 "R8" V 3400 2550 50  0000 C CNN
 F 1 "1kΩ" V 3300 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3230 2550 50  0001 C CNN
 F 3 "~" H 3300 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 3300 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 3300 2550 50  0001 C CNN "Partnumber"
 	1    3300 2550
 	1    0    0    -1  
 $EndComp
@@ -1035,7 +1035,7 @@ F 0 "R10" V 4150 2550 50  0000 C CNN
 F 1 "1kΩ" V 4050 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3980 2550 50  0001 C CNN
 F 3 "~" H 4050 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 4050 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 4050 2550 50  0001 C CNN "Partnumber"
 	1    4050 2550
 	1    0    0    -1  
 $EndComp
@@ -1049,7 +1049,7 @@ F 0 "R13" V 4900 2550 50  0000 C CNN
 F 1 "1kΩ" V 4800 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4730 2550 50  0001 C CNN
 F 3 "~" H 4800 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 4800 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 4800 2550 50  0001 C CNN "Partnumber"
 	1    4800 2550
 	1    0    0    -1  
 $EndComp
@@ -1063,7 +1063,7 @@ F 0 "R15" V 5650 2550 50  0000 C CNN
 F 1 "1kΩ" V 5550 2550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 5480 2550 50  0001 C CNN
 F 3 "~" H 5550 2550 50  0001 C CNN
-F 4 "180 ohm resistor" H 5550 2550 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 5550 2550 50  0001 C CNN "Partnumber"
 	1    5550 2550
 	1    0    0    -1  
 $EndComp
@@ -1077,7 +1077,7 @@ F 0 "R11" V 4500 4500 50  0000 C CNN
 F 1 "1kΩ" V 4400 4500 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4330 4500 50  0001 C CNN
 F 3 "~" H 4400 4500 50  0001 C CNN
-F 4 "180 ohm resistor" H 4400 4500 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 4400 4500 50  0001 C CNN "Partnumber"
 	1    4400 4500
 	1    0    0    -1  
 $EndComp
@@ -1089,7 +1089,7 @@ F 0 "R16" V 9050 4500 50  0000 C CNN
 F 1 "1kΩ" V 8950 4500 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8880 4500 50  0001 C CNN
 F 3 "~" H 8950 4500 50  0001 C CNN
-F 4 "180 ohm resistor" H 8950 4500 50  0001 C CNN "Partnumber"
+F 4 "1k ohm resistor" H 8950 4500 50  0001 C CNN "Partnumber"
 	1    8950 4500
 	1    0    0    -1  
 $EndComp
@@ -1317,7 +1317,7 @@ F 0 "R18" V 1000 3000 50  0000 C CNN
 F 1 "10kΩ" V 900 3000 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 830 3000 50  0001 C CNN
 F 3 "~" H 900 3000 50  0001 C CNN
-F 4 "180 ohm resistor" H 900 3000 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 900 3000 50  0001 C CNN "Partnumber"
 	1    900  3000
 	0    1    1    0   
 $EndComp
@@ -1332,7 +1332,7 @@ F 0 "R19" V 1750 3100 50  0000 C CNN
 F 1 "10kΩ" V 1650 3100 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1580 3100 50  0001 C CNN
 F 3 "~" H 1650 3100 50  0001 C CNN
-F 4 "180 ohm resistor" H 1650 3100 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 1650 3100 50  0001 C CNN "Partnumber"
 	1    1650 3100
 	0    1    1    0   
 $EndComp
@@ -1347,7 +1347,7 @@ F 0 "R20" V 2500 3200 50  0000 C CNN
 F 1 "10kΩ" V 2400 3200 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2330 3200 50  0001 C CNN
 F 3 "~" H 2400 3200 50  0001 C CNN
-F 4 "180 ohm resistor" H 2400 3200 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 2400 3200 50  0001 C CNN "Partnumber"
 	1    2400 3200
 	0    1    1    0   
 $EndComp
@@ -1362,7 +1362,7 @@ F 0 "R21" V 3250 2850 50  0000 C CNN
 F 1 "10kΩ" V 3150 2850 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3080 2850 50  0001 C CNN
 F 3 "~" H 3150 2850 50  0001 C CNN
-F 4 "180 ohm resistor" H 3150 2850 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 3150 2850 50  0001 C CNN "Partnumber"
 	1    3150 2850
 	0    1    1    0   
 $EndComp
@@ -1377,7 +1377,7 @@ F 0 "R23" V 4000 2950 50  0000 C CNN
 F 1 "10kΩ" V 3900 2950 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3830 2950 50  0001 C CNN
 F 3 "~" H 3900 2950 50  0001 C CNN
-F 4 "180 ohm resistor" H 3900 2950 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 3900 2950 50  0001 C CNN "Partnumber"
 	1    3900 2950
 	0    1    1    0   
 $EndComp
@@ -1392,7 +1392,7 @@ F 0 "R24" V 4750 2800 50  0000 C CNN
 F 1 "10kΩ" V 4650 2800 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4580 2800 50  0001 C CNN
 F 3 "~" H 4650 2800 50  0001 C CNN
-F 4 "180 ohm resistor" H 4650 2800 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 4650 2800 50  0001 C CNN "Partnumber"
 	1    4650 2800
 	0    1    1    0   
 $EndComp
@@ -1407,7 +1407,7 @@ F 0 "R25" V 5300 2600 50  0000 C CNN
 F 1 "10kΩ" V 5200 2600 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 5130 2600 50  0001 C CNN
 F 3 "~" H 5200 2600 50  0001 C CNN
-F 4 "180 ohm resistor" H 5200 2600 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 5200 2600 50  0001 C CNN "Partnumber"
 	1    5200 2600
 	-1   0    0    1   
 $EndComp
@@ -1473,7 +1473,7 @@ F 0 "R26" V 8600 5350 50  0000 C CNN
 F 1 "10kΩ" V 8500 5350 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8430 5350 50  0001 C CNN
 F 3 "~" H 8500 5350 50  0001 C CNN
-F 4 "180 ohm resistor" H 8500 5350 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 8500 5350 50  0001 C CNN "Partnumber"
 	1    8500 5350
 	-1   0    0    1   
 $EndComp
@@ -1501,7 +1501,7 @@ F 0 "R22" V 3850 4600 50  0000 C CNN
 F 1 "10kΩ" V 3750 4600 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3680 4600 50  0001 C CNN
 F 3 "~" H 3750 4600 50  0001 C CNN
-F 4 "180 ohm resistor" H 3750 4600 50  0001 C CNN "Partnumber"
+F 4 "10k ohm resistor" H 3750 4600 50  0001 C CNN "Partnumber"
 	1    3750 4600
 	0    -1   -1   0   
 $EndComp
