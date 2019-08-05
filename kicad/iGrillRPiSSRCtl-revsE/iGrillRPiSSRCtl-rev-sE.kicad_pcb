@@ -12,7 +12,7 @@
   (page A3)
   (title_block
     (title "iGrill Smoker SSR Control")
-    (date 2019-08-03)
+    (date 2019-08-05)
     (rev *E)
     (company "Redbud Farms")
     (comment 1 https://creativecommons.org/licenses/by-nc-sa/4.0/)
@@ -45,7 +45,7 @@
   )
 
   (setup
-    (last_trace_width 0.4)
+    (last_trace_width 0.2)
     (user_trace_width 0.2)
     (user_trace_width 0.4)
     (user_trace_width 0.6)
@@ -81,6 +81,7 @@
       (usegerberattributes false)
       (usegerberadvancedattributes false)
       (creategerberjobfile false)
+      (gerberprecision 5)
       (excludeedgelayer true)
       (linewidth 0.150000)
       (plotframeref false)
@@ -96,7 +97,7 @@
       (plotvalue true)
       (plotinvisibletext false)
       (padsonsilk false)
-      (subtractmaskfromsilk false)
+      (subtractmaskfromsilk true)
       (outputformat 1)
       (mirror false)
       (drillshape 0)
@@ -4570,7 +4571,7 @@
   (segment (start 78.1055 39.4855) (end 78.146 39.526) (width 0.4) (layer B.Cu) (net 45))
   (segment (start 78.1055 37.224) (end 78.1055 39.4855) (width 0.4) (layer B.Cu) (net 45))
 
-  (zone (net 2) (net_name +5V) (layer F.Cu) (tstamp 5D45DFE1) (hatch edge 0.508)
+  (zone (net 2) (net_name +5V) (layer F.Cu) (tstamp 5D481BB2) (hatch edge 0.508)
     (connect_pads (clearance 0.254))
     (min_thickness 0.254)
     (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
@@ -5283,7 +5284,7 @@
       )
     )
   )
-  (zone (net 3) (net_name GND) (layer B.Cu) (tstamp 5D45DFDE) (hatch edge 0.508)
+  (zone (net 3) (net_name GND) (layer B.Cu) (tstamp 5D481BAF) (hatch edge 0.508)
     (connect_pads (clearance 0.254))
     (min_thickness 0.254)
     (fill yes (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
