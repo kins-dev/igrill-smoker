@@ -78,3 +78,5 @@ target/
 test.py
 kicad/*/Gerbers/
 .pytest_cache/
+kicad/iGrillRPiSSRCtl-revsE/iGrillRPiSSRCtl-rev-sE.csv
+kicad/iGrillRPiSSRCtl-revsE/iGrillRPiSSRCtl-rev-sE.xml
