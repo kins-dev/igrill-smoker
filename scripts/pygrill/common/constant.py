@@ -58,11 +58,11 @@ class SSRC:
         PERIOD = 101
 
     class TemperatureState:
-        HOT = 1 * (BUZZ.PWM.MAX // 5)  # 20%
-        WARM = 1 * (BUZZ.PWM.MAX // 100)  # 1%
+        HOT = -1 * (BUZZ.PWM.MAX // 5)  # 20%
+        WARM = -1 * (BUZZ.PWM.MAX // 100)  # 1%
         PERFECT = 0  # 0%
-        COOL = -1 * (BUZZ.PWM.MAX // 100)  # -1%
-        COLD = -1 * (BUZZ.PWM.MAX // 5)   # -20%
+        COOL = 1 * (BUZZ.PWM.MAX // 100)  # -1%
+        COLD = 1 * (BUZZ.PWM.MAX // 5)   # -20%
 
     class BOARD:
         REV_ss = "**"

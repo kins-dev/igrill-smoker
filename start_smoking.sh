@@ -17,8 +17,8 @@ function finish  () {
     rm -f "${IGRILL_RUN_DIR}/stage.sh"
     rm -f "${IGRILL_RUN_DIR}/limits.ini"
     
-    # Stop the kasa/buzzer daemon
-    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --exit
+    # Stop the ssrc/kasa/buzzer daemon (SSRC stops Kasa)
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.ssrc_client --exit
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client --exit
 }
 
@@ -96,9 +96,10 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
-    # Start the kasa/buzzer daemon
+    # Start the kasa/buzzer/ssrc daemons
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_daemon --log-level Error & disown
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_daemon --log-level Error & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_daemon --log-level Error & disown
     
     # Silence buzzer
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client
