@@ -113,6 +113,10 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
         # python may fail if disconnected
         set +e
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.bt_monitor
+        if [ "$?" -eq "0" ]; then
+            set -e
+            break
+        fi
         set -e
     done
 fi
