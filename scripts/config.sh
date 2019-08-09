@@ -50,11 +50,6 @@ FOOD="${iGrill__Smoking__Food}"
 TEMP_SLOP="${iGrill__Smoking__TempBandSize}"
 # Used to warn on low battery
 MIN_BATTERY=15
-# overridden by user-config.sh
-VALUE=${TP_LINK_IP:-}
-if [ -z "${VALUE}" ]; then
-    GetKasaIP "${iGrill__Kasa__Name}"
-fi
 STAGE_NAME="Unknown"
 # Set to 1 to use stages
 STAGE=0

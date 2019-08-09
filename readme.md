@@ -1,23 +1,46 @@
-# Starting with Raspberry Pi Stretch
+# Starting with Raspberry Pi Stretch [![Build Status](https://travis-ci.org/kins-dev/igrill-smoker.svg?branch=1.4)](https://travis-ci.org/kins-dev/igrill-smoker)
 
 <!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
 <!-- markdownlint-enable MD033 -->
+<!-- markdownlint-disable MD039 -->
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-* [Problem Statement](#problem-statement)
-* [Design](#design)
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Setup](#setup)
-* [Using iGrill Mini](#using-igrill-mini)
-* [Running](#running)
-* [Lighttpd Setup](#lighttpd-setup)
+- [Problem Statement](#problem-statement)
+- [Design](#design)
+- [Equipment](#equipment)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Software Setup](#software-setup)
+- [Using iGrill Mini](#using-igrill-mini)
+- [Grill Setup](#grill-setup)
+- [Running](#running)
+- [Lighttpd Setup](#lighttpd-setup)
+- [Project Notes](#project-notes)
+- [iGrill Smoker Board Rev. *A](#igrill-smoker-board-rev-a)
+  - [*A Board](#a-board)
+  - [*A Notes](#a-notes)
+  - [*A Parts](#a-parts)
+- [iGrill Smoker Board Rev. *B](#igrill-smoker-board-rev-b)
+  - [*B Board](#b-board)
+  - [*B Notes](#b-notes)
+  - [*B Parts](#b-parts)
+- [iGrill Smoker Board Rev. *C](#igrill-smoker-board-rev-c)
+  - [*C Board](#c-board)
+  - [*C Notes](#c-notes)
+  - [*C Parts](#c-parts)
+- [iGrill Smoker Board Rev. *D](#igrill-smoker-board-rev-d)
+  - [*D Notes](#d-notes)
+  - [*D Parts](#d-parts)
+- [iGrill Smoker Board Rev. *E](#igrill-smoker-board-rev-e)
+  - [*E Notes](#e-notes)
+  - [*E Parts](#e-parts)
 
 <!-- /code_chunk_output -->
 
+<!-- markdownlint-enable MD039 -->
 ## Problem Statement
 
 Create a low cost smoking unit that can be controlled/monitored via the internet.
@@ -30,27 +53,27 @@ See the [design document](documentation/iGrill_smoker_design.md).
 
 Prices as of June 10th, 2019.  Some items like the hotplates or skillet can be found at Goodwill instead.  Total cost (new) $287.96.  Every item can be used for more than one task.  Meat, wood chips, and extension cords not included.
 
-* [Weber Grill](https://www.amazon.com/Weber-741001-Original-22-Inch-Charcoal/dp/B00004RALU/ref=sr_1_3) - $109
-* [iGrill2](https://www.amazon.com/Weber-7203-iGrill-2-Thermometer/dp/B01MG2CNDL/ref=sr_1_3) - $64.99
-* [Hotplate](https://www.amazon.com/Cuisine-ESB-300X-Maxi-Matic-Single-Electric/dp/B0006A2ZTS/ref=sr_1_70) - 2x @ $12.96
-* [TP-Link Kasa](https://www.amazon.com/TP-Link-HS100-Required-Google-Assistant/dp/B0178IC734/ref=sr_1_4) - $14.69
-* [Raspberry Pi](https://www.target.com/p/raspberry-pi-3-model-b-project-board/-/A-53349740) - $34.49
-* [SD Card](https://www.amazon.com/Kingston-Digital-microSDHC-SDC4-8GBSP/dp/B0027CA7UW/ref=sr_1_11) - $3.99
-* [Skillets](https://www.amazon.com/dp/B073Q8P6C8/ref=psdc_289821_t1_B00008GKDN) - 2x @ $10.93
-* [8 inch rings](https://www.amazon.com/Ateco-14408-8-Inch-Stainless-Cutter/dp/B002A5BU5M/ref=pd_sbs_79_5/140-6446357-6003018) - 2x @ $6.51
+- [Weber Grill](https://www.amazon.com/Weber-741001-Original-22-Inch-Charcoal/dp/B00004RALU/ref=sr_1_3) - $109
+- [iGrill2](https://www.amazon.com/Weber-7203-iGrill-2-Thermometer/dp/B01MG2CNDL/ref=sr_1_3) - $64.99
+- [Hotplate](https://www.amazon.com/Cuisine-ESB-300X-Maxi-Matic-Single-Electric/dp/B0006A2ZTS/ref=sr_1_70) - 2x @ $12.96
+- [TP-Link Kasa](https://www.amazon.com/TP-Link-HS100-Required-Google-Assistant/dp/B0178IC734/ref=sr_1_4) - $14.69
+- [Raspberry Pi](https://www.target.com/p/raspberry-pi-3-model-b-project-board/-/A-53349740) - $34.49
+- [SD Card](https://www.amazon.com/Kingston-Digital-microSDHC-SDC4-8GBSP/dp/B0027CA7UW/ref=sr_1_11) - $3.99
+- [Skillets](https://www.amazon.com/dp/B073Q8P6C8/ref=psdc_289821_t1_B00008GKDN) - 2x @ $10.93
+- [8 inch rings](https://www.amazon.com/Ateco-14408-8-Inch-Stainless-Cutter/dp/B002A5BU5M/ref=pd_sbs_79_5/140-6446357-6003018) - 2x @ $6.51
 
 ## Requirements
 
 You must have:
 
-* Raspberry Pi 3
-* TP-Link Kasa
-* iGrill2 or iGrill3 (iGrill mini coming soon for time based smoking)
+- Raspberry Pi 3
+- TP-Link Kasa
+- iGrill2 or iGrill3 (iGrill mini coming soon for time based smoking)
 
 Optional items:
 
-* LEDs with current limiting resistors
-* Speaker with 3.5 mm stereo jack input
+- LEDs with current limiting resistors
+- Speaker with 3.5 mm stereo jack input
 
 *Note: This has been tested using a Raspberry Pi B 3 with Raspian Stretch.  Your milage may vary.*
 
@@ -249,6 +272,169 @@ $HTTP["url"] =~ "/.*\.(json|csv)$" {
 
 ## Project Notes
 
-1.3 Uses TP-Link Kasa for power control.  1.4 will include a brand new power control board that plugs into the Raspberry Pi which will allow much more fine grain control of the smoker temperature.
+1.3 Uses TP-Link Kasa for power control.  1.4 includes a brand new power control board that plugs into the Raspberry Pi which will allow much more fine grain control of the smoker temperature.
 
-This is necessary because the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay will be used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
+This is necessary because the relay in the TP-Link won't handle the number of on/off cycles required.  Instead a solid state relay is used.  A word of caution, this is not UL rated or certified.  If you don't know which end of the soldering iron to hold, then you probably should just stick with 1.3.
+
+The TP-Link Kasa plug will still be used as a failsafe device in the system.
+
+## iGrill Smoker Board Rev. *A
+
+### *A Board
+
+![Board Rev. *A](assets/igrill-smoker-board-sA.png)
+
+This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits off the edge of the Raspberry Pi GPIOs.
+
+### *A Notes
+
+This board should not be used.
+
+Features
+
+- Two LEDs
+- Buzzer
+- Small design
+
+Defects
+
+- The spacing for the resistors is off
+- Hard to hand solder
+- Hangs off the board the wrong way
+- Red LED stays on due to leakage current
+- Leakage current to the SSR
+
+### *A Parts
+
+- Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
+- LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
+- LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
+- Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+
+## iGrill Smoker Board Rev. *B
+
+### *B Board
+
+![Board Rev. *B](assets/igrill-smoker-board-sB.png)
+
+This board has a buzzer, two LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+
+### *B Notes
+
+This board should not be used.
+
+New Features
+
+- Sits over the Pi with mounting holes
+- Board auto detect works
+- Buzzer switch
+
+Defects
+
+- The spacing for the resistors is off
+- The QR code doesn't always read correctly
+- The solder mask makes it hard to read the @ symbol
+- Red LED stays on due to leakage current
+- Buzzer makes a sound when it shouldn't
+- Leakage current to the SSR
+
+### *B Parts
+
+- Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
+- LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
+- LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
+- Resistors (100 ohm x2): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+- Switch: [DigiKey](https://www.digikey.com/product-detail/en/c-k-components/JS202011CQN/401-2001-ND/1640097) $0.43
+
+## iGrill Smoker Board Rev. *C
+
+### *C Board
+
+![Board Rev. *C](assets/igrill-smoker-board-sC.png)
+
+This board has a buzzer, two LEDs and a terminal block for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+
+### *C Notes
+
+This board is currently in production and has not been tested.
+
+New Features
+
+- NPN transistors to remove leakage
+
+Fixes
+
+- QR Code
+- Resistor spacing
+- Solder mask changed to silk screen for fine pitch
+- Using suggested design for the buzzer
+
+Defects
+
+- Leakage current to the SSR
+- Missing resistors on NPN transistor base (good design practice)
+
+### *C Parts
+
+- Header (2x20): [DigiKey](https://www.digikey.com/product-detail/en/sullins-connector-solutions/SFH11-PBPC-D20-ST-BK/S9200-ND/1990093) $1.94
+- LED (Green): [DigiKey](https://www.digikey.com/product-detail/en/lite-on-inc/LTL-4233/160-1130-ND/217580) $0.36
+- LED (Red): [DigiKey](https://www.digikey.com/product-detail/en/wurth-electronics-inc/151051RS11000/732-5016-ND/4490012) $0.15
+- Resistors (100 ohm x3): [DigiKey](https://www.digikey.com/product-detail/en/stackpole-electronics-inc/CF14JT100R/CF14JT100RCT-ND/1830327) $0.10
+- Buzzer: [DigiKey](https://www.digikey.com/product-detail/en/tdk-corporation/PS1240P02BT/445-2525-1-ND/935930) $0.68
+- Switch: [DigiKey](https://www.digikey.com/product-detail/en/c-k-components/JS202011CQN/401-2001-ND/1640097) $0.43
+- Transistors (NPN x3): [DigiKey](https://www.digikey.com/product-detail/en/micro-commercial-co/2N3904-AP/2N3904-APCT-ND/950591) $0.19
+
+## iGrill Smoker Board Rev. *D
+
+![Board Rev. *D](assets/igrill-smoker-board-sD.png)
+
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.
+
+### *D Notes
+
+The boards back from production are bad
+
+New Features
+
+- Five new LEDs for temperature monitoring
+- Surface mount parts
+- Mosfet transistors so a resistor is no longer needed
+- Transistor to prevent SSR leakage
+- Cheaper parts
+
+Defects
+
+- Silk screen issue
+- QR Code issue (too small, inverted on back)
+- Transistors wired backwards
+
+### *D Parts
+
+TODO: Add part list
+
+## iGrill Smoker Board Rev. *E
+
+![Board Rev. *E](assets/igrill-smoker-board-sE.png)
+
+![Board Rev. *E back](assets/igrill-smoker-board-sE-back.png)
+
+This board has a buzzer, seven LEDs and connection points for the solid state relay.  It sits on the Raspberry Pi GPIOs.  It also has jumpers for a board id number
+
+### *E Notes
+
+This board is not yet in production and has not been tested.
+
+New Features
+
+- New QR code
+- Pull down resistors for all transistors
+
+Defects
+
+- None found yet
+
+### *E Parts
+
+TODO: Add part list

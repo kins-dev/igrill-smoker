@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# KiCad
+*.bak
+*-cache.lib
+fp-info-cache
+*-bak
+
+
 # Distribution / packaging
 .Python
 env/
@@ -13,6 +20,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+.pytest/
 eggs/
 .eggs/
 lib/
@@ -68,3 +76,7 @@ target/
 .vscode/settings.json
 .vscode/tags
 test.py
+kicad/*/Gerbers/
+.pytest_cache/
+kicad/iGrillRPiSSRCtl-revsE/iGrillRPiSSRCtl-rev-sE.csv
+kicad/iGrillRPiSSRCtl-revsE/iGrillRPiSSRCtl-rev-sE.xml

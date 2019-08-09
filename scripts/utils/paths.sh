@@ -8,9 +8,8 @@
 true
 # shellcheck disable=2086
 set -$-ue${DEBUG+xv}
-IGRILL_CFG_DIR="${IGRILL_BAS_DIR}/config"
-IGRILL_SCR_DIR="${IGRILL_BAS_DIR}/scripts"
-IGRILL_PYU_DIR="${IGRILL_SCR_DIR}/py_utils"
-IGRILL_PYC_DIR="${IGRILL_SCR_DIR}/py_config"
-IGRILL_UTL_DIR="${IGRILL_SCR_DIR}/utils"
-IGRILL_RUN_DIR="${IGRILL_BAS_DIR}/run"
+export IGRILL_CFG_DIR="${IGRILL_BAS_DIR}/config"
+export IGRILL_SCR_DIR="${IGRILL_BAS_DIR}/scripts"
+export IGRILL_PYC_DIR="${IGRILL_SCR_DIR}/pygrill/config"
+export IGRILL_UTL_DIR="${IGRILL_SCR_DIR}/utils"
+export IGRILL_RUN_DIR="${IGRILL_BAS_DIR}/run"

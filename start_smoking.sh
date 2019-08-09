@@ -9,16 +9,17 @@ set -$-ue${DEBUG+xv}
 
 
 function finish  () {
-    LEDsReset
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
     # Cleanup on exit
     rm -f "${IGRILL_RUN_DIR}/igrill.json"
     rm -f "${IGRILL_RUN_DIR}/last_temp.sh"
     rm -f "${IGRILL_RUN_DIR}/stage.sh"
     rm -f "${IGRILL_RUN_DIR}/limits.ini"
-
-    # Start the kasa daemon
-    python3 "${IGRILL_PYU_DIR}/kasa_client.py" --exit
+    
+    # Stop the ssrc/kasa/buzzer daemon (SSRC stops Kasa)
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --exit
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client --exit
 }
 
 VALUE=${IGRILL_BAS_DIR:-}
@@ -26,9 +27,9 @@ if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
     SOURCE="${BASH_SOURCE[0]}"
     while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+        DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+        SOURCE="$(readlink "$SOURCE")"
+        [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
     IGRILL_BAS_DIR="$(readlink -f "${DIR}")"
@@ -44,11 +45,14 @@ source "${IGRILL_SCR_DIR}/config.sh"
 # shellcheck source=scripts/utils/bt.sh
 source "${IGRILL_UTL_DIR}/bt.sh"
 
-# shellcheck source=scripts/utils/leds.sh
-source "${IGRILL_UTL_DIR}/leds.sh"
-
 # shellcheck source=scripts/utils/limits.sh
 source "${IGRILL_UTL_DIR}/limits.sh"
+
+# Check for pigpiod run file, if it is missing start the service
+# needed for hardware PWM
+if ! [ -f "/var/run/pigpio.pid" ]; then
+    sudo pigpiod
+fi
 
 if ! [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
     echo "Error: $IGRILL_CFG_DIR/iGrill_config.ini mot found"
@@ -79,30 +83,40 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     rm -f last_temp.sh
     rm -f stage.sh
     popd
-
+    
     trap finish INT
     trap finish EXIT
-    if [ ! -f "${IGRILL_SCR_DIR}/py_config/mac_config.py" ]; then
+    if [ ! -f "${IGRILL_PYC_DIR}/mac_config.py" ]; then
         "${IGRILL_UTL_DIR}/get_mac.sh"
     fi
-
+    
     ResetLimits
-
+    
     WriteLimits
     
-    LEDsReset
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
-    # Start the kasa daemon
-    python3 "${IGRILL_PYU_DIR}/kasa_daemon.py" --log-level Error & disown
-
+    # Start the kasa/buzzer/ssrc daemons
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_daemon --log-level Error & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_daemon --log-level Error & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_daemon --log-level Error & disown
+    sleep 2s
+    
+    # Silence buzzer
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client
+    
     # deal with unexpected wireless issues
     while true; do
         # reset the bluetooth connection
         BtReset
-
+        
         # python may fail if disconnected
         set +e
-        python3 "${IGRILL_SCR_DIR}/monitor.py"
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.bt_monitor
+        if [ "$?" -eq "0" ]; then
+            set -e
+            break
+        fi
         set -e
     done
 fi

@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name iGrillRPiSSRCtl-rev-sC-rescue)(type Legacy)(uri ${KIPRJMOD}/iGrillRPiSSRCtl-rev-sC-rescue.lib)(options "")(descr ""))
+  (lib (name Connector_RPi)(type Legacy)(uri ${KIPRJMOD}/Connector_RPi.lib)(options "")(descr ""))
+)

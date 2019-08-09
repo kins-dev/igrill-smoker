@@ -18,9 +18,9 @@ if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
     SOURCE="${BASH_SOURCE[0]}"
     while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+        DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+        SOURCE="$(readlink "$SOURCE")"
+        [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
     IGRILL_BAS_DIR="$(readlink -f "${DIR}/..")"
@@ -29,14 +29,6 @@ fi
 
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
-
-# pull in LED functions
-# shellcheck source=utils/leds.sh
-source "${IGRILL_UTL_DIR}/leds.sh"
-
-# pull in sound functions
-# shellcheck source=utils/sounds.sh
-source "${IGRILL_UTL_DIR}/sounds.sh"
 
 # pull in plug functions
 # shellcheck source=utils/kasa.sh
@@ -55,7 +47,7 @@ function Finish () {
     #	echo "done"
     local KASA_STATE="red"
     local KASA_PLUG_STATE
-    KASA_PLUG_STATE=$(python3 "${IGRILL_PYU_DIR}/kasa_client.py" --status)
+    KASA_PLUG_STATE=$(PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --status)
     if [ "on" == "$KASA_PLUG_STATE" ]; then
         KASA_STATE="lightgreen"
     fi
@@ -99,7 +91,7 @@ EOL
     SetLimits "${iGrill__Probes__SmokeProbe}" "$SM_TEMP" "$SMOKE_MID" 20
     
     WriteLimits
-
+    
     # Reload the config file with the new stage.
     LoadConfig
 }
@@ -152,35 +144,26 @@ if [ "$STAGE" -gt "0" ]; then
         # Get the timestamp
         if [ "$TIMESTAMP" -eq "0" ]; then
             WriteStages
-        else
-            if [ "$STAGE_TIME" -ge "$TIME" ]; then
+        elif [ "$STAGE_TIME" -ge "$TIME" ]; then
                 STAGE=$((STAGE + 1))
                 WriteStages
-            fi
         fi
     fi
 fi
 
+SMOKING_COMPLETE=""
+LOW_BATTERY=""
 if [ "$FD_DONE" -eq "1" ]; then
     #done
-    LEDsSetState "green" "on"
-    
-    # Play a sound
-    PlaySound "complete"
+    SMOKING_COMPLETE="--done"
     
 elif [ "$FD_TEMP" -ge "$INTERNAL_TEMP" ]; then
-    #done
-    LEDsSetState "green" "on"
-    
-    # Play a sound
-    PlaySound "complete"
+    SMOKING_COMPLETE="--done"
     
     if [ "$STAGE" -eq "0" ]; then
         # keep warm at target temp
         SMOKE_MID="$INTERNAL_TEMP"
     fi
-else
-    LEDsSetState "green" "off"
 fi
 
 
@@ -189,12 +172,8 @@ SMOKE_TEMP_LOW=$((SMOKE_MID - TEMP_SLOP))
 
 if [ "$BATTERY" -le "$MIN_BATTERY" ] ; then
     #low battery
-    LEDsSetState "red" "on"
-    PlaySound "low_battery"
-else
-    LEDsSetState "red" "off"
+    LOW_BATTERY="--low_battery"
 fi
-
 
 #echo "writing state"
 cat > "$STATE_FILE" <<EOL
@@ -238,7 +217,7 @@ DIRECTION="0"
 if [ "$SM_TEMP" -gt "$SMOKE_MID" ]; then
     #	echo "temp high"
     DIRECTION="1"
-    elif [ "$SM_TEMP" -lt "$SMOKE_MID" ]; then
+elif [ "$SM_TEMP" -lt "$SMOKE_MID" ]; then
     #	echo "temp low"
     DIRECTION="-1"
 fi
@@ -252,36 +231,37 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
     fi
 fi
 
-if [ "$DIFF" -gt "$MAX_TEMP_CHANGE" ] ; then
-    # temp moving up too fast, disable the hotplate (trying to prevent fires)
-    SetKasaState "off" "smoke temp change meets or exceeds threshold ($DIFF >= $MAX_TEMP_CHANGE)"
-else
-    #	echo "Temp change was $DIFF"
-    if [ "$IN_BAND" -eq "0" ]; then
-        echo "Out of band"
-        if [ "$DIRECTION" -lt "0" ]; then
-            #enable hotplate
-            SetKasaState "on" "smoke temp is below threshold ($SM_TEMP < $SMOKE_TEMP_LOW)"
-            elif [ "$DIRECTION" -gt "0" ]; then
-            SetKasaState "off" "smoke temp is exceeds threshold ($SM_TEMP > $SMOKE_TEMP_HIGH)"
+if [ "${DIRECTION}" -lt "0" ]; then
+    if [ "${IN_BAND}" -eq "0" ]; then
+        if [ "${DIFF}" -lt "0" ]; then
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --cold
+        elif [ "${DIFF}" -gt "${MAX_TEMP_CHANGE}" ]; then
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --hot
         else
-            echo "Error, direction not set but out of band"
-            exit 1
-        fi
-    else
-        #		echo "in band"
-        if [ "$DIFF" -eq "0" ]; then
-            if [ "$DIRECTION" -lt "0" ]; then
-                SetKasaState "on" "smoke temp stable but below midpoint in band ($SMOKE_TEMP_LOW <= $SM_TEMP < $SMOKE_MID)"
-                elif [ "$DIRECTION" -gt "0" ]; then
-                SetKasaState "off" "smoke temp stable but above midpoint in band ($SMOKE_MID < $SM_TEMP <= $SMOKE_TEMP_HIGH)"
+            MAX_TEMP_CHANGE_MID=$((MAX_TEMP_CHANGE / 2))
+            if [ "${DIFF}" -lt "${MAX_TEMP_CHANGE_MID}" ]; then
+                PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+            elif [ "${DIFF}" -gt "${MAX_TEMP_CHANGE_MID}" ]; then
+                PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
             else
-                echo "smoke temp stable and $SM_TEMP == $SMOKE_MID, doing nothing"
+                PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
             fi
-            elif [ "$DIFF" -gt "0" ]; then
-            SetKasaState "off" "smoke temp rising in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH) && ($LAST_SM_TEMP < $SM_TEMP)"
-        else
-            SetKasaState "on" "smoke temp falling in band ($SMOKE_TEMP_LOW <= $SM_TEMP <= $SMOKE_TEMP_HIGH) && ($LAST_SM_TEMP > $SM_TEMP)"
         fi
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cold ${SMOKING_COMPLETE} ${LOW_BATTERY}
+    else
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cool ${SMOKING_COMPLETE} ${LOW_BATTERY}
     fi
+elif [ "${DIRECTION}" -gt "0" ]; then
+    if [ "${IN_BAND}" -eq "0" ]; then
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --hot
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --hot ${SMOKING_COMPLETE} ${LOW_BATTERY}
+    else
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --warm ${SMOKING_COMPLETE} ${LOW_BATTERY}
+    fi
+else
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --perfect ${SMOKING_COMPLETE} ${LOW_BATTERY}
 fi
+PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client ${SMOKING_COMPLETE} ${LOW_BATTERY}

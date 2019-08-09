@@ -1,0 +1,11 @@
+Date:	Wed 26 Jun 2019 07:27:31 AM PDT
+Tool:	Eeschema 5.1.2-f72e74a~84~ubuntu18.04.1
+Component Count:	7
+Ref	Value	Part	Footprint	Description	Vendor
+BZ1	Buzzer	Device:Buzzer	Buzzer_Beeper:Buzzer_12x9.5RM7.6	Buzzer, polarized	
+D1	Low Battery	Device:LED	LED_THT:LED_D5.0mm	Light emitting diode	
+D2	Done	Device:LED	LED_THT:LED_D5.0mm_Clear	Light emitting diode	
+J1	Raspberry_Pi_2_3	Connector:Raspberry_Pi_2_3	Connector_PinSocket_2.54mm:PinSocket_2x20_P2.54mm_Vertical	expansion header for Raspberry Pi 2 & 3	
+J2	SSR Control	Connector_Generic:Conn_01x02	Connector_Wire:SolderWirePad_1x02_P3.81mm_Drill0.8mm	Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)	
+R1	R	Device:R	Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal	Resistor	
+R2	R	Device:R	Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal	Resistor	

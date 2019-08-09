@@ -13,9 +13,9 @@ if [ -z "${VALUE}" ]; then
     # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
     SOURCE="${BASH_SOURCE[0]}"
     while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-    DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
-    SOURCE="$(readlink "$SOURCE")"
-    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+        DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
+        SOURCE="$(readlink "$SOURCE")"
+        [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
     DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
     IGRILL_BAS_DIR="$(readlink -f "${DIR}/../..")"
@@ -31,7 +31,7 @@ function SetKasaState() {
     local MSG
     if [ "$#" -eq "1" ]; then
         MSG="Turning hotplate $1"
-    elif [ "$#" -eq "2" ]; then
+        elif [ "$#" -eq "2" ]; then
         MSG="Turning hotplate $1 due to $2"
     else
         echo "Wrong number of arguments to SetKasaState"
@@ -44,10 +44,10 @@ function SetKasaState() {
     # and another state update may come in
     case "$STATE" in
         "on")
-            python3 "${IGRILL_PYU_DIR}/kasa_client.py" --on
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --on
         ;;
         "off")
-            python3 "${IGRILL_PYU_DIR}/kasa_client.py" --on
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --off
         ;;
         *)
             echo "bad value for hotplate state sent to SetKasaState"
