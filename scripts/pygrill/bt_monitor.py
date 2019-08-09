@@ -22,7 +22,10 @@ from .common.local_logging import SetupLog
 from .config.mac_config import ADDRESS
 
 # TODO: make this a config variable
-DATA_FILE = sys.path[0]+'/../run/igrill.json'
+if not 'IGRILL_RUN_DIR' in os.environ:
+    DATA_FILE = (sys.path[0]+'/../run/igrill.json')
+else:
+    DATA_FILE = (os.environ['IGRILL_RUN_DIR']+'/igrill.json')
 
 
 def main():
