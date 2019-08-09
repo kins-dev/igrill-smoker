@@ -26,12 +26,19 @@ if not 'IGRILL_RUN_DIR' in os.environ:
     DATA_FILE = (sys.path[0]+'/../run/igrill.json')
 else:
     DATA_FILE = (os.environ['IGRILL_RUN_DIR']+'/igrill.json')
+if not 'IGRILL_SCR_DIR' in os.environ:
+    PROCESS_SCRIPT=(sys.path[0]+'/../data.sh')
+else:
+    PROCESS_SCRIPT=(os.environ['IGRILL_SCR_DIR']+'/data.sh')
 
 
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
-    config.read(sys.path[0]+'/../config/iGrill_config.ini')
+    if not 'IGRILL_CFG_DIR' in os.environ:
+        config.read(sys.path[0]+'/../config/iGrill_config.ini')
+    else:
+        config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
     food_probe = config.getint("Probes", "FoodProbe", fallback=1)
     smoke_probe = config.getint("Probes", "SmokeProbe", fallback=4)
     poll_time = config.getint("Reporting", "PollTime", fallback=20)
@@ -96,7 +103,7 @@ def main():
                     if (True == options.test_mode):
                         logging.debug("Skipping data.sh call")
                     else:
-                        os.system(sys.path[0]+"/data.sh " +
+                        os.system(PROCESS_SCRIPT+" " +
                                   str(sensor_data['battery']) + ' ' +
                                   str(sensor_data['temperature'][smoke_probe - 1]) + ' ' +
                                   str(sensor_data['temperature'][food_probe - 1]))

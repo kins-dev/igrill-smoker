@@ -79,11 +79,14 @@ class IDevicePeripheral(btle.Peripheral):
 
     def ReadTemperature(self):
         setLimits = False
-        configFile = sys.path[0]+'/../run/limits.ini' 
+        if not 'IGRILL_RUN_DIR' in os.environ:
+            configFile = (sys.path[0]+'/../../run/limits.ini')
+        else:
+            configFile = (os.environ['IGRILL_RUN_DIR']+'/limits.ini')
         if os.path.isfile(configFile):
             config = configparser.ConfigParser()
             # does not throw an error, just returns the empty set if the file doesn't exist
-            config.read(sys.path[0]+'/py_config/threshold_config.ini')
+            config.read(configFile)
             setLimits = True
 
         temps = [-2000] * UUIDS.MAX_PROBE_COUNT
