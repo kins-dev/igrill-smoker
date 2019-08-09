@@ -19,7 +19,7 @@ import time
 import sys
 from Pyro5.api import Proxy
 from ..common.local_logging import SetupLog
-from . import ssr_daemon
+from . import ssrc_daemon
 from ..common.constant import SSRC
 
 config = configparser.ConfigParser()
