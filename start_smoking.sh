@@ -86,7 +86,7 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     
     trap finish INT
     trap finish EXIT
-    if [ ! -f "${IGRILL_SCR_DIR}/py_config/mac_config.py" ]; then
+    if [ ! -f "${IGRILL_PYC_DIR}/mac_config.py" ]; then
         "${IGRILL_UTL_DIR}/get_mac.sh"
     fi
     
