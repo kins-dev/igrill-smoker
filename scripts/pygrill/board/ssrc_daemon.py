@@ -106,14 +106,14 @@ class Relay(object):
         self.m_threadCondition.notify()
         self.m_threadCondition.release()
         self.m_thread.join()
-        logging.debug("Closing socket")
-        self.m_daemon.shutdown()
         kasaObj = Proxy(("PYRO:{}@{}:{}").format(
             KASA.DAEMON.PYRO_OBJECT_ID,
             KASA.DAEMON.PYRO_HOST,
             KASA.DAEMON.PYRO_PORT))
         kasaObj.TurnPlugOff()
         kasaObj.Exit()
+        logging.debug("Closing socket")
+        self.m_daemon.shutdown()
 
 
 def main():
