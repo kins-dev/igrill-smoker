@@ -47,7 +47,7 @@ function Finish () {
     #	echo "done"
     local KASA_STATE="red"
     local KASA_PLUG_STATE
-    KASA_PLUG_STATE=$(PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m python.kasa.kasa_client --status)
+    KASA_PLUG_STATE=$(PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --status)
     if [ "on" == "$KASA_PLUG_STATE" ]; then
         KASA_STATE="lightgreen"
     fi
