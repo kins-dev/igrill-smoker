@@ -71,6 +71,7 @@ class Relay(object):
             if(not active):
                 pi.hardware_PWM(pin, SSRC.PWM.PERIOD, offVal)
                 break
+            logging.debug("Set relay to {}/1000000".format(currentCompare))
             if(item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD):
                 pi.hardware_PWM(pin, SSRC.PWM.PERIOD, currentCompare)
             else:
@@ -81,7 +82,7 @@ class Relay(object):
 
     def Adjust(self, state):
         with(self.m_lock):
-            self.m_currentCompare + state
+            self.m_currentCompare = self.m_currentCompare + state
             if(SSRC.PWM.MIN > self.m_currentCompare):
                 self.m_currentCompare = SSRC.PWM.MIN
             if(SSRC.PWM.MAX < self.m_currentCompare):
