@@ -47,4 +47,6 @@ class Test_LEDs(unittest.TestCase):
 
 if __name__ == '__main__':
     print("BASEPATH=" + CONFIG.BASEPATH)
+    print("MAX: {}".format(SSRC.PWM.LIMIT_MAX))
+    print("MIN: {}".format(SSRC.PWM.LIMIT_MIN))
     unittest.main()

@@ -66,7 +66,7 @@ class SSRC:
         MAX = BUZZ.PWM.MAX
         MIN = BUZZ.PWM.MIN
         LIMIT_MAX = 70 * (BUZZ.PWM.MAX // 100)
-        LIMIT_MIN = 30 * (BUZZ.PWM.MIN // 100)
+        LIMIT_MIN = 30 * (BUZZ.PWM.MAX // 100)
         PERIOD = 101
 
     class TemperatureState:
