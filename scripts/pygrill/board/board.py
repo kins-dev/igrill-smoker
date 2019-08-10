@@ -16,12 +16,11 @@ import logging
 import argparse
 import configparser
 import time
-import sys
 import os
 # Line to make pylint work
 from argparse import ArgumentParser
 from ..common.local_logging import SetupLog
-from ..common.constant import SSRC
+from ..common.constant import SSRC, CONFIG
 
 
 def DetectBoard(board):
@@ -48,10 +47,7 @@ def DetectBoard(board):
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
-    if not 'IGRILL_CFG_DIR' in os.environ:
-        config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-    else:
-        config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+    config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
     loglevel = config.get("Logging", "LogLevel", fallback="Error")
     logfile = config.get("Logging", "LogFile", fallback="")
     board = config.get("SSR", "Board")

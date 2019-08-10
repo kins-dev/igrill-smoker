@@ -10,6 +10,16 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
+import os
+
+class CONFIG:
+    if not 'IGRILL_BAS_DIR' in os.environ:
+        BASEPATH = os.path.realpath(os.path.dirname(os.path.realpath(__file__))+"/../../../")
+    else:
+        BASEPATH = os.path.realpath(os.environ['IGRILL_BAS_DIR'])
+
+class BLUETOOTH:
+    TEMPERATURE_SCRIPT_NAME = "data.sh"
 
 class TEST:
     class KASA:

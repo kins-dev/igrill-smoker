@@ -227,7 +227,7 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
     fi
 fi
 
-if [ "${DIRECTION}" -lt "0" ]; then
+if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     if [ "${IN_BAND}" -eq "0" ]; then
         if [ "${DIFF}" -lt "0" ]; then
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --cold
@@ -245,15 +245,27 @@ if [ "${DIRECTION}" -lt "0" ]; then
         fi
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cold ${SMOKING_COMPLETE} ${LOW_BATTERY}
     else
-        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cool ${SMOKING_COMPLETE} ${LOW_BATTERY}
+        if [ "${DIFF}" -eq "0" ]; then # steady
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --perfect
+        elif [ "${DIFF}" -gt "0" ]; then # rising
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        else
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+        fi
     fi
 elif [ "${DIRECTION}" -gt "0" ]; then
     if [ "${IN_BAND}" -eq "0" ]; then
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --hot
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --hot ${SMOKING_COMPLETE} ${LOW_BATTERY}
     else
-        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        if [ "${DIFF}" -eq "0" ]; then # steady
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --perfect
+        elif [ "${DIFF}" -gt "0" ]; then # rising
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        else
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+        fi
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --warm ${SMOKING_COMPLETE} ${LOW_BATTERY}
     fi
 else

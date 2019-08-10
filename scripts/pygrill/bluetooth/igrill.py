@@ -16,6 +16,7 @@ import struct
 import configparser
 import sys
 import os
+from ..common.constant import CONFIG
 
 class UUIDS:
     FIRMWARE_VERSION   = btle.UUID("64ac0001-4a4b-4b58-9f37-94d3c52ffdf7")
@@ -79,10 +80,8 @@ class IDevicePeripheral(btle.Peripheral):
 
     def ReadTemperature(self):
         setLimits = False
-        if not 'IGRILL_RUN_DIR' in os.environ:
-            configFile = (sys.path[0]+'/../../run/limits.ini')
-        else:
-            configFile = (os.environ['IGRILL_RUN_DIR']+'/limits.ini')
+        # TODO: Make this a constant shared between bash and python
+        configFile = (CONFIG.BASEPATH + '/run/limits.ini')
         if os.path.isfile(configFile):
             config = configparser.ConfigParser()
             # does not throw an error, just returns the empty set if the file doesn't exist
