@@ -52,6 +52,7 @@ STAGE_NAME="Unknown"
 STAGE=0
 SMOKE_MID="${iGrill__Smoking__SmokeMid}"
 INTERNAL_TEMP="${iGrill__Smoking__InternalTarget}"
+echo "iGrill__Smoking__MaxTempChange=${iGrill__Smoking__MaxTempChange}"
 MAX_TEMP_CHANGE="${iGrill__Smoking__MaxTempChange}"
 FD_DONE=0
 STAGE_FILE="${IGRILL_RUN_DIR}/stage.sh"
