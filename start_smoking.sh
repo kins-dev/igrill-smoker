@@ -97,9 +97,9 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
     # Start the kasa/buzzer/ssrc daemons
-    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_daemon --log-level Error & disown
-    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_daemon --log-level Error & disown
-    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_daemon --log-level Error & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_daemon --log-level Error > "${IGRILL_BAS_DIR}/run/kasa_daemon.log" & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_daemon --log-level Error > "${IGRILL_BAS_DIR}/run/buzzer_daemon.log" & disown
+    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_daemon --log-level Error > "${IGRILL_BAS_DIR}/run/ssrc_daemon.log" & disown
     sleep 2s
     
     # Silence buzzer
