@@ -108,7 +108,7 @@ if(0 < len(vars(options))):
             elif(options.cold):
                 ssrcObj.Adjust(SSRC.TemperatureState.COOL)
                 logging.debug(
-                    "Adjust up 1% to {:.2f}%".format(ssrcObj.Status()))
+                    "Adjust up 0.25% to {:.2f}%".format(ssrcObj.Status()))
             else:
                 ssrcObj.Adjust(SSRC.TemperatureState.PERFECT)
                 logging.debug(
@@ -121,7 +121,7 @@ if(0 < len(vars(options))):
             elif(options.cold):
                 ssrcObj.Adjust(SSRC.TemperatureState.COLD)
                 logging.debug(
-                    "Adjust up 20% to {:.2f}%".format(ssrcObj.Status()))
+                    "Adjust up 5% to {:.2f}%".format(ssrcObj.Status()))
             else:
                 logging.info(
                     "Odd, ssr_client called but not in band, hot or cold, ignoring")
