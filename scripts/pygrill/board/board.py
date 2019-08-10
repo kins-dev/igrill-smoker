@@ -35,10 +35,10 @@ def DetectBoard(board):
 
             pi.set_pull_up_down(p, pigpio.PUD_DOWN)
             tmp = pi.read(p)
-            logging.debug("Pin \"{}\" : \"{}\"".format(p, tmp))
+            #logging.debug("Pin \"{}\" : \"{}\"".format(p, tmp))
             val = val + (tmp << i)
             i = i + 1
-        logging.debug("Val = \"{}\"".format(val))
+        #logging.debug("Val = \"{}\"".format(val))
         if (val in SSRC.BOARD.REV_MAP):
             return SSRC.BOARD.REV_MAP[val]
         return SSRC.BOARD.DISABLED
