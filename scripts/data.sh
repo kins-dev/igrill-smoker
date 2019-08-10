@@ -246,7 +246,7 @@ if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     else
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cool ${SMOKING_COMPLETE} ${LOW_BATTERY}
         if [ "${DIFF}" -eq "0" ]; then # steady
-            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
         elif [ "${DIFF}" -gt "0" ]; then # rising
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
         else
