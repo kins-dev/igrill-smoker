@@ -226,6 +226,9 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
         IN_BAND="1"
     fi
 fi
+echo "DIRECTION=${DIRECTION}"
+echo "IN_BAND=${IN_BAND}"
+echo "DIFF=${DIFF}"
 if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     if [ "${IN_BAND}" -eq "0" ]; then
         if [ "${DIFF}" -lt "0" ]; then
@@ -255,9 +258,11 @@ if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     fi
 elif [ "${DIRECTION}" -gt "0" ]; then
     if [ "${IN_BAND}" -eq "0" ]; then
+        echo "above target, out of band"
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --hot
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --hot ${SMOKING_COMPLETE} ${LOW_BATTERY}
     else
+        echo "above target, in band"
         if [ "${DIFF}" -eq "0" ]; then # steady
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
         elif [ "${DIFF}" -gt "0" ]; then # rising
