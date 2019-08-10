@@ -30,10 +30,6 @@ fi
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 
-# pull in plug functions
-# shellcheck source=utils/kasa.sh
-source "${IGRILL_UTL_DIR}/kasa.sh"
-
 # pull in limit functions
 # shellcheck source=utils/limits.sh
 source "${IGRILL_UTL_DIR}/limits.sh"
