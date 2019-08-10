@@ -247,7 +247,7 @@ if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     else
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cool ${SMOKING_COMPLETE} ${LOW_BATTERY}
         if [ "${DIFF}" -eq "0" ]; then # steady
-            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --perfect
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
         elif [ "${DIFF}" -gt "0" ]; then # rising
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
         else
@@ -260,7 +260,7 @@ elif [ "${DIRECTION}" -gt "0" ]; then
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --hot ${SMOKING_COMPLETE} ${LOW_BATTERY}
     else
         if [ "${DIFF}" -eq "0" ]; then # steady
-            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --perfect
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
         elif [ "${DIFF}" -gt "0" ]; then # rising
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
         else
@@ -269,7 +269,13 @@ elif [ "${DIRECTION}" -gt "0" ]; then
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --warm ${SMOKING_COMPLETE} ${LOW_BATTERY}
     fi
 else
-    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+    if [ "${DIFF}" -eq "0" ]; then # steady
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+    elif [ "${DIFF}" -gt "0" ]; then # rising
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+    else
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+    fi
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --perfect ${SMOKING_COMPLETE} ${LOW_BATTERY}
 fi
 PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client ${SMOKING_COMPLETE} ${LOW_BATTERY}
