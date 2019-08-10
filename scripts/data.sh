@@ -226,7 +226,9 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
         IN_BAND="1"
     fi
 fi
-
+echo "DIRECTION=${DIRECTION}"
+echo "IN_BAND=${IN_BAND}"
+echo "DIFF=${DIFF}"
 if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     if [ "${IN_BAND}" -eq "0" ]; then
         if [ "${DIFF}" -lt "0" ]; then
