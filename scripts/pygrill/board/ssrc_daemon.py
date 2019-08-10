@@ -59,10 +59,10 @@ class Relay(object):
         while(True):
             with(self.m_lock):
                 active = self.m_active
-                if(SSRC.PWM.MIN > self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.MIN
-                if(SSRC.PWM.MAX < self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.MAX
+                if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
+                    self.m_currentCompare = SSRC.PWM.LIMIT_MIN
+                if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
+                    self.m_currentCompare = SSRC.PWM.LIMIT_MAX
                 currentCompare = self.m_currentCompare
             if(not active):
                 pi.hardware_PWM(pin, SSRC.PWM.PERIOD, offVal)
@@ -82,10 +82,10 @@ class Relay(object):
     def Adjust(self, state):
         with(self.m_lock):
             self.m_currentCompare = self.m_currentCompare + state
-            if(SSRC.PWM.MIN > self.m_currentCompare):
-                self.m_currentCompare = SSRC.PWM.MIN
-            if(SSRC.PWM.MAX < self.m_currentCompare):
-                self.m_currentCompare = SSRC.PWM.MAX
+            if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.LIMIT_MIN
+            if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.LIMIT_MAX
         self.m_threadCondition.acquire()
         self.m_threadCondition.notify()
         self.m_threadCondition.release()
