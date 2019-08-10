@@ -106,15 +106,20 @@ if(0 < len(vars(options))):
         if(options.in_band):
             if(options.hot):
                 ssrcObj.Adjust(SSRC.TemperatureState.WARM)
+                logging.debug("Adjust down 1%")
             elif(options.cold):
                 ssrcObj.Adjust(SSRC.TemperatureState.COOL)
+                logging.debug("Adjust up 1%")
             else:
                 ssrcObj.Adjust(SSRC.TemperatureState.PERFECT)
+                logging.debug("Do not adjust")
         else:
             if(options.hot):
                 ssrcObj.Adjust(SSRC.TemperatureState.HOT)
+                logging.debug("Adjust down 20%")
             elif(options.cold):
                 ssrcObj.Adjust(SSRC.TemperatureState.COLD)
+                logging.debug("Adjust up 20%")
             else:
                 logging.info(
                     "Odd, ssr_client called but not in band, hot or cold, ignoring")
