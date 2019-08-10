@@ -11,21 +11,21 @@ Copyright &copy; 2019 Scott Atkins
 
 <!-- code_chunk_output -->
 
-- [ Introduction](#introduction)
-- [ Sources](#sources)
-- [ Files](#files)
-  - [ Bash](#bash)
-  - [ Python](#python)
-  - [ INI](#ini)
-  - [ JSON](#json)
-  - [ CSV](#csv)
-- [ File relation graph](#file-relation-graph)
-  - [ /start_smoking.sh](#start_smokingsh)
-  - [ /scripts/config.sh](#scriptsconfigsh)
-  - [ /scripts/monitor.py](#scriptsmonitorpy)
-  - [ /scripts/data.sh](#scriptsdatash)
-- [ Configuration](#configuration)
-  - [ INI File](#ini-file)
+- [Introduction](#introduction)
+- [Sources](#sources)
+- [Files](#files)
+  - [Bash](#bash)
+  - [Python](#python)
+  - [INI](#ini)
+  - [JSON](#json)
+  - [CSV](#csv)
+- [File relation graph](#file-relation-graph)
+  - [/start_smoking.sh](#start_smokingsh)
+  - [/scripts/config.sh](#scriptsconfigsh)
+  - [/scripts/monitor.py](#scriptsmonitorpy)
+  - [/scripts/data.sh](#scriptsdatash)
+- [Configuration](#configuration)
+  - [INI File](#ini-file)
 
 <!-- /code_chunk_output -->
 <!-- markdownlint-enable MD007 -->
@@ -86,7 +86,10 @@ This is an attempt to document all the files in the project.  Relations between 
   - Writes state.json
   - Writes last_temp.sh
   - Writes data to current.csv
-  - Calls to [scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py) to get the plug state
+  - Calls to [scripts/pygrill/kasa/kasa_client.py](../scripts/pygrill/kasa/kasa_client.py) to get the plug state
+  - Calls to [scripts/pygrill/board/ssrc_client.py](../scripts/pygrill/board/ssrc_client.py) to adjust the solid state relay
+  - Calls to [scripts/pygrill/board/buzzer_client.py](../scripts/pygrill/board/buzzer_client.py) to sound alarms
+  - Calls to [scripts/pygrill/board/leds.py](../scripts/pygrill/board/leds.py) to set the LEDs
 - **[igrill-smoker/scripts/utils/bt.sh](../scripts/utils/bt.sh)** - Bluetooth functions
   - **BtReset** - Resets Bluetooth
 - **[igrill-smoker/scripts/utils/create_vars.sh](../scripts/utils/create_vars.sh)** - Setup default values
@@ -104,11 +107,6 @@ This is an attempt to document all the files in the project.  Relations between 
     - Scan is killed when iGrill is found
   - Writes mac_config.py
   - Calls BtReset
-- **[igrill-smoker/scripts/utils/kasa.sh](../scripts/utils/kasa.sh)** - Plug control
-  - SetKasaState - calls to [scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py) to turn the plug on or off
-- **[igrill-smoker/scripts/utils/leds.sh](../scripts/utils/leds.sh)** - Controls notification LEDs
-  - LEDsReset - Turns LEDs off
-  - LEDsSetState - Sets a LED to a particular state
 - **[igrill-smoker/scripts/utils/limits.sh](../scripts/utils/limits.sh)** - Sets upper and lower limits for the iGrill
   - Loads [paths.sh](../scripts/utils/paths.sh)
   - Reset limits - Sets limits for all 4 probes to be -32768 to 32767
@@ -118,29 +116,28 @@ This is an attempt to document all the files in the project.  Relations between 
 - **[igrill-smoker/scripts/utils/paths.sh](../scripts/utils/paths.sh)** - Sets up standard path variables
 - **[igrill-smoker/scripts/utils/read_ini.sh](../scripts/utils/read_ini.sh)** - Reads ini file
   - read_ini - Reads the specified file and sets variables
-- **[igrill-smoker/scripts/utils/sounds.sh](../scripts/utils/sounds.sh)** - plays sounds through the 3.5 mm jack
-  - PlaySound - calls omxplayer to play a sound
 - **igrill-smoker/run/stage.sh** - Tracks the current cooking stage
 - **igrill-smoker/run/last_temp.sh** - Tracks the last temperature
 
 ### Python
 
-- **[igrill-smoker/scripts/monitor.py](../scripts/monitor.py)** - Top level python script
+- **[igrill-smoker/scripts/pygrill/bt_monitor.py](../scripts/pygrill/bt_monitor.py)** - Top level python script
   - Loads the configuration
   - Formats the results
   - Calls [scripts/data.sh](../scripts/data.sh) with the temperature data
-- **[igrill-smoker/scripts/py_utils/igrill.py](../scripts/py_utils/igrill.py)** - Interface to iGrill
+- **[igrill-smoker/scripts/pygrill/bluetooth/igrill.py](../scripts/pygrill/bluetooth/igrill.py)** - Interface to iGrill
   - Performs handshake
   - Grabs temperature/battery data
   - Sets probe limits
-- **[igrill-smoker/scripts/py_utils/local_logging.py](../scripts/py_utils/local_logging.py)** - Sets up logging
+- **[igrill-smoker/scripts/pygrill/common/local_logging.py](../scripts/pygrill/common/local_logging.py)** - Sets up logging
   - Report specific log level
   - Redirects to file if specified
-- **[igrill-smoker/scripts/py_utils/kasa_daemon.py](../scripts/py_utils/kasa_daemon.py)** - Controls kasa hardware
+- **[igrill-smoker/scripts/pygrill/common/constant.py](../scripts/pygrill/common/constant.py)** - Various constants
+- **[igrill-smoker/scripts/pygrill/kasa/kasa_daemon.py](../scripts/pygrill/kasa/kasa_daemon.py)** - Controls kasa hardware
   - Find plug by name
   - Return plug status
   - Sets countdown timer for 5 minutes when turning the plug on
-- **[igrill-smoker/scripts/py_utils/kasa_client.py](../scripts/py_utils/kasa_client.py)** - Passes commands to the daemon
+- **[igrill-smoker/scripts/pygrill/kasa/kasa_client.py](../scripts/pygrill/kasa/kasa_client.py)** - Passes commands to the daemon
   - Turn plug on and off
   - Return plug status
   - Tells the daemon to exit
