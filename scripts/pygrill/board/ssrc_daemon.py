@@ -39,7 +39,7 @@ class Relay(object):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
-        self.m_currentCompare = SSRC.PWM.MIN
+        self.m_currentCompare = SSRC.PWM.LIMIT_MIN
         self.m_active = True
         self.m_threadCondition = threading.Condition()
         self.m_lock = threading.Lock()
