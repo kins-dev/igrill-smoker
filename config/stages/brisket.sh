@@ -20,7 +20,7 @@ case "$STAGE" in
         # Warmup stage, keep plate at a cooler temp and limit temp rise
         STAGE_NAME="Warmup"
         SMOKE_MID=180
-        MAX_TEMP_CHANGE=1
+        MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=70
     ;;
     2)
