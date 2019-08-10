@@ -237,6 +237,7 @@ if [ "${DIRECTION}" -lt "0" ]; then # colder than target
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --hot
         else
             MAX_TEMP_CHANGE_MID=$((MAX_TEMP_CHANGE / 2))
+            echo "MAX_TEMP_CHANGE_MID=${MAX_TEMP_CHANGE_MID}"
             if [ "${DIFF}" -lt "${MAX_TEMP_CHANGE_MID}" ]; then
                 PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
             elif [ "${DIFF}" -gt "${MAX_TEMP_CHANGE_MID}" ]; then
