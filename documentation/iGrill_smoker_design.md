@@ -187,12 +187,13 @@ This is broken down into multiple graphs so it is easier to follow.
 
 The ini file is a one stop shop to configure this project.
 
-<!-- TODO: add > at the end of this line, open MPE, and use shift enter to regenerate --
+<!-- TODO: add > at the end of this line, open MPE, and use shift enter to regenerate -->
 ```bash {cmd hide modify_source}
 echo -n \`\`\`ini
 cat ../config/iGrill_config.example.ini
-echo -n \`\`\`
-```>
+#echo -n \`\`\`
+```
+
 <!---->
 
 <!-- code_chunk_output -->
@@ -240,6 +241,12 @@ Food=brisket
 SmokeMid=225
 InternalTarget=185
 
+# Used to specify the solid state relay board
+[SSR]
+# Possible values:
+#  **, *A, *B, *C, *D, *D.1, *E, Auto, None
+Board=Auto
+
 [Reporting]
 # time in seconds between polls of the iGrill
 # faster polling means more power use
@@ -248,4 +255,6 @@ PollTime=20
 ResultsDirectory=/var/www/html
 CSVFile=current.csv
 StateFile=state.json
+
 ```
+<!-- /code_chunk_output -->

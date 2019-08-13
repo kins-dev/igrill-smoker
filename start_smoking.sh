@@ -112,8 +112,9 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
         
         # python may fail if disconnected
         set +e
-        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.bt_monitor
-        if [ "$?" -eq "0" ]; then
+        
+        # exit code of 0 indicates a ctrl-c or a script failed
+        if PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.bt_monitor; then
             set -e
             break
         fi

@@ -5,8 +5,10 @@ style start_smoking stroke-width:4px
     subgraph 
 
     start_smoking[start_smoking.sh]
+    buzzer_daemon[buzzer_daemon.py]
     kasa_daemon[kasa_daemon.py]
     kasa_client[kasa_client.py]
+    ssrc_daemon[ssrc_daemon.py]
 config[config.sh]
     items[items.json]
 paths[paths.sh]      
@@ -15,18 +17,19 @@ limits_ini[limits.ini]
                 gen_json[gen_json.sh]
                 get_mac[get_mac.sh]
                 mac_config[mac_config.py]
-            monitor[monitor.py]
+            monitor[bt_monitor.py]
                 bt[bt.sh]
-                leds[leds.sh]
 start_smoking --- config
 gen_json --- paths
 start_smoking --- gen_json
 start_smoking --- limits
 start_smoking --- paths
 start_smoking --- bt
-start_smoking --- leds
 start_smoking --- get_mac
+start_smoking ==> buzzer_daemon
 start_smoking --- kasa_client
+start_smoking ==> ssrc_daemon
+ssrc_daemon --> kasa_daemon
 kasa_client --> kasa_daemon
 get_mac -.- mac_config
 gen_json -.- items
