@@ -1,0 +1,55 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Assets",
+            "type": "shell",
+            "options": {
+                "cwd": "documentation/assets"
+            },
+            "command": "make",
+            "args": [
+                "all"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Update Pi",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@192.168.0.41",
+                "-C",
+                "cd igrill-smoker;git pull"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Python Tests",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "-m",
+                "unittest",
+                "discover",
+                "-v",
+                "-s",
+                "scripts/pygrill",
+                "-t",
+                "scripts",
+                "-p",
+                "test_*.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

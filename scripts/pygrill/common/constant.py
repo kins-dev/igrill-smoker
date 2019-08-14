@@ -83,6 +83,7 @@ class SSRC:
         REV_sC = "*C"
         REV_sD = "*D"
         REV_sD_Patched = "*D.1"
+        REV_sE = "*E"
         DISABLED = "None"
         DETECT_REV = "Auto"
 
@@ -95,7 +96,8 @@ class SSRC:
         REV_MAP = {
             1793: REV_sB,
             1794: REV_sC,
-            1795: REV_sD
+            1795: REV_sD,
+            1796: REV_sE
         }
 
         ITEM_IO = "Pin"
@@ -130,6 +132,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 10,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE : {
+                        ITEM_IO: 10,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Smoking complete": {
@@ -156,6 +162,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 22,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 22,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Cold": {
@@ -170,6 +180,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 2,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 27,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Cool": {
@@ -184,6 +198,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 3,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 17,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Perfect": {
@@ -198,6 +216,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 4,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 4,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Warm": {
@@ -212,6 +234,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 17,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 3,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Hot": {
@@ -226,6 +252,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 27,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 2,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
             },
@@ -251,6 +281,10 @@ class SSRC:
                     ITEM_VALUE: VALUES_STANDARD
                 },
                 REV_sD_Patched: {
+                    ITEM_IO: 12,
+                    ITEM_VALUE: VALUES_STANDARD
+                },
+                REV_sE: {
                     ITEM_IO: 12,
                     ITEM_VALUE: VALUES_STANDARD
                 }
@@ -279,6 +313,10 @@ class SSRC:
                 REV_sD_Patched: {
                     ITEM_IO: 13,
                     ITEM_VALUE: VALUES_INVERTED
+                },
+                REV_sE: {
+                    ITEM_IO: 13,
+                    ITEM_VALUE: VALUES_STANDARD
                 }
             },
             "Switch": {
@@ -293,7 +331,11 @@ class SSRC:
                     ITEM_IO: 6,
                     ITEM_VALUE: VALUES_STANDARD
                 },
-                REV_sD_Patched: ITEM_INVALID
+                REV_sD_Patched: ITEM_INVALID,
+                REV_sE: {
+                    ITEM_IO: 6,
+                    ITEM_VALUE: VALUES_STANDARD
+                }
             }
         }
 

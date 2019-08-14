@@ -133,6 +133,12 @@ This is an attempt to document all the files in the project.  Relations between 
   - Report specific log level
   - Redirects to file if specified
 - **[igrill-smoker/scripts/pygrill/common/constant.py](../scripts/pygrill/common/constant.py)** - Various constants
+- **[igrill-smoker/scripts/pygrill/board/board.py](../scripts/pygrill/board/board.py)** - Detects the board type
+- **[igrill-smoker/scripts/pygrill/board/buzzer_daemon.py](../scripts/pygrill/board/buzzer_daemon.py)** - Controls the buzzer
+  - plays different sounds for smoking complete and low battery
+- **[igrill-smoker/scripts/pygrill/board/buzzer_client.py](../scripts/pygrill/board/buzzer_client.py)** - Passes commands to the daemon
+  - done or low_battery for those tones
+  - Tells the daemon to exit
 - **[igrill-smoker/scripts/pygrill/kasa/kasa_daemon.py](../scripts/pygrill/kasa/kasa_daemon.py)** - Controls kasa hardware
   - Find plug by name
   - Return plug status
@@ -141,7 +147,7 @@ This is an attempt to document all the files in the project.  Relations between 
   - Turn plug on and off
   - Return plug status
   - Tells the daemon to exit
-- **igrill-smoker/scripts/py_config/mac_config.py**
+- **igrill-smoker/scripts/pygrill/config/mac_config.py**
 
 ### INI
 
