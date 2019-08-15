@@ -24,9 +24,20 @@
             "type": "shell",
             "command": "ssh",
             "args": [
-                "pi@192.168.0.41",
+                "pi@pigrill",
                 "-C",
                 "cd igrill-smoker;git pull"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Board Checkout",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "cd igrill-smoker/tests/board;./board_checkout.sh"
             ],
             "problemMatcher": []
         },
