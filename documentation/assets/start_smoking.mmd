@@ -6,9 +6,11 @@ style start_smoking stroke-width:4px
 
     start_smoking[start_smoking.sh]
     buzzer_daemon[buzzer_daemon.py]
+    buzzer_client[buzzer_client.py]
     kasa_daemon[kasa_daemon.py]
     kasa_client[kasa_client.py]
     ssrc_daemon[ssrc_daemon.py]
+    ssrc_client[ssrc_client.py]
 config[config.sh]
     items[items.json]
 paths[paths.sh]      
@@ -27,7 +29,10 @@ start_smoking --- paths
 start_smoking --- bt
 start_smoking --- get_mac
 start_smoking ==> buzzer_daemon
-start_smoking --- kasa_client
+start_smoking ==> ssrc_client
+ssrc_client --> ssrc_daemon
+start_smoking ==> buzzer_client
+buzzer_client --> buzzer_daemon
 start_smoking ==> ssrc_daemon
 ssrc_daemon --> kasa_daemon
 kasa_client --> kasa_daemon

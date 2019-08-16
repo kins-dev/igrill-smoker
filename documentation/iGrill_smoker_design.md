@@ -26,6 +26,7 @@ Copyright &copy; 2019 Scott Atkins
   - [/scripts/data.sh](#scriptsdatash)
 - [Configuration](#configuration)
   - [INI File](#ini-file)
+- [How to Generate a Smoke Schedule](#how-to-generate-a-smoke-schedule)
 
 <!-- /code_chunk_output -->
 <!-- markdownlint-enable MD007 -->
@@ -33,7 +34,7 @@ Copyright &copy; 2019 Scott Atkins
 <!-- markdownlint-enable MD039 -->
 ## Introduction
 
-There are a lot of moving parts in this project, so this is an attempt to document those parts and how they interact.
+There are a lot of moving parts in this project, so this is an attempt to document those parts and how they interact.  Additionally this a moving target, so some information can be out of date.
 
 ## Sources
 
@@ -118,6 +119,9 @@ This is an attempt to document all the files in the project.  Relations between 
   - read_ini - Reads the specified file and sets variables
 - **igrill-smoker/run/stage.sh** - Tracks the current cooking stage
 - **igrill-smoker/run/last_temp.sh** - Tracks the last temperature
+- **[igrill-smoker/tests/board/board_checkout.sh](../tests/board/board_checkout.sh)** - Runs through a set of tests to check the board is functioning properly
+  - LEDs
+  - Buzzer
 
 ### Python
 
@@ -134,6 +138,7 @@ This is an attempt to document all the files in the project.  Relations between 
   - Redirects to file if specified
 - **[igrill-smoker/scripts/pygrill/common/constant.py](../scripts/pygrill/common/constant.py)** - Various constants
 - **[igrill-smoker/scripts/pygrill/board/board.py](../scripts/pygrill/board/board.py)** - Detects the board type
+  - Cannot detect **, *A or *D.1
 - **[igrill-smoker/scripts/pygrill/board/buzzer_daemon.py](../scripts/pygrill/board/buzzer_daemon.py)** - Controls the buzzer
   - plays different sounds for smoking complete and low battery
 - **[igrill-smoker/scripts/pygrill/board/buzzer_client.py](../scripts/pygrill/board/buzzer_client.py)** - Passes commands to the daemon
@@ -147,7 +152,25 @@ This is an attempt to document all the files in the project.  Relations between 
   - Turn plug on and off
   - Return plug status
   - Tells the daemon to exit
-- **igrill-smoker/scripts/pygrill/config/mac_config.py**
+- **[igrill-smoker/scripts/pygrill/board/ssrc_daemon.py](../scripts/pygrill/board/ssrc_daemon.py)** - Controls solid state relay
+  - Minimum is 30% max is 85%
+  - Step up by 5% or 0.25%
+  - Step down by 1% or 20%
+  - Sets countdown timer for 5 minutes
+  - On exit, kill Kasa daemon
+- **[igrill-smoker/scripts/pygrill/board/ssrc_client.py](../scripts/pygrill/board/ssrc_client.py)** - Passes commands to the daemon
+  - Turn up or down, a large or small amount
+  - Leave everything the same, but reset the countdown
+  - Tells the daemon to exit
+- **[igrill-smoker/scripts/pygrill/board/leds.py](../scripts/pygrill/board/leds.py)** - Controls LEDs
+  - Sets smoking complete or low battery
+  - Sets temperature state:
+    - Cold: low outside of band
+    - Cool: low in band
+    - Perfect: at target temperature
+    - Warm: high in band
+    - Hot: high out of band
+- **igrill-smoker/scripts/pygrill/config/mac_config.py** - Mac address for the iGrill
 
 ### INI
 
@@ -191,16 +214,14 @@ This is broken down into multiple graphs so it is easier to follow.
 
 ### INI File
 
-The ini file is a one stop shop to configure this project.
+The ini file is a one place for the user to configure this project.
 
-<!-- TODO: add > at the end of this line, open MPE, and use shift enter to regenerate -->
+<!-- NOTE: open markdown preview enhanced window and use shift enter to regenerate -->
 ```bash {cmd hide modify_source}
 echo -n \`\`\`ini
 cat ../config/iGrill_config.example.ini
 #echo -n \`\`\`
 ```
-
-<!---->
 
 <!-- code_chunk_output -->
 
@@ -264,3 +285,91 @@ StateFile=state.json
 
 ```
 <!-- /code_chunk_output -->
+
+## How to Generate a Smoke Schedule
+
+Here is what **[igrill-smoker/config/stages/brisket.py](../config/stages/brisket.py)** looks like:
+<!-- NOTE: open markdown preview enhanced window and use shift enter to regenerate -->
+```bash {cmd hide modify_source}
+echo \`\`\`bash
+cat ../config/stages/brisket.sh
+echo ""
+echo -n \`\`\`
+```
+
+<!-- code_chunk_output -->
+
+```bash
+#!/bin/bash
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
+# Defining variables for other scripts
+# shellcheck disable=2034
+true
+# shellcheck disable=2086
+set -$-ue${DEBUG+xv}
+
+MINI_COMPATIBLE=false
+
+# Note: for this to work. Internal temp must be increased at each stage
+# the system will go to the next stage when the food hits the designated
+# internal temp
+
+case "$STAGE" in
+    1)
+        # Warmup stage, keep plate at a cooler temp and limit temp rise
+        STAGE_NAME="Warmup"
+        SMOKE_MID=180
+        MAX_TEMP_CHANGE=2
+        INTERNAL_TEMP=70
+    ;;
+    2)
+        # Smoke stage, keep plate at cooler temp, but allow bigger temp rise
+        STAGE_NAME="Smoke"
+        SMOKE_MID=180
+        MAX_TEMP_CHANGE=2
+        INTERNAL_TEMP=120
+    ;;
+    3)
+        # Cook stage, move hotplate to higher temp, allow bigger temp rise
+        STAGE_NAME="Cook"
+        SMOKE_MID=225
+        MAX_TEMP_CHANGE=2
+        INTERNAL_TEMP=170
+    ;;
+    4)
+        # Braise stage, move hotplate to higher temp, allow bigger temp rise
+        STAGE_NAME="Braise"
+        SMOKE_MID=225
+        MAX_TEMP_CHANGE=2
+        INTERNAL_TEMP=185
+    ;;
+    5|6)
+        # Keep warm stage, move hotplate to higher temp, allow bigger temp rise
+        STAGE_NAME="Keep warm"
+        SMOKE_MID=160
+        MAX_TEMP_CHANGE=2
+        INTERNAL_TEMP=190
+        # signal we're done
+        FD_DONE=1
+        # Stay in this stage
+        STAGE=5
+    ;;
+    *)
+        echo "error: unknown stage"
+        exit 1
+    ;;
+esac
+```
+
+<!-- /code_chunk_output -->
+
+- ```$STAGE``` - Current stage as an integer
+  - Must start at 1
+  - Case statement for the last stage (5 in the example) must also include last stage + 1 (eg. ```5|6```)
+- ```$STAGE_NAME``` - Name to show on the webpage for this stage
+- ```$INTERNAL_TEMP``` - Target food temperature for this stage
+  - Should be monotonically increasing for every stage except the last one
+  - Use of ```$INTERNAL_TEMP``` means ```$MINI_COMPATIBLE``` should be false

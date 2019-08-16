@@ -31,15 +31,15 @@ graph TD
     data -.- state
     limits --- paths
     data --- paths
-    data --> ssrc_client
+    data ==> ssrc_client
     ssrc_client --> ssrc_daemon
     ssrc_daemon --- board
     data --> buzzer_client
     buzzer_client --> buzzer_daemon
     buzzer_daemon --- board
-    data --> leds
+    data ==> leds
     leds --- board
-    data --> kasa_client
+    data ==> kasa_client
     kasa_client --> kasa_daemon
     click data "#scriptsdatash" "data.sh"
     click config "#scriptsconfigsh" "config.sh"
