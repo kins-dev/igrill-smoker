@@ -216,11 +216,10 @@ This is broken down into multiple graphs so it is easier to follow.
 
 The ini file is a one place for the user to configure this project.
 
-<!-- NOTE: open markdown preview enhanced window and use shift enter to regenerate -->
+<!-- NOTE: Add > at the end of this line and open markdown preview enhanced window.  Use shift enter to regenerate. --
 ```bash {cmd hide modify_source}
 echo -n \`\`\`ini
 cat ../config/iGrill_config.example.ini
-#echo -n \`\`\`
 ```
 
 <!-- code_chunk_output -->
@@ -289,14 +288,13 @@ StateFile=state.json
 ## How to Generate a Smoke Schedule
 
 Here is what **[igrill-smoker/config/stages/brisket.py](../config/stages/brisket.py)** looks like:
-<!-- NOTE: open markdown preview enhanced window and use shift enter to regenerate -->
+<!-- NOTE: Add > at the end of this line and open markdown preview enhanced window.  Use shift enter to regenerate. --
 ```bash {cmd hide modify_source}
 echo \`\`\`bash
 cat ../config/stages/brisket.sh
 echo ""
 echo -n \`\`\`
 ```
-
 <!-- code_chunk_output -->
 
 ```bash
