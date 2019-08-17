@@ -287,6 +287,8 @@ StateFile=state.json
 
 ## How to Generate a Smoke Schedule
 
+Easiest way is to copy then edit an existing schedule.  Examples and variable description is below.
+
 Here is what **[igrill-smoker/config/stages/brisket.py](../config/stages/brisket.py)** looks like:
 <!-- NOTE: Add > at the end of this line and open markdown preview enhanced window.  Use shift enter to regenerate. --
 ```bash {cmd hide modify_source}
