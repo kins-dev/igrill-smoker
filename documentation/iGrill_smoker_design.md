@@ -367,7 +367,91 @@ esac
 - ```$STAGE``` - Current stage as an integer
   - Must start at 1
   - Case statement for the last stage (5 in the example) must also include last stage + 1 (eg. ```5|6```)
+  - Last stage must set ```$STAGE``` to the last stage again in case it was incremented (eg. ```STAGE=5```)
 - ```$STAGE_NAME``` - Name to show on the webpage for this stage
 - ```$INTERNAL_TEMP``` - Target food temperature for this stage
   - Should be monotonically increasing for every stage except the last one
   - Use of ```$INTERNAL_TEMP``` means ```$MINI_COMPATIBLE``` should be false
+- ```$SMOKE_MID``` - Temperature the smoke should be kept at
+- ```$FD_DONE```- The value ```1``` indicates the food is done (set on the last stage)
+
+Here is what **[igrill-smoker/config/stages/baby-back-ribs.py](../config/stages/baby-back-ribs.py)** looks like:
+
+<!-- NOTE: Add > at the end of this line and open markdown preview enhanced window.  Use shift enter to regenerate. --
+```bash {cmd hide modify_source}
+echo \`\`\`bash
+cat ../config/stages/baby-back-ribs.sh
+echo ""
+echo -n \`\`\`
+```
+
+<!-- code_chunk_output -->
+
+```bash
+#!/bin/bash
+# Copyright (c) 2019:   Scott Atkins <scott@kins.dev>
+#                       (https://git.kins.dev/igrill-smoker)
+# License:              MIT License
+#                       See the LICENSE file
+# Defining variables for other scripts
+# shellcheck disable=2034
+true
+# shellcheck disable=2086
+set -$-ue${DEBUG+xv}
+
+MINI_COMPATIBLE=true
+
+case "$STAGE" in
+    1)
+        # Warmup stage, keep plate at a cooler temp and limit temp rise
+        STAGE_NAME="Warmup"
+        SMOKE_MID=180
+        MAX_TEMP_CHANGE=1
+        TIME=15
+    ;;
+    2)
+        # Smoke stage, keep plate at cooler temp, but allow bigger temp rise
+        STAGE_NAME="Smoke"
+        SMOKE_MID=180
+        MAX_TEMP_CHANGE=2
+        TIME=180
+    ;;
+    3)
+        # Braise stage, move hotplate to higher temp, allow bigger temp rise
+        STAGE_NAME="Braise"
+        SMOKE_MID=225
+        MAX_TEMP_CHANGE=2
+        TIME=120
+    ;;
+    4)
+        # Sauce stage, move hotplate to higher temp, allow bigger temp rise
+        STAGE_NAME="Sauce"
+        SMOKE_MID=225
+        MAX_TEMP_CHANGE=2
+        TIME=60
+    ;;
+    5|6)
+        # Keep warm stage, move hotplate to higher temp, allow bigger temp rise
+        STAGE_NAME="Keep warm"
+        SMOKE_MID=165
+        MAX_TEMP_CHANGE=2
+        TIME=100
+        # signal we're done
+        FD_DONE=1
+        # Stay in this stage
+        STAGE=5
+    ;;
+    *)
+        echo "error: unknown stage"
+        exit 1
+    ;;
+esac
+```
+
+<!-- /code_chunk_output -->
+
+This is iGrill mini compatible and uses the time instead of food temperature
+
+- ```$TIME``` - Minutes to stay in this stage
+
+Both ```$TIME``` and ```$INTERNAL_TEMP``` can be used in a stage, first event to occur moves the system to the next stage.
