@@ -33,11 +33,35 @@
         {
             "label": "Board Checkout",
             "type": "shell",
+            "dependsOn":["Start pigpiod"],
             "command": "ssh",
             "args": [
                 "pi@pigrill",
                 "-C",
                 "cd igrill-smoker/tests/board;./board_checkout.sh"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup Screen",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "cd igrill-smoker;screen -ls pigrill || screen -dmS pigrill -c config/.screenrc;screen -S pigrill -X select 0"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Start pigpiod",
+            "type": "shell",
+            "dependsOn":["Setup Screen"],
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "screen -S pigrill -X select 1;screen -s pigrill -X stuff \"sudo pigpiod\"`echo -ne \"\\015\"`;screen -S pigrill -X select 0"
             ],
             "problemMatcher": []
         },
