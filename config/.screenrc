@@ -16,5 +16,5 @@ defbce on
 # mouse tracking allows to switch region focus by clicking
 mousetrack on
 
-screen -t smoking_status 0 bash
-screen -t bash 1 bash
+screen -t "Smoking Status" 0
+screen -t "General Purpose" 1
