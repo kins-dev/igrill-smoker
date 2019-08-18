@@ -64,6 +64,17 @@
                 "screen -S pigrill -X select 1;screen -s pigrill -X stuff \"sudo pigpiod\"`echo -ne \"\\015\"`;screen -S pigrill -X select 0"
             ],
             "problemMatcher": []
+        }, {
+            "label": "Start smoking",
+            "type": "shell",
+            "dependsOn": ["Setup Screen"],
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "screen -S pigrill -X select 1;screen -s pigrill -X stuff \"./start_smoking.sh\"`echo -ne \"\\015\"`"
+            ],
+            "problemMatcher": []
         },
         {
             "label": "Python Tests",
