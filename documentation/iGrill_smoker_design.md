@@ -221,7 +221,7 @@ The ini file is a one place for the user to configure this project.
 echo -n \`\`\`ini
 cat ../config/iGrill_config.example.ini
 ```
-
+<!-- -->
 <!-- code_chunk_output -->
 
 ```ini
@@ -297,6 +297,7 @@ cat ../config/stages/brisket.sh
 echo ""
 echo -n \`\`\`
 ```
+<!-- -->
 <!-- code_chunk_output -->
 
 ```bash
@@ -376,6 +377,7 @@ esac
   - Use of ```$INTERNAL_TEMP``` means ```$MINI_COMPATIBLE``` should be false
 - ```$SMOKE_MID``` - Temperature the smoke should be kept at
 - ```$FD_DONE```- The value ```1``` indicates the food is done (set on the last stage)
+- ```$MAX_TEMP_CHANGE``` - Maximum change over a time period.  Should be 2-4
 
 Here is what **[igrill-smoker/config/stages/baby-back-ribs.py](../config/stages/baby-back-ribs.py)** looks like:
 
@@ -405,35 +407,35 @@ MINI_COMPATIBLE=true
 
 case "$STAGE" in
     1)
-        # Warmup stage, keep plate at a cooler temp and limit temp rise
+        # Warmup stage, keep plate at a cooler temp
         STAGE_NAME="Warmup"
         SMOKE_MID=180
-        MAX_TEMP_CHANGE=1
+        MAX_TEMP_CHANGE=2
         TIME=15
     ;;
     2)
-        # Smoke stage, keep plate at cooler temp, but allow bigger temp rise
+        # Smoke stage, keep plate at cooler temp
         STAGE_NAME="Smoke"
         SMOKE_MID=180
         MAX_TEMP_CHANGE=2
         TIME=180
     ;;
     3)
-        # Braise stage, move hotplate to higher temp, allow bigger temp rise
-        STAGE_NAME="Braise"
+        # Cook stage, move hotplate to higher temp
+        STAGE_NAME="Cook"
         SMOKE_MID=225
         MAX_TEMP_CHANGE=2
         TIME=120
     ;;
     4)
-        # Sauce stage, move hotplate to higher temp, allow bigger temp rise
+        # Sauce stage
         STAGE_NAME="Sauce"
         SMOKE_MID=225
         MAX_TEMP_CHANGE=2
         TIME=60
     ;;
     5|6)
-        # Keep warm stage, move hotplate to higher temp, allow bigger temp rise
+        # Keep warm stage, move hotplate to lower temp
         STAGE_NAME="Keep warm"
         SMOKE_MID=165
         MAX_TEMP_CHANGE=2
