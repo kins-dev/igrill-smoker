@@ -1,16 +1,16 @@
-# 1.2 Pull Request
+# 1.4 Pull Request
 
 ## Status
 
-- [ ] In Development
-- [ ] Testing
+- [x] In Development
+- [x] Testing
 - [ ] Complete
 
 ## Description
 
 A few sentences describing the overall goals of the pull request's commits.
 
-## Todos
+## To Dos
 
 - [ ] Tests
 - [ ] Documentation
