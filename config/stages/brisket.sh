@@ -17,35 +17,35 @@ MINI_COMPATIBLE=false
 
 case "$STAGE" in
     1)
-        # Warmup stage, keep plate at a cooler temp and limit temp rise
+        # Warmup stage, keep plate at a cooler temp
         STAGE_NAME="Warmup"
         SMOKE_MID=180
-        MAX_TEMP_CHANGE=1
+        MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=70
     ;;
     2)
-        # Smoke stage, keep plate at cooler temp, but allow bigger temp rise
+        # Smoke stage
         STAGE_NAME="Smoke"
         SMOKE_MID=180
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=120
     ;;
     3)
-        # Cook stage, move hotplate to higher temp, allow bigger temp rise
+        # Cook stage, move hotplate to higher temp
         STAGE_NAME="Cook"
         SMOKE_MID=225
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=170
     ;;
     4)
-        # Braise stage, move hotplate to higher temp, allow bigger temp rise
+        # Braise stage
         STAGE_NAME="Braise"
         SMOKE_MID=225
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=185
     ;;
     5|6)
-        # Keep warm stage, move hotplate to higher temp, allow bigger temp rise
+        # Keep warm stage, move hotplate to lower temp
         STAGE_NAME="Keep warm"
         SMOKE_MID=160
         MAX_TEMP_CHANGE=2

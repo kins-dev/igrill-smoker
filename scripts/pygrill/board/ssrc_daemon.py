@@ -16,11 +16,10 @@ import logging
 import argparse
 import configparser
 import threading
-import os
 import sys
 from ..kasa.kasa_daemon import Kasa
 from Pyro5.api import expose, behavior, Daemon, Proxy
-from ..common.constant import SSRC, KASA
+from ..common.constant import SSRC, KASA, CONFIG
 from . import board
 from struct import pack
 from ..common.local_logging import SetupLog
@@ -33,17 +32,14 @@ class Relay(object):
         self.m_daemon = daemon
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        if not 'IGRILL_CFG_DIR' in os.environ:
-            config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        else:
-            config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+        config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
         boardVal = board.DetectBoard(
             config.get("SSR", "Board", fallback=boardIn))
         if (SSRC.BOARD.DISABLED == boardVal):
             sys.exit(1)
         self.m_boardVal = boardVal
         self.m_exitCode = 0
-        self.m_currentCompare = SSRC.PWM.MIN
+        self.m_currentCompare = SSRC.PWM.LIMIT_MAX
         self.m_active = True
         self.m_threadCondition = threading.Condition()
         self.m_lock = threading.Lock()
@@ -63,15 +59,15 @@ class Relay(object):
         while(True):
             with(self.m_lock):
                 active = self.m_active
-                if(SSRC.PWM.MIN > self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.MIN
-                if(SSRC.PWM.MAX < self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.MAX
+                if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
+                    self.m_currentCompare = SSRC.PWM.LIMIT_MIN
+                if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
+                    self.m_currentCompare = SSRC.PWM.LIMIT_MAX
                 currentCompare = self.m_currentCompare
             if(not active):
                 pi.hardware_PWM(pin, SSRC.PWM.PERIOD, offVal)
                 break
-            logging.debug("Set relay to {}/1000000".format(currentCompare))
+            logging.debug("Set relay to {:.2f}%".format((currentCompare/SSRC.PWM.MAX)*100))
             if(item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD):
                 pi.hardware_PWM(pin, SSRC.PWM.PERIOD, currentCompare)
             else:
@@ -79,14 +75,17 @@ class Relay(object):
                     pin, SSRC.PWM.PERIOD, SSRC.PWM.MAX - currentCompare)
             self.m_threadCondition.wait(120.0)
         self.m_threadCondition.release()
+    
+    def Status(self):
+        return (self.m_currentCompare / SSRC.PWM.MAX) * 100
 
     def Adjust(self, state):
         with(self.m_lock):
             self.m_currentCompare = self.m_currentCompare + state
-            if(SSRC.PWM.MIN > self.m_currentCompare):
-                self.m_currentCompare = SSRC.PWM.MIN
-            if(SSRC.PWM.MAX < self.m_currentCompare):
-                self.m_currentCompare = SSRC.PWM.MAX
+            if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.LIMIT_MIN
+            if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.LIMIT_MAX
         self.m_threadCondition.acquire()
         self.m_threadCondition.notify()
         self.m_threadCondition.release()
@@ -119,10 +118,7 @@ class Relay(object):
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
-    if not 'IGRILL_CFG_DIR' in os.environ:
-        config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-    else:
-        config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+    config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
     loglevel = config.get("Logging", "LogLevel", fallback="Error")
     logfile = config.get("Logging", "LogFile", fallback="")
 

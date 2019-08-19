@@ -20,25 +20,16 @@ import sys
 from .bluetooth.igrill import IGrillPeripheral, IGrillMiniPeripheral
 from .common.local_logging import SetupLog
 from .config.mac_config import ADDRESS
+from .common.constant import BLUETOOTH, CONFIG
 
-# TODO: make this a config variable
-if not 'IGRILL_RUN_DIR' in os.environ:
-    DATA_FILE = (sys.path[0]+'/../run/igrill.json')
-else:
-    DATA_FILE = (os.environ['IGRILL_RUN_DIR']+'/igrill.json')
-if not 'IGRILL_SCR_DIR' in os.environ:
-    PROCESS_SCRIPT=(sys.path[0]+'/../data.sh')
-else:
-    PROCESS_SCRIPT=(os.environ['IGRILL_SCR_DIR']+'/data.sh')
-
+# TODO: make this a shared constant between bash and python
+DATA_FILE = (CONFIG.BASEPATH + '/run/igrill.json')
+PROCESS_SCRIPT = CONFIG.BASEPATH + "/scripts/" + BLUETOOTH.TEMPERATURE_SCRIPT_NAME
 
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
-    if not 'IGRILL_CFG_DIR' in os.environ:
-        config.read(sys.path[0]+'/../config/iGrill_config.ini')
-    else:
-        config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+    config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
     food_probe = config.getint("Probes", "FoodProbe", fallback=1)
     smoke_probe = config.getint("Probes", "SmokeProbe", fallback=4)
     poll_time = config.getint("Reporting", "PollTime", fallback=20)
@@ -103,10 +94,13 @@ def main():
                     if (True == options.test_mode):
                         logging.debug("Skipping data.sh call")
                     else:
-                        os.system(PROCESS_SCRIPT+" " +
+                        returnVal = os.system(PROCESS_SCRIPT+" " +
                                   str(sensor_data['battery']) + ' ' +
                                   str(sensor_data['temperature'][smoke_probe - 1]) + ' ' +
                                   str(sensor_data['temperature'][food_probe - 1]))
+                        if ( 0 != returnVal):
+                            logging.info("data.sh exited with {}".format(returnVal))
+                            sys.exit(returnVal)
                     if (True == options.test_mode):
                         logging.info(
                             "Skipping sensor data write.  Data: {}".format(sensor_data))

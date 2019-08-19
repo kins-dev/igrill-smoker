@@ -20,14 +20,11 @@ import sys
 from Pyro5.api import Proxy
 from ..common.local_logging import SetupLog
 from . import ssrc_daemon
-from ..common.constant import SSRC
+from ..common.constant import SSRC, CONFIG
 
 config = configparser.ConfigParser()
 # does not throw an error, just returns the empty set if the file doesn't exist
-if not 'IGRILL_CFG_DIR' in os.environ:
-    config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-else:
-    config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
 loglevel = config.get("Logging", "LogLevel", fallback="Error")
 logfile = config.get("Logging", "LogFile", fallback="")
 
@@ -106,15 +103,25 @@ if(0 < len(vars(options))):
         if(options.in_band):
             if(options.hot):
                 ssrcObj.Adjust(SSRC.TemperatureState.WARM)
+                logging.debug(
+                    "Adjust down 1% to {:.2f}%".format(ssrcObj.Status()))
             elif(options.cold):
                 ssrcObj.Adjust(SSRC.TemperatureState.COOL)
+                logging.debug(
+                    "Adjust up 0.25% to {:.2f}%".format(ssrcObj.Status()))
             else:
                 ssrcObj.Adjust(SSRC.TemperatureState.PERFECT)
+                logging.debug(
+                    "Stay at {:.2f}%".format(ssrcObj.Status()))
         else:
             if(options.hot):
                 ssrcObj.Adjust(SSRC.TemperatureState.HOT)
+                logging.debug(
+                    "Adjust down 20% to {:.2f}%".format(ssrcObj.Status()))
             elif(options.cold):
                 ssrcObj.Adjust(SSRC.TemperatureState.COLD)
+                logging.debug(
+                    "Adjust up 5% to {:.2f}%".format(ssrcObj.Status()))
             else:
                 logging.info(
                     "Odd, ssr_client called but not in band, hot or cold, ignoring")

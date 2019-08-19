@@ -1,0 +1,101 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Assets",
+            "type": "shell",
+            "options": {
+                "cwd": "documentation/assets"
+            },
+            "command": "make",
+            "args": [
+                "all"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Update Pi",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "cd igrill-smoker;git pull"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Board Checkout",
+            "type": "shell",
+            "dependsOn":["Start pigpiod"],
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "cd igrill-smoker/tests/board;./board_checkout.sh"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup Screen",
+            "type": "shell",
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "cd igrill-smoker;screen -ls pigrill || screen -dmS pigrill -c config/.screenrc;screen -S pigrill -X select 0"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Start pigpiod",
+            "type": "shell",
+            "dependsOn":["Setup Screen"],
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "screen -S pigrill -X select 1;screen -s pigrill -X stuff \"sudo pigpiod\"`echo -ne \"\\015\"`;screen -S pigrill -X select 0"
+            ],
+            "problemMatcher": []
+        }, {
+            "label": "Start smoking",
+            "type": "shell",
+            "dependsOn": ["Setup Screen"],
+            "command": "ssh",
+            "args": [
+                "pi@pigrill",
+                "-C",
+                "screen -S pigrill -X select 0;screen -s pigrill -X stuff \"./start_smoking.sh\"`echo -ne \"\\015\"`"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Python Tests",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "-m",
+                "unittest",
+                "discover",
+                "-v",
+                "-s",
+                "scripts/pygrill",
+                "-t",
+                "scripts",
+                "-p",
+                "test_*.py"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

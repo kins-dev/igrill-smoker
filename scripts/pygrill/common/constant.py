@@ -10,6 +10,16 @@ __author__ = "Scott Atkins"
 __version__ = "1.4.0"
 __license__ = "MIT"
 
+import os
+
+class CONFIG:
+    if not 'IGRILL_BAS_DIR' in os.environ:
+        BASEPATH = os.path.realpath(os.path.dirname(os.path.realpath(__file__))+"/../../../")
+    else:
+        BASEPATH = os.path.realpath(os.environ['IGRILL_BAS_DIR'])
+
+class BLUETOOTH:
+    TEMPERATURE_SCRIPT_NAME = "data.sh"
 
 class TEST:
     class KASA:
@@ -55,14 +65,16 @@ class SSRC:
     class PWM:
         MAX = BUZZ.PWM.MAX
         MIN = BUZZ.PWM.MIN
-        PERIOD = 101
+        LIMIT_MAX = 85 * (BUZZ.PWM.MAX // 100)
+        LIMIT_MIN = 30 * (BUZZ.PWM.MAX // 100)
+        PERIOD = 1
 
     class TemperatureState:
-        HOT = -1 * (BUZZ.PWM.MAX // 5)  # 20%
-        WARM = -1 * (BUZZ.PWM.MAX // 100)  # 1%
-        PERFECT = 0  # 0%
-        COOL = 1 * (BUZZ.PWM.MAX // 100)  # -1%
-        COLD = 1 * (BUZZ.PWM.MAX // 5)   # -20%
+        HOT = -1 * (BUZZ.PWM.MAX // 5)      # -20%
+        WARM = -1 * (BUZZ.PWM.MAX // 100)   #  -1%
+        PERFECT = 0                         #   0%
+        COOL = 1 * (BUZZ.PWM.MAX // 400)    #   0.25%
+        COLD = 1 * (BUZZ.PWM.MAX // 20)     #   5%
 
     class BOARD:
         REV_ss = "**"
@@ -71,6 +83,7 @@ class SSRC:
         REV_sC = "*C"
         REV_sD = "*D"
         REV_sD_Patched = "*D.1"
+        REV_sE = "*E"
         DISABLED = "None"
         DETECT_REV = "Auto"
 
@@ -83,7 +96,8 @@ class SSRC:
         REV_MAP = {
             1793: REV_sB,
             1794: REV_sC,
-            1795: REV_sD
+            1795: REV_sD,
+            1796: REV_sE
         }
 
         ITEM_IO = "Pin"
@@ -118,6 +132,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 10,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE : {
+                        ITEM_IO: 10,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Smoking complete": {
@@ -144,6 +162,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 22,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 22,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Cold": {
@@ -158,6 +180,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 2,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 27,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Cool": {
@@ -172,6 +198,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 3,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 17,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Perfect": {
@@ -186,6 +216,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 4,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 4,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Warm": {
@@ -200,6 +234,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 17,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 3,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
                 "Hot": {
@@ -214,6 +252,10 @@ class SSRC:
                     REV_sD_Patched: {
                         ITEM_IO: 27,
                         ITEM_VALUE: VALUES_INVERTED
+                    },
+                    REV_sE: {
+                        ITEM_IO: 2,
+                        ITEM_VALUE: VALUES_STANDARD
                     }
                 },
             },
@@ -239,6 +281,10 @@ class SSRC:
                     ITEM_VALUE: VALUES_STANDARD
                 },
                 REV_sD_Patched: {
+                    ITEM_IO: 12,
+                    ITEM_VALUE: VALUES_STANDARD
+                },
+                REV_sE: {
                     ITEM_IO: 12,
                     ITEM_VALUE: VALUES_STANDARD
                 }
@@ -267,6 +313,10 @@ class SSRC:
                 REV_sD_Patched: {
                     ITEM_IO: 13,
                     ITEM_VALUE: VALUES_INVERTED
+                },
+                REV_sE: {
+                    ITEM_IO: 13,
+                    ITEM_VALUE: VALUES_STANDARD
                 }
             },
             "Switch": {
@@ -281,7 +331,11 @@ class SSRC:
                     ITEM_IO: 6,
                     ITEM_VALUE: VALUES_STANDARD
                 },
-                REV_sD_Patched: ITEM_INVALID
+                REV_sD_Patched: ITEM_INVALID,
+                REV_sE: {
+                    ITEM_IO: 6,
+                    ITEM_VALUE: VALUES_STANDARD
+                }
             }
         }
 

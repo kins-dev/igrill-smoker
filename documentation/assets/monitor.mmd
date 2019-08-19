@@ -3,9 +3,10 @@ style monitor stroke-width:4px
 style data stroke-width:4px
 
     subgraph 
-    monitor[monitor.py]
+    monitor[bt_monitor.py]
     igrill[igrill.py]
-    logging[logging.py]
+    logging[local_logging.py]
+    constants[constant.py]
     mac_config[mac_config.py]
     limits[limits.ini]
     iGrill_config[iGrill_config.ini]
@@ -17,4 +18,5 @@ style data stroke-width:4px
     monitor -.- iGrill_config
     igrill -.- limits
     monitor ==> data
+    monitor --- constants
 end

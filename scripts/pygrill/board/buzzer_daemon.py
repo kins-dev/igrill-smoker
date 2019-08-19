@@ -19,7 +19,7 @@ import threading
 import os
 import sys
 from Pyro5.api import expose, behavior, Daemon
-from ..common.constant import SSRC, BUZZ
+from ..common.constant import SSRC, BUZZ, CONFIG
 from . import board
 from struct import pack
 from ..common.local_logging import SetupLog
@@ -32,10 +32,7 @@ class Buzzer(object):
         self.m_daemon = daemon
         config = configparser.ConfigParser()
         # does not throw an error, just returns the empty set if the file doesn't exist
-        if not 'IGRILL_CFG_DIR' in os.environ:
-            config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-        else:
-            config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+        config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
         boardVal = board.DetectBoard(
             config.get("SSR", "Board", fallback=boardIn))
         if (SSRC.BOARD.DISABLED == boardVal):
@@ -164,10 +161,7 @@ class Buzzer(object):
 def main():
     config = configparser.ConfigParser()
     # does not throw an error, just returns the empty set if the file doesn't exist
-    if not 'IGRILL_CFG_DIR' in os.environ:
-        config.read(sys.path[0]+'/../../config/iGrill_config.ini')
-    else:
-        config.read(os.environ['IGRILL_CFG_DIR']+'/iGrill_config.ini')
+    config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
     loglevel = config.get("Logging", "LogLevel", fallback="Error")
     logfile = config.get("Logging", "LogFile", fallback="")
 

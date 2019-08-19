@@ -30,10 +30,6 @@ fi
 # shellcheck source=utils/paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 
-# pull in plug functions
-# shellcheck source=utils/kasa.sh
-source "${IGRILL_UTL_DIR}/kasa.sh"
-
 # pull in limit functions
 # shellcheck source=utils/limits.sh
 source "${IGRILL_UTL_DIR}/limits.sh"
@@ -230,8 +226,10 @@ if [ "$SM_TEMP" -ge "$SMOKE_TEMP_LOW" ]; then
         IN_BAND="1"
     fi
 fi
-
-if [ "${DIRECTION}" -lt "0" ]; then
+#echo "DIRECTION=${DIRECTION}"
+#echo "IN_BAND=${IN_BAND}"
+#echo "DIFF=${DIFF}"
+if [ "${DIRECTION}" -lt "0" ]; then # colder than target
     if [ "${IN_BAND}" -eq "0" ]; then
         if [ "${DIFF}" -lt "0" ]; then
             PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --cold
@@ -249,19 +247,39 @@ if [ "${DIRECTION}" -lt "0" ]; then
         fi
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cold ${SMOKING_COMPLETE} ${LOW_BATTERY}
     else
-        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --cool ${SMOKING_COMPLETE} ${LOW_BATTERY}
+        if [ "${DIFF}" -eq "0" ]; then # steady
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+        elif [ "${DIFF}" -gt "0" ]; then # rising
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        else
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+        fi
     fi
 elif [ "${DIRECTION}" -gt "0" ]; then
     if [ "${IN_BAND}" -eq "0" ]; then
+        #echo "above target, out of band"
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --hot
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --hot ${SMOKING_COMPLETE} ${LOW_BATTERY}
     else
-        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        #echo "above target, in band"
+        if [ "${DIFF}" -eq "0" ]; then # steady
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+        elif [ "${DIFF}" -gt "0" ]; then # rising
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+        else
+            PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+        fi
         PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --warm ${SMOKING_COMPLETE} ${LOW_BATTERY}
     fi
 else
-    PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+    if [ "${DIFF}" -eq "0" ]; then # steady
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band
+    elif [ "${DIFF}" -gt "0" ]; then # rising
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --hot
+    else
+        PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --in_band --cold
+    fi
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds --perfect ${SMOKING_COMPLETE} ${LOW_BATTERY}
 fi
 PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.buzzer_client ${SMOKING_COMPLETE} ${LOW_BATTERY}

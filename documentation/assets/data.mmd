@@ -2,32 +2,44 @@ graph TD
     style config stroke-width:4px
     style data stroke-width:4px
     subgraph 
+        constants[constant.py]
+        logging[local_logging.py]
         data[data.sh]
         config[config.sh]
         paths[paths.sh]
-        leds[leds.sh]
-        kasa[kasa.sh]
         kasa_client[kasa_client.py]
-        sounds[sounds.sh]
+        kasa_daemon[kasa_daemon.py]
+        leds[LEDs.py]
+        ssrc_client[ssrc_client.py]
+        ssrc_daemon[ssrc_daemon.py]
+        buzzer_client[buzzer_client.py]
+        buzzer_daemon[buzzer_daemon.py]
+        board[board.py]
         current[current.csv]
         stage[stage.sh]
         state[state.json]
         last_temp[last_temp.sh]
         limits[limits.sh]
     end
+    board --- constants
+    board --- logging
     data --- config
     data --- limits
-    data --- leds
-    data --- kasa
-    data --- sounds
     data -.- current
     data -.- stage
     data -.- last_temp
     data -.- state
     limits --- paths
     data --- paths
-    kasa --- paths
-    kasa --- kasa_client
-    data --- kasa_client
+    data ==> ssrc_client
+    ssrc_client --> ssrc_daemon
+    ssrc_daemon --- board
+    data --> buzzer_client
+    buzzer_client --> buzzer_daemon
+    buzzer_daemon --- board
+    data ==> leds
+    leds --- board
+    data ==> kasa_client
+    kasa_client --> kasa_daemon
     click data "#scriptsdatash" "data.sh"
     click config "#scriptsconfigsh" "config.sh"

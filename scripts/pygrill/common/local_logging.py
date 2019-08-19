@@ -35,4 +35,4 @@ def SetupLog(log_level, logfile):
         logging.basicConfig(format='%(asctime)s %(threadName)s %(levelname)s: %(message)s')
 
     logging.getLogger().setLevel(numeric_level)
-    logging.info("log_level set to: {0}".format(log_level))
+    #logging.info("log_level set to: {0}".format(log_level))

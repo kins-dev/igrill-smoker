@@ -13,7 +13,7 @@ __license__ = "MIT"
 import unittest
 import unittest.mock as mock
 from ..board import leds
-from ..common.constant import SSRC
+from ..common.constant import SSRC, CONFIG
 
 
 class Test_LEDs(unittest.TestCase):
@@ -46,4 +46,7 @@ class Test_LEDs(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    print("BASEPATH=" + CONFIG.BASEPATH)
+    print("MAX: {}".format(SSRC.PWM.LIMIT_MAX))
+    print("MIN: {}".format(SSRC.PWM.LIMIT_MIN))
     unittest.main()
