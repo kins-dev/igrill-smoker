@@ -19,21 +19,21 @@ case "$STAGE" in
     1)
         # Warmup stage, keep plate at a cooler temp
         STAGE_NAME="Warmup"
-        SMOKE_MID=120
+        SMOKE_MID=160
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=65
     ;;
     2)
         # Smoke stage, keep plate at cooler temp
         STAGE_NAME="Smoke"
-        SMOKE_MID=160
+        SMOKE_MID=180
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=100
     ;;
     3)
         # Smoke stage, keep plate at cooler temp
         STAGE_NAME="Smoke"
-        SMOKE_MID=180
+        SMOKE_MID=200
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=120
     ;;

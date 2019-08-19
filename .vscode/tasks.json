@@ -72,7 +72,7 @@
             "args": [
                 "pi@pigrill",
                 "-C",
-                "screen -S pigrill -X select 1;screen -s pigrill -X stuff \"./start_smoking.sh\"`echo -ne \"\\015\"`"
+                "screen -S pigrill -X select 0;screen -s pigrill -X stuff \"./start_smoking.sh\"`echo -ne \"\\015\"`"
             ],
             "problemMatcher": []
         },
