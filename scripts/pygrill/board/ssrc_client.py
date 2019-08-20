@@ -83,6 +83,12 @@ parser.add_argument(
     dest='log_destination',
     default=logfile,
     help='Set log destination (file), default: \'' + logfile + '\'')
+parser.add_argument(
+    '--status',
+    dest='status',
+    help='Gets the SSRC status',
+    action='store_true')
+
 options = parser.parse_args()
 
 SetupLog(options.log_level, options.log_destination)
@@ -99,6 +105,8 @@ if(0 < len(vars(options))):
 
     if(options.shutdown):
         ssrcObj.Exit()
+    elif(options.status):
+        print("{:.2f}".format(ssrcObj.Status()))
     else:
         if(options.in_band):
             if(options.hot):
