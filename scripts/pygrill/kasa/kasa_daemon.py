@@ -72,6 +72,7 @@ class Kasa(object):
         self.m_findTime = 0
         self.FindDevice()
         self.m_exitCode = 0
+        self.m_fail_cnt = 0
         self.m_errors = list()
 
     def ExitCode(self):
@@ -80,17 +81,23 @@ class Kasa(object):
     def FindDevice(self):
         state = -1
         cnt = 0
-        # if it has been more than 10 seconds since the last scan, find the device again
-        if (10 < (int(time.time()) - self.m_findTime)):
+        # if it has been more than 10 seconds since the last scan, find the device again, or if last communication failed
+        if (10 < (int(time.time()) - self.m_findTime) or 0 < self.m_fail_cnt):
             # Try to discover up to 5 times
             while ((state == -1) and (cnt < 5)):
-                self.m_ip, state = self.Discover(self.name)
+                ip, state = self.Discover(self.name)
                 cnt += 1
             if (state == -1):
-                self.m_exitCode = 1
-                self.Exit()
-            self.m_active = (state == 1)
-            self.m_findTime = int(time.time())
+                self.m_fail_cnt = self.m_fail_cnt + 1
+                if (9 < self.m_fail_cnt):
+                    logging.error("Unable to discover after 10 attempts, exiting")
+                    self.m_exitCode = 1
+                    self.Exit()
+            else:
+                self.m_ip = ip
+                self.m_fail_cnt = 0
+                self.m_active = (state == 1)
+                self.m_findTime = int(time.time())
 
     def CheckForErrors(self, result):
         data = json.loads(result)
@@ -107,19 +114,25 @@ class Kasa(object):
             self.m_errors.append(result)
 
     def SendCommand(self, command):
-        logging.debug("Setting up socket")
-        self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        logging.debug("Connecting")
-        self.m_sock.connect((self.m_ip, KASA.DAEMON.NET_PORT))
-        logging.debug("Sending to \"{}:{}\" \"{}\"".format(
-            self.m_ip, KASA.DAEMON.NET_PORT, command))
-        self.m_sock.send(EncryptWithHeader(command))
-        logging.debug("Reading result")
-        result = DecryptWithHeader(
-            self.m_sock.recv(KASA.DAEMON.NET_BUFFER_SIZE))
-        self.CheckForErrors(result)
-        logging.debug("Result: {}".format(result))
-        self.m_sock.close()
+        if (0 == self.m_fail_cnt):
+            logging.debug("Setting up socket")
+            self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            logging.debug("Connecting")
+            try:
+                self.m_sock.connect((self.m_ip, KASA.DAEMON.NET_PORT))
+                logging.debug("Sending to \"{}:{}\" \"{}\"".format(
+                    self.m_ip, KASA.DAEMON.NET_PORT, command))
+                self.m_sock.send(EncryptWithHeader(command))
+                logging.debug("Reading result")
+                result = DecryptWithHeader(
+                    self.m_sock.recv(KASA.DAEMON.NET_BUFFER_SIZE))
+                self.CheckForErrors(result)
+                logging.debug("Result: {}".format(result))
+            except socket.error:
+                logging.error("Socket error while trying to communicate")
+                self.m_fail_cnt = self.m_fail_cnt + 1
+            finally:
+                self.m_sock.close()
 
     def Discover(self, alias):
         logging.debug("Attempting to discover \"{}\"".format(alias))
