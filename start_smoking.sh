@@ -67,7 +67,7 @@ if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     FILE="$WEBDIR/$(date +"%Y_%m_%d_%I_%M_%p").csv"
     sudo touch "$FILE"
     sudo chmod a+rw "$FILE"
-    echo "Time,Battery,Smoke Temp,Food Temp,Internal Target,Smoke Target Low,Smoke Target,Smoke Target High,Plug State" > "$FILE"
+    echo "Time,Battery,Smoke Temp,Food Temp,Internal Target,Smoke Target Low,Smoke Target,Smoke Target High,Plug State,Solid State Relay State" > "$FILE"
     
     # Link CSV file
     sudo rm -f "$CSV_FILE"

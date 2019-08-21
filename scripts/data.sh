@@ -43,6 +43,8 @@ function Finish () {
     #	echo "done"
     local KASA_STATE="red"
     local KASA_PLUG_STATE
+    local SSR_STATE
+    SSR_STATE=$(PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --status)
     KASA_PLUG_STATE=$(PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.kasa.kasa_client --status)
     if [ "on" == "$KASA_PLUG_STATE" ]; then
         KASA_STATE="lightgreen"
@@ -51,7 +53,7 @@ function Finish () {
         FD_TEMP=""
         INTERNAL_TEMP=""
     fi
-    echo "$CSV_DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE" >> "$CSV_FILE"
+    echo "$CSV_DATE,$BATTERY,$SM_TEMP,$FD_TEMP,$INTERNAL_TEMP,$SMOKE_TEMP_LOW,$SMOKE_MID,$SMOKE_TEMP_HIGH,$KASA_STATE,$SSR_STATE" >> "$CSV_FILE"
 }
 
 # Load the config/user config/stages files
