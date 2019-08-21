@@ -93,7 +93,7 @@ class Kasa(object):
                     response = os.system("ping -c 1 " + self.m_ip)
                     if(0 == response):
                         self.m_discovery_fail_cnt = self.m_discovery_fail_cnt + 1
-                        logging.debug("IP up but discovery failed, ignoring")
+                        logging.error("IP up but discovery failed, ignoring, count: {}".format(self.m_discovery_fail_cnt))
                         return
                 self.m_fail_cnt = self.m_fail_cnt + 1
                 logging.error("Unable to discover kasa, fail count is {}".format(self.m_fail_cnt))
@@ -170,7 +170,7 @@ class Kasa(object):
                     logging.debug("Found alias: closing socket")
                     #logging.debug("IP: {}".format(retData[0]))
                     #logging.debug("State: {}".format(retData[1]))
-                    break;
+                    break
         except socket.timeout:
             logging.debug("Timeout: closing socket")
             logging.info("\"{}\" was not found, exiting.".format(alias))
