@@ -84,8 +84,8 @@ class Kasa(object):
         # if it has been more than 10 seconds since the last scan, find the device again, or if last communication failed
         if (10 < (int(time.time()) - self.m_findTime) or 0 < self.m_fail_cnt):
             ip, state = self.Discover(self.name)
-            logging.debug("IP: {}".format(ip))
-            logging.debug("State: {}".format(state))
+            #logging.debug("IP: {}".format(ip))
+            #logging.debug("State: {}".format(state))
             if ("" == ip):
                 self.m_fail_cnt = self.m_fail_cnt + 1
                 logging.error("Unable to discover kasa, fail count is {}".format(self.m_fail_cnt))
@@ -135,6 +135,7 @@ class Kasa(object):
                 self.m_sock.close()
 
     def Discover(self, alias):
+        retData = ("", -1)
         logging.debug("Attempting to discover \"{}\"".format(alias))
         logging.debug("Setting up socket")
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -158,16 +159,15 @@ class Kasa(object):
                     retData = (addr[0], 
                         json_data["system"]["get_sysinfo"]["relay_state"])
                     logging.debug("Found alias: closing socket")
-                    logging.debug("IP: {}".format(retData[0]))
-                    logging.debug("State: {}".format(retData[1]))
-                    sock.close()
-                    return retData
+                    #logging.debug("IP: {}".format(retData[0]))
+                    #logging.debug("State: {}".format(retData[1]))
+                    break;
         except socket.timeout:
             logging.debug("Timeout: closing socket")
             logging.info("\"{}\" was not found, exiting.".format(alias))
         finally:
             sock.close()
-            return ("", -1)
+            return retData
 
     def GetIP(self):
         self.FindDevice()
