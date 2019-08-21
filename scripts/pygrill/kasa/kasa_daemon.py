@@ -80,11 +80,12 @@ class Kasa(object):
 
     def FindDevice(self):
         state = -1
-        cnt = 0
         attempts = 10
         # if it has been more than 10 seconds since the last scan, find the device again, or if last communication failed
         if (10 < (int(time.time()) - self.m_findTime) or 0 < self.m_fail_cnt):
             ip, state = self.Discover(self.name)
+            logging.debug("IP: {}".format(ip))
+            logging.debug("State: {}".format(state))
             if ("" == ip):
                 self.m_fail_cnt = self.m_fail_cnt + 1
                 logging.error("Unable to discover kasa, fail count is {}".format(self.m_fail_cnt))
