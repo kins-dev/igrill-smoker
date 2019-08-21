@@ -90,7 +90,7 @@ class Kasa(object):
                 cnt += 1
             if (state == -1):
                 self.m_fail_cnt = self.m_fail_cnt + 1
-                logging.error("Unable to discover kasa")
+                logging.error("Unable to discover kasa, fail count is {}".format(self.m_fail_cnt))
                 if (attempts <= self.m_fail_cnt):
                     logging.error("Unable to discover after {} attempts, exiting".format(attempts))
                     self.m_exitCode = 1
