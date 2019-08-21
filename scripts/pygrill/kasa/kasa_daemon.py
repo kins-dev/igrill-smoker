@@ -154,10 +154,14 @@ class Kasa(object):
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
                 logging.debug("Received: {}".format(Decrypt(data)))
-                if json_data["system"]["get_sysinfo"]["alias"] == alias:
+                if (json_data["system"]["get_sysinfo"]["alias"] == alias):
+                    retData = (addr[0], 
+                        json_data["system"]["get_sysinfo"]["relay_state"])
                     logging.debug("Found alias: closing socket")
+                    logging.debug("IP: {}".format(retData[0]))
+                    logging.debug("State: {}".format(retData[1]))
                     sock.close()
-                    return (addr[0], json_data["system"]["get_sysinfo"]["relay_state"])
+                    return retData
         except socket.timeout:
             logging.debug("Timeout: closing socket")
             logging.info("\"{}\" was not found, exiting.".format(alias))
