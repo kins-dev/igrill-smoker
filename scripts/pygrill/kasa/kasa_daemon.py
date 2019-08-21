@@ -81,6 +81,7 @@ class Kasa(object):
     def FindDevice(self):
         state = -1
         cnt = 0
+        attempts = 10
         # if it has been more than 10 seconds since the last scan, find the device again, or if last communication failed
         if (10 < (int(time.time()) - self.m_findTime) or 0 < self.m_fail_cnt):
             # Try to discover up to 5 times
@@ -89,8 +90,9 @@ class Kasa(object):
                 cnt += 1
             if (state == -1):
                 self.m_fail_cnt = self.m_fail_cnt + 1
-                if (9 < self.m_fail_cnt):
-                    logging.error("Unable to discover after 10 attempts, exiting")
+                logging.error("Unable to discover kasa")
+                if (attempts <= self.m_fail_cnt):
+                    logging.error("Unable to discover after {} attempts, exiting".format(attempts))
                     self.m_exitCode = 1
                     self.Exit()
             else:
