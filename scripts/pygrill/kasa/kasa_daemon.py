@@ -70,10 +70,10 @@ class Kasa(object):
 
         self.name = kasa_alias
         self.m_findTime = 0
-        self.FindDevice()
         self.m_exitCode = 0
-        self.m_fail_cnt = 0
         self.m_errors = list()
+        self.m_fail_cnt = 0
+        self.FindDevice()
 
     def ExitCode(self):
         return self.m_exitCode
