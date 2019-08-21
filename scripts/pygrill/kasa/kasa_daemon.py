@@ -143,7 +143,7 @@ class Kasa(object):
         logging.debug("Allowing broadcast")
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Sending broadcast")
-        sock.settimeout(2)
+        sock.settimeout(2 + self.m_fail_cnt)
         logging.debug("Msg: {}".format(KASA.DAEMON.JSON_DISCOVER))
         logging.debug("To:  {}:{}".format(
             KASA.DAEMON.NET_DISCOVER_IP, KASA.DAEMON.NET_PORT))
@@ -163,6 +163,7 @@ class Kasa(object):
         except socket.timeout:
             logging.debug("Timeout: closing socket")
             logging.info("\"{}\" was not found, exiting.".format(alias))
+        finally:
             sock.close()
             return ("", -1)
 
