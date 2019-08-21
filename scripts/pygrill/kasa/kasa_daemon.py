@@ -73,6 +73,8 @@ class Kasa(object):
         self.m_exitCode = 0
         self.m_errors = list()
         self.m_fail_cnt = 0
+        self.m_discovery_fail_cnt = 0
+        self.m_ip = ""
         self.FindDevice()
 
     def ExitCode(self):
@@ -87,6 +89,12 @@ class Kasa(object):
             #logging.debug("IP: {}".format(ip))
             #logging.debug("State: {}".format(state))
             if ("" == ip):
+                if("" != self.m_ip and attempts <= self.m_discovery_fail_cnt):
+                    response = os.system("ping -c 1 " + self.m_ip)
+                    if(0 == response):
+                        self.m_discovery_fail_cnt = self.m_discovery_fail_cnt + 1
+                        logging.debug("IP up but discovery failed, ignoring")
+                        return
                 self.m_fail_cnt = self.m_fail_cnt + 1
                 logging.error("Unable to discover kasa, fail count is {}".format(self.m_fail_cnt))
                 if (attempts <= self.m_fail_cnt):
@@ -96,6 +104,7 @@ class Kasa(object):
             else:
                 self.m_ip = ip
                 self.m_fail_cnt = 0
+                self.m_discovery_fail_cnt = 0
                 self.m_active = (state == 1)
                 self.m_findTime = int(time.time())
 
