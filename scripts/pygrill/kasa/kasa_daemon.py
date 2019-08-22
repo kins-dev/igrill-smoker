@@ -119,7 +119,7 @@ class Kasa(object):
                 logging.error("Socket error {} while trying to communicate".format(e))
                 self.m_fail_cnt = self.m_fail_cnt + 1
             finally:
-                sock.shutdown()
+                sock.shutdown(socket.SHUT_RDWR)
                 sock.close()
         return result
 
@@ -163,7 +163,7 @@ class Kasa(object):
             if(10 <= self.m_discovery_fail_cnt):
                 logging.error("Failed to discover {} times".format(self.m_discovery_fail_cnt))
         finally:
-            sock.shutdown()
+            sock.shutdown(socket.SHUT_RDWR)
             sock.close()
 
     def GetIP(self):
@@ -199,7 +199,7 @@ class Kasa(object):
 
     def Exit(self):
         logging.debug("Closing socket")
-        self.m_daemon.shutdown()
+        self.m_daemon.shutdown(socket.SHUT_RDWR)
 
 
 def main():
