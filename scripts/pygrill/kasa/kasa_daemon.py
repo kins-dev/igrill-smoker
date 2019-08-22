@@ -68,7 +68,7 @@ class Kasa(object):
         config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
         kasa_alias = config.get("Kasa", "Name", fallback="iGrill-smoker")
 
-        self.name = kasa_alias
+        self.m_name = kasa_alias
         self.m_findTime = 0
         self.m_exitCode = 0
         self.m_errors = list()
@@ -113,9 +113,9 @@ class Kasa(object):
                 logging.debug("Reading result")
                 result = DecryptWithHeader(
                     sock.recv(KASA.DAEMON.NET_BUFFER_SIZE))
-                self.CheckForErrors(result)
                 logging.debug("Result: {}".format(result))
-            except socket.error, e:
+                self.CheckForErrors(result)
+            except socket.error as e:
                 logging.error("Socket error {} while trying to communicate".format(e))
                 self.m_fail_cnt = self.m_fail_cnt + 1
             finally:
@@ -124,14 +124,14 @@ class Kasa(object):
         return result
 
     def GetSystemInfo(self):
-        result = self.SendCommand(JSON_DISCOVER)
+        result = self.SendCommand(KASA.DAEMON.JSON_DISCOVER)
         if("" != result):
             data = json.loads(result)
             self.m_active = (1 == data["system"]["get_sysinfo"]["relay_state"])
 
 
-    def Discover(self, alias):
-        logging.debug("Attempting to discover \"{}\"".format(alias))
+    def Discover(self):
+        logging.debug("Attempting to discover \"{}\"".format(self.m_name))
         logging.debug("Setting up socket")
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         logging.debug("Allowing broadcast")
@@ -150,7 +150,7 @@ class Kasa(object):
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
                 logging.debug("Received: {}".format(Decrypt(data)))
-                if (json_data["system"]["get_sysinfo"]["alias"] == alias):
+                if (json_data["system"]["get_sysinfo"]["alias"] == self.m_name):
                     logging.debug("Found alias: closing socket")
                     self.m_ip = addr[0]
                     self.m_ipValid = True
@@ -159,7 +159,7 @@ class Kasa(object):
                     break
         except socket.timeout:
             self.m_discovery_fail_cnt = self.m_discovery_fail_cnt + 1
-            logging.info("Timed out while looking for \"{}\"".format(alias))
+            logging.info("Timed out while looking for \"{}\"".format(self.m_name))
             if(10 <= self.m_discovery_fail_cnt):
                 logging.error("Failed to discover {} times".format(self.m_discovery_fail_cnt))
         finally:
