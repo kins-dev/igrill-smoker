@@ -163,7 +163,6 @@ class Kasa(object):
             if(10 <= self.m_discovery_fail_cnt):
                 logging.error("Failed to discover {} times".format(self.m_discovery_fail_cnt))
         finally:
-            sock.shutdown(socket.SHUT_RDWR)
             sock.close()
 
     def GetIP(self):
