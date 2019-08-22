@@ -192,6 +192,7 @@ def main():
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')
+    daemon.shutdown()
     daemon.close()
     logging.debug('daemon closed')
     sys.exit(buzzObj.ExitCode())
