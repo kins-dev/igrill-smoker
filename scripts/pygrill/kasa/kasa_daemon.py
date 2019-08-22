@@ -198,7 +198,7 @@ class Kasa(object):
 
     def Exit(self):
         logging.debug("Closing socket")
-        self.m_daemon.shutdown(socket.SHUT_RDWR)
+        self.m_daemon.shutdown()
 
 
 def main():
