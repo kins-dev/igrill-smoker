@@ -45,19 +45,22 @@ if(0 < len(vars(options))):
     if(options.turn_on and options.turn_off):
         print("Cannot turn on and off at the same time")
         sys.exit(1)
-
     kasaObj = Proxy(("PYRO:{}@{}:{}").format(
         KASA.DAEMON.PYRO_OBJECT_ID,
         KASA.DAEMON.PYRO_HOST,
         KASA.DAEMON.PYRO_PORT))
-    if(options.turn_on):
-        kasaObj.TurnPlugOn()
-    if(options.turn_off):
-        kasaObj.TurnPlugOff()
-    if(options.status):
-        if(kasaObj.GetActive()):
-            print("on")
-        else:
-            print("off")
-    if(options.shutdown):
-        kasaObj.Exit()
+    try:
+        if(options.turn_on):
+            kasaObj.TurnPlugOn()
+        if(options.turn_off):
+            kasaObj.TurnPlugOff()
+        if(options.status):
+            if(kasaObj.GetActive()):
+                print("on")
+            else:
+                print("off")
+        if(options.shutdown):
+            kasaObj.Exit()
+    finally:
+        # Failure to communicate can cause an exception
+        sys.exit(0)
