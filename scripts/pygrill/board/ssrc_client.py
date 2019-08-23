@@ -102,7 +102,6 @@ if(0 < len(vars(options))):
         SSRC.DAEMON.PYRO_OBJECT_ID,
         SSRC.DAEMON.PYRO_HOST,
         SSRC.DAEMON.PYRO_PORT))
-    # TODO: Put in try except code to handle network errors
     try:
         if(options.shutdown):
             ssrcObj.Exit()
@@ -137,5 +136,6 @@ if(0 < len(vars(options))):
                     # something else like logging
                     pass
     finally:
+        logging.error("Exception while attempting to adjust SSRC - may be a temporary issue")
         # Might get an exception from a communication error (new IP)
         sys.exit(0)
