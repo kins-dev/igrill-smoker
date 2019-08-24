@@ -65,17 +65,17 @@ WEBDIR="${iGrill__Reporting__ResultsDirectory}"
 if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
     # Setup CSV file
     FILE="$WEBDIR/$(date +"%Y_%m_%d_%I_%M_%p").csv"
-    sudo touch "$FILE"
-    sudo chmod a+rw "$FILE"
-    echo "Time,Battery,Smoke Temp,Food Temp,Internal Target,Smoke Target Low,Smoke Target,Smoke Target High,Plug State,Solid State Relay State" > "$FILE"
+    sudo touch "${FILE}"
+    sudo chmod a+rw "${FILE}"
+    echo "${CSV_HEADER}" > "${FILE}"
     
     # Link CSV file
-    sudo rm -f "$CSV_FILE"
-    sudo ln -s "$FILE" "$CSV_FILE"
+    sudo rm -f "${CSV_FILE}"
+    sudo ln -s "${FILE}" "${CSV_FILE}"
     
     # Setup state file
-    sudo touch "$STATE_FILE"
-    sudo chmod a+rw "$STATE_FILE"
+    sudo touch "${STATE_FILE}"
+    sudo chmod a+rw "${STATE_FILE}"
     sudo "${IGRILL_UTL_DIR}/gen_json.sh"
     
     # Cleanup from last run (shouldn't be needed)
