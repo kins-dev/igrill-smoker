@@ -135,7 +135,9 @@ if(0 < len(vars(options))):
                         "Odd, ssr_client called but not in band, hot or cold, ignoring")
                     # something else like logging
                     pass
+    except:
+        logging.error(
+            "Exception while attempting to adjust SSRC - may be a temporary issue")
     finally:
-        logging.error("Exception while attempting to adjust SSRC - may be a temporary issue")
         # Might get an exception from a communication error (new IP)
         sys.exit(0)
