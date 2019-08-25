@@ -229,32 +229,100 @@
     var urlInput = document.getElementById('fetchURL');
     var pollingCheckbox = document.getElementById('enablePolling');
     var pollingInput = document.getElementById('pollingTime');
-    
+
     function createChart() {
       Highcharts.chart('container', {
         chart: {
           type: 'spline',
-          zoomType: 'x'
+          zoomType: 'x',
+          events: {
+            load: function () {
+              setTimeout(requestData, 1000);
+            }
+          }
         },
         title: {
-          text: 'Live Data'
+          text: 'Smoker Data'
         },
+        yAxis: [{
+            title: {
+              text: "Temperature (\xBAF)"
+            },
+            min: null,
+            max: null,
+            alignTicks: false,
+            startOnTick: false,
+            endOnTick: false,
+            tickPixelInterval: null,
+            tickInterval: 20,
+            showEmpty: false
+          },
+          {
+            title: {
+              text: "Battery and SSR %",
+            },
+            min: 0,
+            max: 100,
+            alignTicks: false,
+            tickAmount: 6,
+            opposite: true,
+            showEmpty: false
+          }
+        ],
         plotOptions: {
           series: {
+            //stickyTracking: false,
+            yAxis: 0,
+            enableMouseTracking: true,
+            stickyTracking: false,
+            turboThreshold: 0,
             marker: {
+              enabled: false,
               //fillColor: '#FFFFFF',
-              lineWidth: 1,
+              lineWidth: 0,
+              radius: 2,
+
               lineColor: null // inherit from series
             }
           }
         },
+        annotations: [{
+          labels: [{
+            point: {
+              x: 0,
+              y: 0
+            },
+            text: 'Loading stage...',
+            shape: 'rect'
+
+          }]
+        }],
+        series: [{
+            yAxis: 1
+          },
+          {
+            yAxis: 1
+          },
+          {
+            marker: {
+              enabled: true
+            }
+          },
+          {}
+        ],
+
         data: {
-          csvURL: urlInput.value,
-          enablePolling: pollingCheckbox.checked === true,
-          dataRefreshRate: parseInt(pollingInput.value, 10),
+          complete: requestData,
+          csvURL: urlInput.options[urlInput.selectedIndex].value,
+          enablePolling: true,
+          firstRowAsNames: true,
+          dataRefreshRate: 10,
           seriesMapping: [{
             x: 0,
             y: 1
+          }, {
+            x: 0,
+            y: 9
           }, {
             x: 0,
             y: 2,
@@ -275,23 +343,19 @@
             x: 0,
             y: 7
           }]
-
         }
       });
 
-      if (pollingInput.value < 1 || !pollingInput.value) {
-        pollingInput.value = 1;
-      }
-    }
+      //if (pollingInput.value < 1 || !pollingInput.value) { // pollingInput.value=1; //} }
 
-    urlInput.value = defaultData;
+      urlInput.value = defaultData;
 
-    // We recreate instead of using chart update to make sure the loaded CSV
-    // and such is completely gone.
-    pollingCheckbox.onchange = urlInput.onchange = pollingInput.onchange = createChart;
+      // We recreate instead of using chart update to make sure the loaded CSV
+      // and such is completely gone.
+      pollingCheckbox.onchange = urlInput.onchange = pollingInput.onchange = createChart;
 
-    // Create the chart
-    createChart();
+      // Create the chart
+      createChart();
   </script>
 
   <script>
