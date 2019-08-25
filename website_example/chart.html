@@ -345,17 +345,17 @@
           }]
         }
       });
+    }
+    //if (pollingInput.value < 1 || !pollingInput.value) { // pollingInput.value=1; //} }
 
-      //if (pollingInput.value < 1 || !pollingInput.value) { // pollingInput.value=1; //} }
+    urlInput.value = defaultData;
 
-      urlInput.value = defaultData;
+    // We recreate instead of using chart update to make sure the loaded CSV
+    // and such is completely gone.
+    pollingCheckbox.onchange = urlInput.onchange = pollingInput.onchange = createChart;
 
-      // We recreate instead of using chart update to make sure the loaded CSV
-      // and such is completely gone.
-      pollingCheckbox.onchange = urlInput.onchange = pollingInput.onchange = createChart;
-
-      // Create the chart
-      createChart();
+    // Create the chart
+    createChart();
   </script>
 
   <script>
