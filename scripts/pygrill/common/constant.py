@@ -43,8 +43,8 @@ class KASA:
         PYRO_PORT = NET_PORT + 1
         PYRO_OBJECT_ID = "PyGrillKasa"
         JSON_DISCOVER = b'{"system":{"get_sysinfo":{}}}'
-        JSON_COUNTDOWN_DELETE_AND_RUN = b'{"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":300,"act":0,"name":"fail safe"}}}'
-        JSON_PLUG_ON = b'{"system":{"set_relay_state":{"state":1}},"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":300,"act":0,"name":"fail safe"}}}'
+        JSON_COUNTDOWN_DELETE_AND_RUN = b'{"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":600,"act":0,"name":"fail safe"}}}'
+        JSON_PLUG_ON = b'{"system":{"set_relay_state":{"state":1}},"count_down":{"delete_all_rules":null,"add_rule":{"enable":1,"delay":600,"act":0,"name":"fail safe"}}}'
         JSON_PLUG_OFF = b'{"count_down":{"delete_all_rules":null},"system":{"set_relay_state":{"state":0}}}'
         JSON_COUNTDOWN_DELETE = b'{"count_down":{"delete_all_rules":null}}'
 

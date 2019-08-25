@@ -33,12 +33,12 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     '--on',
     dest='turn_on',
-    help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
+    help='Turns the plug on, with a 10 minute countdown to turn off if no other command comes in',
     action='store_true')
 parser.add_argument(
     '--off',
     dest='turn_off',
-    help='Turns the plug on, with a 5 minute countdown to turn off if no other command comes in',
+    help='Turns the plug on, with a 10 minute countdown to turn off if no other command comes in',
     action='store_true')
 parser.add_argument(
     '--exit',
