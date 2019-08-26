@@ -65,11 +65,6 @@ parser.add_argument(
     dest='log_destination',
     default=logfile,
     help='Set log destination (file), default: \'' + logfile + '\'')
-parser.add_argument(
-    '--status',
-    dest='status',
-    help='Gets the SSRC status',
-    action='store_true')
 
 options = parser.parse_args()
 
