@@ -18,7 +18,7 @@ MINI_COMPATIBLE=false
 case "$STAGE" in
     1)
         STAGE_NAME="Season"
-        SMOKE_MID=250
+        SMOKE_MID=235
         MAX_TEMP_CHANGE=20
         TIME=120
     ;;
