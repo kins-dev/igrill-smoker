@@ -37,5 +37,6 @@ do
     mv "${file}" "${file}.bak"
     echo "${CSV_HEADER}" > "${file}"
     tail -n +2 "${file}.bak" >> "${file}"
+    touch -r "${file}.bak" "${file}"
 done
 popd
