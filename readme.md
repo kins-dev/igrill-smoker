@@ -1,6 +1,8 @@
 # Starting with Raspberry Pi Stretch [![Build Status](https://travis-ci.org/kins-dev/igrill-smoker.svg?branch=master)](https://travis-ci.org/kins-dev/igrill-smoker)
 
-**Note: You are 100% responsible for ensuring safe food practices are followed.  Check and modify temperatures as appropriate.**
+<!-- markdownlint-disable MD033 -->
+**<span style="color:darkred">Note: You are 100% responsible for ensuring safe food practices are followed.  Check and modify temperatures as appropriate.</span>**
+<!-- markdownlint-enable MD033 -->
 
 <!-- markdownlint-disable MD033 -->
 <h2>Table of Contents</h2>
