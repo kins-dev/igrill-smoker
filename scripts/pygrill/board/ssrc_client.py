@@ -83,6 +83,12 @@ parser.add_argument(
     dest='log_destination',
     default=logfile,
     help='Set log destination (file), default: \'' + logfile + '\'')
+parser.add_argument(
+    '--status',
+    dest='status',
+    help='Gets the SSRC status',
+    action='store_true')
+
 options = parser.parse_args()
 
 SetupLog(options.log_level, options.log_destination)
@@ -96,34 +102,42 @@ if(0 < len(vars(options))):
         SSRC.DAEMON.PYRO_OBJECT_ID,
         SSRC.DAEMON.PYRO_HOST,
         SSRC.DAEMON.PYRO_PORT))
-
-    if(options.shutdown):
-        ssrcObj.Exit()
-    else:
-        if(options.in_band):
-            if(options.hot):
-                ssrcObj.Adjust(SSRC.TemperatureState.WARM)
-                logging.debug(
-                    "Adjust down 1% to {:.2f}%".format(ssrcObj.Status()))
-            elif(options.cold):
-                ssrcObj.Adjust(SSRC.TemperatureState.COOL)
-                logging.debug(
-                    "Adjust up 0.25% to {:.2f}%".format(ssrcObj.Status()))
-            else:
-                ssrcObj.Adjust(SSRC.TemperatureState.PERFECT)
-                logging.debug(
-                    "Stay at {:.2f}%".format(ssrcObj.Status()))
+    try:
+        if(options.shutdown):
+            ssrcObj.Exit()
+        elif(options.status):
+            print("{:.2f}".format(ssrcObj.Status()))
         else:
-            if(options.hot):
-                ssrcObj.Adjust(SSRC.TemperatureState.HOT)
-                logging.debug(
-                    "Adjust down 20% to {:.2f}%".format(ssrcObj.Status()))
-            elif(options.cold):
-                ssrcObj.Adjust(SSRC.TemperatureState.COLD)
-                logging.debug(
-                    "Adjust up 5% to {:.2f}%".format(ssrcObj.Status()))
+            if(options.in_band):
+                if(options.hot):
+                    ssrcObj.Adjust(SSRC.TemperatureState.WARM)
+                    logging.debug(
+                        "Adjust down 1% to {:.2f}%".format(ssrcObj.Status()))
+                elif(options.cold):
+                    ssrcObj.Adjust(SSRC.TemperatureState.COOL)
+                    logging.debug(
+                        "Adjust up 0.25% to {:.2f}%".format(ssrcObj.Status()))
+                else:
+                    ssrcObj.Adjust(SSRC.TemperatureState.PERFECT)
+                    logging.debug(
+                        "Stay at {:.2f}%".format(ssrcObj.Status()))
             else:
-                logging.info(
-                    "Odd, ssr_client called but not in band, hot or cold, ignoring")
-                # something else like logging
-                pass
+                if(options.hot):
+                    ssrcObj.Adjust(SSRC.TemperatureState.HOT)
+                    logging.debug(
+                        "Adjust down 20% to {:.2f}%".format(ssrcObj.Status()))
+                elif(options.cold):
+                    ssrcObj.Adjust(SSRC.TemperatureState.COLD)
+                    logging.debug(
+                        "Adjust up 5% to {:.2f}%".format(ssrcObj.Status()))
+                else:
+                    logging.info(
+                        "Odd, ssr_client called but not in band, hot or cold, ignoring")
+                    # something else like logging
+                    pass
+    except:
+        logging.error(
+            "Exception while attempting to adjust SSRC - may be a temporary issue")
+    finally:
+        # Might get an exception from a communication error (new IP)
+        sys.exit(0)

@@ -147,7 +147,7 @@ This is an attempt to document all the files in the project.  Relations between 
 - **[igrill-smoker/scripts/pygrill/kasa/kasa_daemon.py](../scripts/pygrill/kasa/kasa_daemon.py)** - Controls kasa hardware
   - Find plug by name
   - Return plug status
-  - Sets countdown timer for 5 minutes when turning the plug on
+  - Sets countdown timer for 10 minutes when turning the plug on
 - **[igrill-smoker/scripts/pygrill/kasa/kasa_client.py](../scripts/pygrill/kasa/kasa_client.py)** - Passes commands to the daemon
   - Turn plug on and off
   - Return plug status
@@ -156,7 +156,7 @@ This is an attempt to document all the files in the project.  Relations between 
   - Minimum is 30% max is 85%
   - Step up by 5% or 0.25%
   - Step down by 1% or 20%
-  - Sets countdown timer for 5 minutes
+  - Sets countdown timer for 10 minutes
   - On exit, kill Kasa daemon
 - **[igrill-smoker/scripts/pygrill/board/ssrc_client.py](../scripts/pygrill/board/ssrc_client.py)** - Passes commands to the daemon
   - Turn up or down, a large or small amount

@@ -68,29 +68,18 @@ class Kasa(object):
         config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
         kasa_alias = config.get("Kasa", "Name", fallback="iGrill-smoker")
 
-        self.name = kasa_alias
+        self.m_name = kasa_alias
         self.m_findTime = 0
-        self.FindDevice()
         self.m_exitCode = 0
         self.m_errors = list()
+        self.m_fail_cnt = 0
+        self.m_discovery_fail_cnt = 0
+        self.m_ip = ""
+        self.m_ipValid = False
+        self.GetSystemInfo()
 
     def ExitCode(self):
         return self.m_exitCode
-
-    def FindDevice(self):
-        state = -1
-        cnt = 0
-        # if it has been more than 10 seconds since the last scan, find the device again
-        if (10 < (int(time.time()) - self.m_findTime)):
-            # Try to discover up to 5 times
-            while ((state == -1) and (cnt < 5)):
-                self.m_ip, state = self.Discover(self.name)
-                cnt += 1
-            if (state == -1):
-                self.m_exitCode = 1
-                self.Exit()
-            self.m_active = (state == 1)
-            self.m_findTime = int(time.time())
 
     def CheckForErrors(self, result):
         data = json.loads(result)
@@ -107,28 +96,48 @@ class Kasa(object):
             self.m_errors.append(result)
 
     def SendCommand(self, command):
-        logging.debug("Setting up socket")
-        self.m_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        logging.debug("Connecting")
-        self.m_sock.connect((self.m_ip, KASA.DAEMON.NET_PORT))
-        logging.debug("Sending to \"{}:{}\" \"{}\"".format(
-            self.m_ip, KASA.DAEMON.NET_PORT, command))
-        self.m_sock.send(EncryptWithHeader(command))
-        logging.debug("Reading result")
-        result = DecryptWithHeader(
-            self.m_sock.recv(KASA.DAEMON.NET_BUFFER_SIZE))
-        self.CheckForErrors(result)
-        logging.debug("Result: {}".format(result))
-        self.m_sock.close()
+        result = ""
+        if (3 < self.m_fail_cnt or False == self.m_ipValid):
+            self.m_ipValid = False
+            self.m_ip = ""
+            self.Discover()
+        if (self.m_ipValid):
+            logging.debug("Setting up socket")
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            logging.debug("Connecting")
+            try:
+                sock.connect((self.m_ip, KASA.DAEMON.NET_PORT))
+                logging.debug("Sending to \"{}:{}\" \"{}\"".format(
+                    self.m_ip, KASA.DAEMON.NET_PORT, command))
+                sock.send(EncryptWithHeader(command))
+                logging.debug("Reading result")
+                result = DecryptWithHeader(
+                    sock.recv(KASA.DAEMON.NET_BUFFER_SIZE))
+                logging.debug("Result: {}".format(result))
+                self.CheckForErrors(result)
+            except socket.error as e:
+                logging.error("Socket error {} while trying to communicate".format(e))
+                self.m_fail_cnt = self.m_fail_cnt + 1
+            finally:
+                sock.shutdown(socket.SHUT_RDWR)
+                sock.close()
+        return result
 
-    def Discover(self, alias):
-        logging.debug("Attempting to discover \"{}\"".format(alias))
+    def GetSystemInfo(self):
+        result = self.SendCommand(KASA.DAEMON.JSON_DISCOVER)
+        if("" != result):
+            data = json.loads(result)
+            self.m_active = (1 == data["system"]["get_sysinfo"]["relay_state"])
+
+
+    def Discover(self):
+        logging.debug("Attempting to discover \"{}\"".format(self.m_name))
         logging.debug("Setting up socket")
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         logging.debug("Allowing broadcast")
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         logging.debug("Sending broadcast")
-        sock.settimeout(2)
+        sock.settimeout(2 + self.m_fail_cnt)
         logging.debug("Msg: {}".format(KASA.DAEMON.JSON_DISCOVER))
         logging.debug("To:  {}:{}".format(
             KASA.DAEMON.NET_DISCOVER_IP, KASA.DAEMON.NET_PORT))
@@ -141,22 +150,28 @@ class Kasa(object):
                 json_data = json.loads(Decrypt(data))
                 logging.debug("From:     {}".format(addr))
                 logging.debug("Received: {}".format(Decrypt(data)))
-                if json_data["system"]["get_sysinfo"]["alias"] == alias:
+                if (json_data["system"]["get_sysinfo"]["alias"] == self.m_name):
                     logging.debug("Found alias: closing socket")
-                    sock.close()
-                    return (addr[0], json_data["system"]["get_sysinfo"]["relay_state"])
+                    self.m_ip = addr[0]
+                    self.m_ipValid = True
+                    self.m_discovery_fail_cnt = 0
+                    self.m_fail_cnt = 0
+                    break
         except socket.timeout:
-            logging.debug("Timeout: closing socket")
-            logging.info("\"{}\" was not found, exiting.".format(alias))
+            self.m_discovery_fail_cnt = self.m_discovery_fail_cnt + 1
+            logging.info("Timed out while looking for \"{}\"".format(self.m_name))
+            if(10 <= self.m_discovery_fail_cnt):
+                logging.error("Failed to discover {} times".format(self.m_discovery_fail_cnt))
+        finally:
             sock.close()
-            return ("", -1)
 
     def GetIP(self):
-        self.FindDevice()
+        if(False == self.m_ipValid):
+            self.GetSystemInfo()
         return self.m_ip
 
     def GetActive(self):
-        self.FindDevice()
+        self.GetSystemInfo()
         return self.m_active
 
     def GetErrors(self):
@@ -166,7 +181,7 @@ class Kasa(object):
         self.m_errors = list()
 
     def TurnPlugOn(self):
-        self.FindDevice()
+        self.GetSystemInfo()
         if (self.m_active):
             self.SendCommand(KASA.DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN)
         else:
@@ -174,7 +189,7 @@ class Kasa(object):
         self.m_active = True
 
     def TurnPlugOff(self):
-        self.FindDevice()
+        self.GetSystemInfo()
         if (self.m_active):
             self.SendCommand(KASA.DAEMON.JSON_PLUG_OFF)
         else:
@@ -220,6 +235,7 @@ def main():
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')
+    daemon.shutdown()
     daemon.close()
     logging.debug('daemon closed')
     sys.exit(kasaObj.ExitCode())

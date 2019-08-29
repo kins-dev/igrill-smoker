@@ -24,12 +24,15 @@ class Test_KasaDaemon(unittest.TestCase):
     def setUp(self):
         self.m_daemon = Daemon(host=KASA.DAEMON.PYRO_HOST,
                                port=KASA.DAEMON.PYRO_PORT)
+        
         # This must be scoped oddly.  Daemon uses sockets so we don't want to mock the socket
         # object untill the daemon is setup.
         with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
             self.m_mock_inst = mockitem.return_value
             self.m_mock_inst.recvfrom.return_value = [kasa_daemon.Encrypt(
                 TEST.KASA.DAEMON.DISCOVER_RSP), ['192.168.0.0', 9999]]
+            self.m_mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
+                TEST.KASA.DAEMON.DISCOVER_RSP)
             self.m_kasaDaemon = kasa_daemon.Kasa(self.m_daemon)
             self.m_daemon.register(
                 self.m_kasaDaemon, objectId=KASA.DAEMON.PYRO_OBJECT_ID)
@@ -44,28 +47,28 @@ class Test_KasaDaemon(unittest.TestCase):
         with mock.patch('pygrill.kasa.kasa_daemon.socket.socket') as mockitem:
             mock_inst = mockitem.return_value
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                TEST.KASA.DAEMON.ON_NO_ERROR_RSP)
+                TEST.KASA.DAEMON.OFF_ON_NO_ERROR_RSP)
             self.m_kasaDaemon.TurnPlugOn()
             self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
             mock_inst.send.assert_called_with(
                 kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_PLUG_ON))
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                TEST.KASA.DAEMON.ON_NO_ERROR_RSP)
+                TEST.KASA.DAEMON.ON_ON_NO_ERROR_RSP)
             self.m_kasaDaemon.TurnPlugOn()
             self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
             mock_inst.send.assert_called_with(
                 kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_COUNTDOWN_DELETE_AND_RUN))
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                TEST.KASA.DAEMON.OFF_NO_ERROR_RSP)
+                TEST.KASA.DAEMON.ON_OFF_NO_ERROR_RSP)
             self.m_kasaDaemon.TurnPlugOff()
             self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
             mock_inst.send.assert_called_with(
                 kasa_daemon.EncryptWithHeader(KASA.DAEMON.JSON_PLUG_OFF))
             mock_inst.reset_mock()
             mock_inst.recv.return_value = kasa_daemon.EncryptWithHeader(
-                TEST.KASA.DAEMON.OFF_NO_ERROR_RSP)
+                TEST.KASA.DAEMON.OFF_OFF_NO_ERROR_RSP)
             self.m_kasaDaemon.TurnPlugOff()
             self.assertListEqual(self.m_kasaDaemon.GetErrors(), list())
             mock_inst.send.assert_called_with(
@@ -79,6 +82,9 @@ class Test_KasaDaemon(unittest.TestCase):
             resp = list()
             resp.append(kasa_daemon.Decrypt(
                 kasa_daemon.Encrypt(TEST.KASA.DAEMON.OFF_ERROR_RSP)))
+            resp.append(kasa_daemon.Decrypt(
+                kasa_daemon.Encrypt(TEST.KASA.DAEMON.OFF_ERROR_RSP)))
+            print(self.m_kasaDaemon.GetErrors())
             self.assertListEqual(self.m_kasaDaemon.GetErrors(), resp)
             mock_inst.send.assert_called()
             mock_inst.reset_mock()

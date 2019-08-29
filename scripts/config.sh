@@ -37,7 +37,7 @@ if [ -f "$IGRILL_CFG_DIR/iGrill_config.ini" ]; then
     read_ini "$IGRILL_CFG_DIR/iGrill_config.ini" --prefix "iGrill"
 fi
 RESULTS_DIRECTORY="${iGrill__Reporting__ResultsDirectory}"
-
+CSV_HEADER="Time,Battery,Smoke Temp,Food Temp,Internal Target,Smoke Target Low,Smoke Target,Smoke Target High,Plug State,SSR Value"
 CSV_FILE="${RESULTS_DIRECTORY}/${iGrill__Reporting__CSVFile}"
 STATE_FILE="${RESULTS_DIRECTORY}/${iGrill__Reporting__StateFile}"
 BAD_DATA=-2000

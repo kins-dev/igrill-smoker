@@ -26,16 +26,16 @@ case "$STAGE" in
     2)
         # Smoke stage, keep plate at cooler temp
         STAGE_NAME="Smoke"
-        SMOKE_MID=180
+        SMOKE_MID=225
         MAX_TEMP_CHANGE=2
         INTERNAL_TEMP=100
     ;;
     3)
         # Smoke stage, keep plate at cooler temp
         STAGE_NAME="Smoke"
-        SMOKE_MID=200
+        SMOKE_MID=225
         MAX_TEMP_CHANGE=2
-        INTERNAL_TEMP=120
+        INTERNAL_TEMP=165
     ;;
     4)
         # Cook stage, move hotplate to higher temp
