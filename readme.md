@@ -2,6 +2,7 @@
 
 
 **&#x1F534; Note: You are 100% responsible for ensuring safe food practices are followed.**
+
 **&#x1F534; Check and modify temperatures as appropriate**
 
 <!-- markdownlint-disable MD033 -->
