@@ -43,6 +43,32 @@ def DetectBoard(board):
             return SSRC.BOARD.REV_MAP[val]
         return SSRC.BOARD.DISABLED
 
+def DetectID(board):
+    realBoard = DetectBoard(board)
+    if(realBoard == SSRC.BOARD.REV_ss):
+        return -1
+    if(realBoard == SSRC.BOARD.REV_sA):
+        return -1
+    if(realBoard == SSRC.BOARD.REV_sB):
+        return -1
+    if(realBoard == SSRC.BOARD.REV_sC):
+        return -1
+    if(realBoard == SSRC.BOARD.REV_sD):
+        return -1
+    if(realBoard == SSRC.BOARD.REV_sD_Patched):
+        return -1
+    pi = pigpio.pi()
+    i = 0
+    val = 0
+    for p in SSRC.BOARD.ID_PINS:
+        pi.set_mode(p, pigpio.INPUT)
+
+        pi.set_pull_up_down(p, pigpio.PUD_DOWN)
+        tmp = pi.read(p)
+        #logging.debug("Pin \"{}\" : \"{}\"".format(p, tmp))
+        val = val + (tmp << i)
+        i = i + 1
+    return val
 
 def main():
     config = configparser.ConfigParser()
@@ -69,19 +95,17 @@ def main():
         default=logfile,
         help='Set log destination (file), default: \'' + logfile + '\'')
     parser.add_argument(
-        '--low_battery',
+        '--id',
         action='store_true',
-        dest='low_battery',
-        help='Turns on the low battery led')
-    parser.add_argument(
-        '--done',
-        action='store_true',
-        dest='done',
-        help='Turns on the low battery led')
+        dest='id',
+        help='Prints the board id')
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    DetectBoard(board)
+    if(options.id):
+        print(DetectID(board))
+    else:
+        DetectBoard(board)
 
 
 if __name__ == '__main__':
