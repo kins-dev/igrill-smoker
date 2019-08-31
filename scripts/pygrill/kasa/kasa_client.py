@@ -89,7 +89,8 @@ if(0 < len(vars(options))):
                 print("off")
         if(options.shutdown):
             kasaObj.Exit()
-    finally:
+    except:
         logging.error("Exception while attempting to contact Kasa - may be a temporary issue")
+    finally:
         # Failure to communicate can cause an exception
         sys.exit(0)
