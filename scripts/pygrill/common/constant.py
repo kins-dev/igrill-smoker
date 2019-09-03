@@ -95,6 +95,8 @@ class SSRC:
 
         REV_PINS = [14, 15, 18, 23, 24, 25, 8, 7, 16, 20, 21]
 
+        ID_PINS = [9, 11, 5, 19, 26]
+
         REV_MAP = {
             1793: REV_sB,
             1794: REV_sC,
