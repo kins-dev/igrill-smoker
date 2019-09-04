@@ -1,8 +1,8 @@
-# Starting with Raspberry Pi Stretch [![Build Status](https://travis-ci.org/kins-dev/igrill-smoker.svg?branch=master)](https://travis-ci.org/kins-dev/igrill-smoker)
+# Starting with Raspberry Pi Stretch [![Build Status](https://travis-ci.org/kins-dev/igrill-smoker.svg?branch=1.5)](https://travis-ci.org/kins-dev/igrill-smoker)
 
 <!-- markdownlint-disable MD036 -->
 **&#x1F534; Note: You are 100% responsible for ensuring safe food practices are followed**
-                    
+
 **&#x1F534; Check and modify temperatures as appropriate**
 <!-- markdownlint-enable MD036 -->
 
@@ -15,6 +15,7 @@
 <!-- code_chunk_output -->
 
 - [Problem Statement](#problem-statement)
+- [Versions](#versions)
 - [Design](#design)
 - [Equipment](#equipment)
 - [Requirements](#requirements)
@@ -50,6 +51,15 @@
 ## Problem Statement
 
 Create a low cost smoking unit that can be controlled/monitored via the internet.
+
+## Versions
+
+- v1.0: Whole System
+- v1.1: BLE Improvements
+- v1.2: Python3 Support
+- v1.3: Temperature Range Support
+- v1.4: SSR Support
+- v1.5: PID control
 
 ## Design
 
