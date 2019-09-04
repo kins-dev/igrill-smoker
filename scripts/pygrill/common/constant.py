@@ -62,7 +62,6 @@ class BUZZ:
         FREQ2 = 2500
         FREQ3 = 3000
 
-
 class SSRC:
     class PWM:
         MAX = BUZZ.PWM.MAX
@@ -347,3 +346,17 @@ class SSRC:
         PYRO_HOST = BUZZ.DAEMON.PYRO_HOST
         PYRO_PORT = BUZZ.DAEMON.PYRO_PORT + 1
         PYRO_OBJECT_ID = "PyGrillSSR"
+
+
+class TEMP:
+    class DAEMON:
+        PYRO_HOST = SSRC.DAEMON.PYRO_HOST
+        PYRO_PORT = SSRC.DAEMON.PYRO_PORT + 1
+        PYRO_OBJECT_ID = "PyGrillTemperature"
+
+    class PID:
+        K_P = 10
+        K_I = 3
+        K_D = 3
+        MAX = 1000000
+        MIN = 0
