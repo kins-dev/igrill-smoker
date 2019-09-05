@@ -54,53 +54,20 @@ class Controller(object):
 
     def StartThread(self):
         logging.debug("Starting thread")
-        pi = pigpio.pi()
-        item = SSRC.BOARD.ITEMS["Relay"][self.m_boardVal]
-        if (item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD):
-            offVal = SSRC.PWM.MIN
-        else:
-            offVal = SSRC.PWM.MAX
-        pin = item[SSRC.BOARD.ITEM_IO]
         self.m_threadCondition.acquire()
         while(True):
-            with(self.m_lock):
-                active = self.m_active
-                if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.LIMIT_MIN
-                if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.LIMIT_MAX
-                currentCompare = self.m_currentCompare
-            if(not active):
-                pi.hardware_PWM(pin, SSRC.PWM.PERIOD, offVal)
-                break
-            logging.debug("Set relay to {:.2f}%".format(
-                (currentCompare/SSRC.PWM.MAX)*100))
-            if(item[SSRC.BOARD.ITEM_VALUE] == SSRC.BOARD.VALUES_STANDARD):
-                pi.hardware_PWM(pin, SSRC.PWM.PERIOD, currentCompare)
-            else:
-                pi.hardware_PWM(
-                    pin, SSRC.PWM.PERIOD, SSRC.PWM.MAX - currentCompare)
+            
             self.m_threadCondition.wait(120.0)
         self.m_threadCondition.release()
 
-    def Status(self):
-        return (self.m_currentCompare / SSRC.PWM.MAX) * 100
 
-    def Adjust(self, state):
+    def Adjust(self, temp):
         with(self.m_lock):
-            self.m_currentCompare = self.m_currentCompare + state
-            if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
-                self.m_currentCompare = SSRC.PWM.LIMIT_MIN
-            if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
-                self.m_currentCompare = SSRC.PWM.LIMIT_MAX
-        self.m_threadCondition.acquire()
-        self.m_threadCondition.notify()
-        self.m_threadCondition.release()
-        kasaObj = Proxy(("PYRO:{}@{}:{}").format(
-            KASA.DAEMON.PYRO_OBJECT_ID,
-            KASA.DAEMON.PYRO_HOST,
-            KASA.DAEMON.PYRO_PORT))
-        kasaObj.TurnPlugOn()
+            self.m_pid.setpoint = temp
+
+    def FeedBack(self, temp):
+        with(self.m_lock):
+            self.m_value = self.m_pid(temp)
 
     def ExitCode(self):
         return self.m_exitCode
@@ -112,12 +79,6 @@ class Controller(object):
         self.m_threadCondition.notify()
         self.m_threadCondition.release()
         self.m_thread.join()
-        kasaObj = Proxy(("PYRO:{}@{}:{}").format(
-            KASA.DAEMON.PYRO_OBJECT_ID,
-            KASA.DAEMON.PYRO_HOST,
-            KASA.DAEMON.PYRO_PORT))
-        kasaObj.TurnPlugOff()
-        kasaObj.Exit()
         logging.debug("Closing socket")
         self.m_daemon.shutdown()
 
@@ -148,18 +109,18 @@ def main():
     options = parser.parse_args()
 
     SetupLog(options.log_level, options.log_destination)
-    daemon = Daemon(host=SSRC.DAEMON.PYRO_HOST,
-                    port=SSRC.DAEMON.PYRO_PORT)
-    ssrcObj = Relay(daemon)
+    daemon = Daemon(host=TEMP.DAEMON.PYRO_HOST,
+                    port=TEMP.DAEMON.PYRO_PORT)
+    tempObj = Controller(daemon)
     uri = daemon.register(
-        ssrcObj, objectId=SSRC.DAEMON.PYRO_OBJECT_ID)
+        tempObj, objectId=TEMP.DAEMON.PYRO_OBJECT_ID)
     logging.debug(uri)
     daemon.requestLoop()
     logging.debug('exited requestLoop')
     daemon.shutdown()
     daemon.close()
     logging.debug('daemon closed')
-    sys.exit(ssrcObj.ExitCode())
+    sys.exit(tempObj.ExitCode())
 
 
 if __name__ == "__main__":
