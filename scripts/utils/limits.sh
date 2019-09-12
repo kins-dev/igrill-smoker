@@ -27,6 +27,9 @@ fi
 # shellcheck source=paths.sh
 source "${IGRILL_BAS_DIR}/scripts/utils/paths.sh"
 
+# shellcheck source=../config.sh
+source "${IGRILL_SCR_DIR}/config.sh"
+
 function ResetLimits () {
     for i in $(seq 1 4); do
         local PROBE_NAME=LIMITS_Probe${i}
@@ -74,7 +77,8 @@ HIGH_TEMP=32767
 }
 
 function WriteLimits () {
-    PrintLimits > "${IGRILL_RUN_DIR}/limits.ini"
+    
+    PrintLimits > "${RUN_LIMITS}"
 }
 
 function RecheckLimits () {

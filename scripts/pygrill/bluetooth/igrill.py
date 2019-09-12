@@ -80,8 +80,12 @@ class IDevicePeripheral(btle.Peripheral):
 
     def ReadTemperature(self):
         setLimits = False
-        # TODO: Make this a constant shared between bash and python
-        configFile = (CONFIG.BASEPATH + '/run/limits.ini')
+        config = configparser.ConfigParser()
+        # does not throw an error, just returns the empty set if the file doesn't exist
+        config.read(CONFIG.BASEPATH+'/config/iGrill_config.ini')
+
+        configFile = (CONFIG.BASEPATH + '/run/' +
+                      config.get("RuntimeFiles", "LimitsFile", fallback="limits.ini"))
         if os.path.isfile(configFile):
             config = configparser.ConfigParser()
             # does not throw an error, just returns the empty set if the file doesn't exist
