@@ -12,10 +12,10 @@ function finish  () {
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.leds
     
     # Cleanup on exit
-    rm -f "${IGRILL_RUN_DIR}/igrill.json"
+    rm -f "${RUN_DATA}"
     rm -f "${IGRILL_RUN_DIR}/last_temp.sh"
     rm -f "${IGRILL_RUN_DIR}/stage.sh"
-    rm -f "${IGRILL_RUN_DIR}/limits.ini"
+    rm -f "${RUN_LIMITS}"
     
     # Stop the ssrc/kasa/buzzer daemon (SSRC stops Kasa)
     PYTHONPATH="${IGRILL_SCR_DIR}" python3 -m pygrill.board.ssrc_client --exit
@@ -62,7 +62,7 @@ fi
 
 WEBDIR="${iGrill__Reporting__ResultsDirectory}"
 
-if ! [ -f "${IGRILL_RUN_DIR}/igrill.json" ] ; then
+if ! [ -f "${RUN_DATA}" ] ; then
     # Setup CSV file
     FILE="$WEBDIR/$(date +"%Y_%m_%d_%I_%M_%p").csv"
     sudo touch "${FILE}"

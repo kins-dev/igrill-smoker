@@ -22,8 +22,6 @@ from .common.local_logging import SetupLog
 from .config.mac_config import ADDRESS
 from .common.constant import BLUETOOTH, CONFIG
 
-# TODO: make this a shared constant between bash and python
-DATA_FILE = (CONFIG.BASEPATH + '/run/igrill.json')
 PROCESS_SCRIPT = CONFIG.BASEPATH + "/scripts/" + BLUETOOTH.TEMPERATURE_SCRIPT_NAME
 
 def main():
@@ -36,6 +34,8 @@ def main():
     loglevel = config.get("Logging", "LogLevel", fallback="INFO")
     logfile = config.get("Logging", "LogFile", fallback="")
     igrill_type = config.get("iGrill", "Type", fallback="Standard")
+    data_file = (CONFIG.BASEPATH + '/run/' + 
+                 config.get("RuntimeFiles", "TempDataFile", fallback="igrill.json"))
 
     parser = argparse.ArgumentParser(
         description='Connects to iGrill device and calls a script to process results')
@@ -107,7 +107,7 @@ def main():
                     else:
                         logging.info(
                             'Writing sensor data: {}'.format(sensor_data))
-                        with open(DATA_FILE, 'w') as f:
+                        with open(data_file, 'w') as f:
                             f.write(json.dumps(sensor_data))
                 else:
                     time.sleep(0.5)
