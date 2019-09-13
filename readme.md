@@ -146,6 +146,12 @@ FoodProbe=1
 # is 1 and right most is 4 on the iGrill 2/3
 SmokeProbe=4
 
+[RuntimeFiles]
+# Where the limits file should exist, relative to the project
+# directory
+LimitsFile=limits.ini
+TempDataFile=igrill.json
+
 [Logging]
 LogLevel=INFO
 LogFile=
@@ -164,6 +170,12 @@ Food=brisket
 # Only valid if Food=None
 SmokeMid=225
 InternalTarget=185
+
+# Used to specify the solid state relay board
+[SSR]
+# Possible values:
+#  **, *A, *B, *C, *D, *D.1, *E, Auto, None
+Board=Auto
 
 [Reporting]
 # time in seconds between polls of the iGrill

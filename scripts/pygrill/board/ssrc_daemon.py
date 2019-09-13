@@ -45,6 +45,7 @@ class Relay(object):
         self.m_lock = threading.Lock()
         self.m_thread = threading.Thread(target=self.StartThread, args=())
         self.m_thread.start()
+        self.m_pid = False
 
     def StartThread(self):
         logging.debug("Starting thread")
@@ -59,10 +60,16 @@ class Relay(object):
         while(True):
             with(self.m_lock):
                 active = self.m_active
-                if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.LIMIT_MIN
-                if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
-                    self.m_currentCompare = SSRC.PWM.LIMIT_MAX
+                if(self.m_pid):
+                    if(SSRC.PWM.MIN > self.m_currentCompare):
+                        self.m_currentCompare = SSRC.PWM.MIN
+                    if(SSRC.PWM.MAX < self.m_currentCompare):
+                        self.m_currentCompare = SSRC.PWM.MAX
+                else:
+                    if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
+                        self.m_currentCompare = SSRC.PWM.LIMIT_MIN
+                    if(SSRC.PWM.LIMIT_MAX < self.m_currentCompare):
+                        self.m_currentCompare = SSRC.PWM.LIMIT_MAX
                 currentCompare = self.m_currentCompare
             if(not active):
                 pi.hardware_PWM(pin, SSRC.PWM.PERIOD, offVal)
@@ -79,8 +86,27 @@ class Relay(object):
     def Status(self):
         return (self.m_currentCompare / SSRC.PWM.MAX) * 100
 
+    # Directly set the PWM value between MIN and MAX
+    def PidAdjust(self, value):
+        with(self.m_lock):
+            self.m_pid = True
+            self.m_currentCompare = value
+            if(SSRC.PWM.MIN > self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.MIN
+            if(SSRC.PWM.MAX < self.m_currentCompare):
+                self.m_currentCompare = SSRC.PWM.MAX
+        self.m_threadCondition.acquire()
+        self.m_threadCondition.notify()
+        self.m_threadCondition.release()
+        kasaObj = Proxy(("PYRO:{}@{}:{}").format(
+            KASA.DAEMON.PYRO_OBJECT_ID,
+            KASA.DAEMON.PYRO_HOST,
+            KASA.DAEMON.PYRO_PORT))
+        kasaObj.TurnPlugOn()
+
     def Adjust(self, state):
         with(self.m_lock):
+            self.m_pid = False
             self.m_currentCompare = self.m_currentCompare + state
             if(SSRC.PWM.LIMIT_MIN > self.m_currentCompare):
                 self.m_currentCompare = SSRC.PWM.LIMIT_MIN
