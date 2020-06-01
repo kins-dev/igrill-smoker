@@ -6,10 +6,9 @@
 # Some cam processors have trouble with my rev scheme,
 # so this removes that line from the gerber
 # shellcheck disable=2034
-true
-# shellcheck disable=2086
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
-
 
 if ! [ "$#" -eq "1" ]; then
     echo "Wrong number of arguments to process_gerbers.sh"

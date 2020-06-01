@@ -3,8 +3,8 @@
 #                       (https://git.kins.dev/igrill-smoker)
 # License:              MIT License
 #                       See the LICENSE file
-true
-# shellcheck disable=2086
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 sudo apt-get update
 sudo apt-get install -y libglib2.0-dev lighttpd certbot screen

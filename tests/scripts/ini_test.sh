@@ -4,8 +4,9 @@
 # License:              MIT License
 #                       See the LICENSE file
 # Defining variables for other scripts
-true
-# shellcheck disable=2086
+# shellcheck source-path=SCRIPTDIR/tests/scripts
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 INI__foo1__bar1=""
 source "../../scripts/utils/read_ini.sh"

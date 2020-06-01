@@ -19,7 +19,7 @@ if [ -z "${VALUE}" ]; then
         SOURCE="$(readlink "${SOURCE}")"
         [[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
-    DIR="$( cd -P "$( dirname "${SOURCE}")"  > /dev/null 2>&1 && pwd)"
+    DIR="$(cd -P "$(dirname "${SOURCE}")" > /dev/null 2>&1 && pwd)"
     IGRILL_BAS_DIR="$(readlink -f "${DIR}/..")"
     export IGRILL_BAS_DIR
 fi
@@ -63,12 +63,12 @@ LAST_SM_TEMP=0
 LAST_FD_TEMP=0
 
 if [ -f "${STAGE_FILE}" ]; then
-    # shellcheck source=../run/stage.sh
+    # shellcheck source=/dev/null
     source "${STAGE_FILE}"
 fi
 
 if [ -f "${LAST_TEMP_FILE}" ]; then
-    # shellcheck source=../run/last_temp.sh
+    # shellcheck source=/dev/null
     source "${LAST_TEMP_FILE}"
 fi
 

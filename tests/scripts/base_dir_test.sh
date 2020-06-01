@@ -3,8 +3,9 @@
 #                       (https://git.kins.dev/igrill-smoker)
 # License:              MIT License
 #                       See the LICENSE file
-true
-# shellcheck disable=2086
+# shellcheck source-path=SCRIPTDIR/tests/scripts
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 
 source "../../scripts/utils/base_dir.sh"

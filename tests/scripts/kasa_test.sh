@@ -3,10 +3,12 @@
 #                       (https://git.kins.dev/igrill-smoker)
 # License:              MIT License
 #                       See the LICENSE file
-true
-# shellcheck disable=2086
+# shellcheck source-path=SCRIPTDIR/tests/scripts
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 
-source "../../scripts/utils/kasa.sh"
-GetKasaIP "iGrill-smoker"
-echo "${TP_LINK_IP}"
+# FIXME: I believe this should go away now
+# source "../../scripts/utils/kasa.sh"
+# GetKasaIP "iGrill-smoker"
+# echo "${TP_LINK_IP}"

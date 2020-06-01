@@ -17,7 +17,7 @@ if [ -z "${VALUE}" ]; then
         SOURCE="$(readlink "${SOURCE}")"
         [[ ${SOURCE} != /* ]] && SOURCE="${DIR}/${SOURCE}" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
     done
-    DIR="$( cd -P "$( dirname "${SOURCE}")"  > /dev/null 2>&1 && pwd)"
+    DIR="$(cd -P "$(dirname "${SOURCE}")" > /dev/null 2>&1 && pwd)"
     IGRILL_BAS_DIR="$(readlink -f "${DIR}/../..")"
     export IGRILL_BAS_DIR
 fi
@@ -40,7 +40,7 @@ coproc sudo stdbuf -oL hcitool lescan
 while read -r CMD; do
 
     # when we find the iGrill_V2 setup that information
-    if [[ ${CMD} = *"iGrill"* ]]; then
+    if [[ ${CMD} == *"iGrill"* ]]; then
         MAC=${CMD:0:17}
         echo "${MAC}"
         echo -n "ADDRESS='" > "${OUTPUT}"

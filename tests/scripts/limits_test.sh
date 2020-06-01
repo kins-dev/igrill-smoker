@@ -4,18 +4,21 @@
 # License:              MIT License
 #                       See the LICENSE file
 # Defining variables for other scripts
-true
-# shellcheck disable=2086
+# shellcheck source-path=SCRIPTDIR/tests/scripts
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 
-function ResetLimits () {
+function ResetLimits()
+{
     for i in $(seq 1 4); do
         local PROBE_NAME=LIMITS_Probe${i}
         eval "${PROBE_NAME}='[Probe${i}]'"
     done
 }
 
-function SetLimits () {
+function SetLimits()
+{
     local PROBE_NAME=LIMITS_Probe${1}
     local LOW
     local HIGH
@@ -35,7 +38,8 @@ HIGH_TEMP=${HIGH}"
     eval "${PROBE_NAME}=\${VAL}"
 }
 
-function PrintLimits () {
+function PrintLimits()
+{
     echo "[DEFAULT]
 LOW_TEMP=-32768
 HIGH_TEMP=32767
@@ -44,7 +48,7 @@ HIGH_TEMP=32767
     for i in $(seq 1 4); do
         local PROBE_NAME=LIMITS_Probe${i}
         eval "VAL=\${${PROBE_NAME}}"
-        echo "$VAL"
+        echo "${VAL}"
         echo ""
     done
 }
