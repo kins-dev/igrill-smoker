@@ -5,8 +5,8 @@
 #                       See the LICENSE file
 # Defining variables for other scripts
 # shellcheck disable=2034
-true
-# shellcheck disable=2086
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 
 MINI_COMPATIBLE=false
@@ -15,14 +15,14 @@ MINI_COMPATIBLE=false
 # the system will go to the next stage when the food hits the designated
 # internal temp
 
-case "$STAGE" in
+case "${STAGE}" in
     1)
         STAGE_NAME="Season"
         SMOKE_MID=235
         MAX_TEMP_CHANGE=20
         TIME=120
-    ;;
-    2|3)
+        ;;
+    2 | 3)
         STAGE_NAME="Done"
         SMOKE_MID=0
         MAX_TEMP_CHANGE=20
@@ -32,9 +32,9 @@ case "$STAGE" in
         # Stay in this stage
         STAGE=2
 
-    ;;
+        ;;
     *)
         echo "error: unknown stage"
         exit 1
-    ;;
+        ;;
 esac

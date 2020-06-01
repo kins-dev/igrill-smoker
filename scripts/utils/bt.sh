@@ -3,11 +3,13 @@
 #                       (https://git.kins.dev/igrill-smoker)
 # License:              MIT License
 #                       See the LICENSE file
-true
-# shellcheck disable=2086
+# shellcheck source-path=SCRIPTDIR/scripts/utils
+:
+# shellcheck disable=2154
 set -$-ue${DEBUG+xv}
 
-function BtReset() {
+function BtReset()
+{
     # turn off the radio and turn it on again
     sudo hciconfig hci0 down
     sudo hciconfig hci0 up
